@@ -802,3 +802,32 @@ textarea {
 .skill-cell input {
   text-align: center;
 }
+
+.tab-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.tab-button {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab-button:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.tab-button-active {
+  background: rgba(119, 195, 255, 0.14);
+  border-color: rgba(119, 195, 255, 0.22);
+  color: #dff2ff;
+}
