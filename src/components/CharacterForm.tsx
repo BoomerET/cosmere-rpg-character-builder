@@ -44,7 +44,11 @@ export function CharacterForm({
     defaultValues,
   });
 
-  const { fields: weaponFields, append, remove } = useFieldArray({
+  const {
+    fields: weaponFields,
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: "weapons",
   });
@@ -92,8 +96,13 @@ export function CharacterForm({
       <FlashMessage kind="error" message={errorMessage || submitError} />
 
       {Object.keys(form.formState.errors).length > 0 ? (
-        <section className="notice notice-error" style={{ marginBottom: "18px" }}>
-          <p style={{ marginBottom: "8px" }}>There are validation errors in the form.</p>
+        <section
+          className="notice notice-error"
+          style={{ marginBottom: "18px" }}
+        >
+          <p style={{ marginBottom: "8px" }}>
+            There are validation errors in the form.
+          </p>
           <ul style={{ margin: 0, paddingLeft: "20px" }}>
             {form.formState.errors.meta?.name?.message ? (
               <li>{String(form.formState.errors.meta.name.message)}</li>
@@ -113,13 +122,10 @@ export function CharacterForm({
 
       <form
         className="sheet-card"
-        onSubmit={form.handleSubmit(
-          (values) => {
-            setSubmitError("");
-            onSubmit(values);
-          },
-          onInvalid
-        )}
+        onSubmit={form.handleSubmit((values) => {
+          setSubmitError("");
+          onSubmit(values);
+        }, onInvalid)}
       >
         <div className="tab-bar">
           <button
@@ -191,12 +197,20 @@ export function CharacterForm({
                 <div className="mini-grid two-up">
                   <label className="field field-small">
                     <span>Level</span>
-                    <input type="number" min="1" {...numericRegister("meta.level")} />
+                    <input
+                      type="number"
+                      min="1"
+                      {...numericRegister("meta.level")}
+                    />
                   </label>
 
                   <label className="field field-small">
                     <span>Tier</span>
-                    <input type="number" min="1" {...numericRegister("meta.tier")} />
+                    <input
+                      type="number"
+                      min="1"
+                      {...numericRegister("meta.tier")}
+                    />
                   </label>
                 </div>
               </div>
@@ -210,33 +224,69 @@ export function CharacterForm({
               <h2>Attributes</h2>
               <div className="attributes-grid">
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Strength">STR</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.strength")} />
+                  <span className="attribute-label" title="Strength">
+                    STR
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.strength")}
+                  />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Speed">SPD</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.speed")} />
+                  <span className="attribute-label" title="Speed">
+                    SPD
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.speed")}
+                  />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Intellect">INT</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.intellect")} />
+                  <span className="attribute-label" title="Intellect">
+                    INT
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.intellect")}
+                  />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Willpower">WIL</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.willpower")} />
+                  <span className="attribute-label" title="Willpower">
+                    WIL
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.willpower")}
+                  />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Awareness">AWR</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.awareness")} />
+                  <span className="attribute-label" title="Awareness">
+                    AWR
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.awareness")}
+                  />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Presence">PRE</span>
-                  <input className="attribute-input" type="number" {...numericRegister("attributes.presence")} />
+                  <span className="attribute-label" title="Presence">
+                    PRE
+                  </span>
+                  <input
+                    className="attribute-input"
+                    type="number"
+                    {...numericRegister("attributes.presence")}
+                  />
                 </label>
               </div>
             </section>
@@ -250,19 +300,25 @@ export function CharacterForm({
                   <div className="mini-grid three-up">
                     <div className="defense-display">
                       <span className="defense-label">Physical</span>
-                      <strong className="defense-value">{physicalDefense}</strong>
+                      <strong className="defense-value">
+                        {physicalDefense}
+                      </strong>
                       <span className="defense-formula">10 + STR + SPD</span>
                     </div>
 
                     <div className="defense-display">
                       <span className="defense-label">Cognitive</span>
-                      <strong className="defense-value">{cognitiveDefense}</strong>
+                      <strong className="defense-value">
+                        {cognitiveDefense}
+                      </strong>
                       <span className="defense-formula">10 + INT + WIL</span>
                     </div>
 
                     <div className="defense-display">
                       <span className="defense-label">Spiritual</span>
-                      <strong className="defense-value">{spiritualDefense}</strong>
+                      <strong className="defense-value">
+                        {spiritualDefense}
+                      </strong>
                       <span className="defense-formula">10 + AWR + PRE</span>
                     </div>
                   </div>
@@ -273,11 +329,17 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input type="number" {...numericRegister("health.total")} />
+                      <input
+                        type="number"
+                        {...numericRegister("health.total")}
+                      />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input type="number" {...numericRegister("health.current")} />
+                      <input
+                        type="number"
+                        {...numericRegister("health.current")}
+                      />
                     </label>
                   </div>
                 </div>
@@ -287,11 +349,17 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input type="number" {...numericRegister("focus.total")} />
+                      <input
+                        type="number"
+                        {...numericRegister("focus.total")}
+                      />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input type="number" {...numericRegister("focus.current")} />
+                      <input
+                        type="number"
+                        {...numericRegister("focus.current")}
+                      />
                     </label>
                   </div>
                 </div>
@@ -301,11 +369,17 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input type="number" {...numericRegister("investiture.total")} />
+                      <input
+                        type="number"
+                        {...numericRegister("investiture.total")}
+                      />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input type="number" {...numericRegister("investiture.current")} />
+                      <input
+                        type="number"
+                        {...numericRegister("investiture.current")}
+                      />
                     </label>
                   </div>
                 </div>
@@ -339,7 +413,10 @@ export function CharacterForm({
 
                 <label className="field field-small">
                   <span>Lifting Capacity</span>
-                  <input type="number" {...numericRegister("liftingCapacity")} />
+                  <input
+                    type="number"
+                    {...numericRegister("liftingCapacity")}
+                  />
                 </label>
               </div>
             </section>
@@ -365,11 +442,19 @@ export function CharacterForm({
                     <div className="skill-stat">{skill.stat.toUpperCase()}</div>
 
                     <div className="field field-small skill-cell">
-                      <input type="number" min="0" {...numericRegister(`skills.${index}.rank` as never)} />
+                      <input
+                        type="number"
+                        min="0"
+                        {...numericRegister(`skills.${index}.rank` as never)}
+                      />
                     </div>
 
                     <div className="field field-small skill-cell">
-                      <input type="number" min="0" {...numericRegister(`skills.${index}.bonus` as never)} />
+                      <input
+                        type="number"
+                        min="0"
+                        {...numericRegister(`skills.${index}.bonus` as never)}
+                      />
                     </div>
                   </div>
                 ))}
@@ -433,12 +518,16 @@ export function CharacterForm({
 
                     <label className="field field-small">
                       <span>Damage Dice</span>
-                      <input {...form.register(`weapons.${index}.damageDice`)} />
+                      <input
+                        {...form.register(`weapons.${index}.damageDice`)}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Damage Type</span>
-                      <input {...form.register(`weapons.${index}.damageType`)} />
+                      <input
+                        {...form.register(`weapons.${index}.damageType`)}
+                      />
                     </label>
 
                     <label className="field">
@@ -448,27 +537,47 @@ export function CharacterForm({
 
                     <label className="field">
                       <span>Expert Traits</span>
-                      <input {...form.register(`weapons.${index}.expertTraits`)} />
+                      <input
+                        {...form.register(`weapons.${index}.expertTraits`)}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Handling</span>
-                      <input type="number" {...numericRegister(`weapons.${index}.handling` as never)} />
+                      <input
+                        type="number"
+                        {...numericRegister(
+                          `weapons.${index}.handling` as never,
+                        )}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Carried</span>
-                      <input type="number" {...numericRegister(`weapons.${index}.carried` as never)} />
+                      <input
+                        type="number"
+                        {...numericRegister(
+                          `weapons.${index}.carried` as never,
+                        )}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Ammo</span>
-                      <input type="number" {...numericRegister(`weapons.${index}.ammo` as never)} />
+                      <input
+                        type="number"
+                        {...numericRegister(`weapons.${index}.ammo` as never)}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Max Ammo</span>
-                      <input type="number" {...numericRegister(`weapons.${index}.maxAmmo` as never)} />
+                      <input
+                        type="number"
+                        {...numericRegister(
+                          `weapons.${index}.maxAmmo` as never,
+                        )}
+                      />
                     </label>
                   </div>
                 </div>
@@ -481,16 +590,6 @@ export function CharacterForm({
           <section className="sheet-section">
             <h2>Details</h2>
             <div className="form-grid">
-              <label className="field">
-                <span>Expertises</span>
-                <textarea rows={4} {...form.register("expertisesText")} />
-              </label>
-
-              <label className="field">
-                <span>Talents</span>
-                <textarea rows={4} {...form.register("talentsText")} />
-              </label>
-
               <label className="field">
                 <span>Conditions & Injuries</span>
                 <textarea rows={4} {...form.register("conditionsText")} />
@@ -505,12 +604,20 @@ export function CharacterForm({
         )}
 
         <div className="action-row">
-          <button type="button" className="button button-secondary" onClick={onCancel}>
+          <button
+            type="button"
+            className="button button-secondary"
+            onClick={onCancel}
+          >
             Cancel
           </button>
 
           {onSecondaryAction && secondaryActionLabel ? (
-            <button type="button" className="button button-secondary" onClick={onSecondaryAction}>
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={onSecondaryAction}
+            >
               {secondaryActionLabel}
             </button>
           ) : null}

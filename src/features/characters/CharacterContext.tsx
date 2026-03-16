@@ -67,7 +67,6 @@ function makeBlankCharacter(): CharacterInput {
     recoveryDie: "d4",
     sensesRange: "",
     liftingCapacity: "",
-    expertisesText: "",
     weapons: [
       {
         name: "Unarmed Attack",
@@ -85,7 +84,6 @@ function makeBlankCharacter(): CharacterInput {
     ],
     expertise: [],
     talents: [],
-    talentsText: "",
     conditionsText: "",
     skills: DEFAULT_SKILLS.map((skill) => ({ ...skill })),
     notes: "",
