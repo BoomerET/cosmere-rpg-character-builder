@@ -84,6 +84,8 @@ function makeBlankCharacter(): CharacterInput {
         type: 0,
       },
     ],
+    expertise: [],
+    talents: [],
     talentsText: "",
     conditionsText: "",
     skills: DEFAULT_SKILLS.map((skill) => ({ ...skill })),

@@ -71,6 +71,24 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     type: numberAt(node, "type", 0),
   }));
 
+  const importedExpertise = Array.from(
+    character.querySelectorAll("expertise > *"),
+  ).map((node) => ({
+    name: textAt(node, "name") || "Unnamed Expertise",
+    text: textAt(node, "text"),
+  }));
+
+  const importedTalents = Array.from(
+    character.querySelectorAll("talent > *"),
+  ).map((node) => ({
+    name: textAt(node, "name") || "Unnamed Talent",
+    activation: textAt(node, "activation"),
+    prerequisites: textAt(node, "prerequisites"),
+    source: textAt(node, "source"),
+    specialty: textAt(node, "specialty"),
+    text: textAt(node, "text"),
+  }));
+
   return {
     id: uuid(),
     meta: {
@@ -129,7 +147,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     recoveryDie: textAt(character, "recdie") || "d4",
     sensesRange: "",
     liftingCapacity: numberAt(character, "encumbrance > carry", 50),
-    expertisesText: "",
+    expertise: importedExpertise,
     weapons:
       importedWeapons.length > 0
         ? importedWeapons
@@ -148,7 +166,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
               type: 0,
             },
           ],
-    talentsText: "",
+    talents: importedTalents,
     conditionsText: "",
     skills:
       importedSkills.length > 0

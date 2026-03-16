@@ -64,6 +64,25 @@ function tag(
   return `<${name}${attrText}>${content}</${name}>`;
 }
 
+function formattedText(value: string): string {
+  if (!value.trim()) {
+    return "";
+  }
+
+  const paragraphs = value
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p>${escapeXml(p).replace(/\n/g, "<br />")}</p>`)
+    .join("");
+
+  return paragraphs;
+}
+
+function listNodeName(index: number): string {
+  return `id-${String(index + 1).padStart(5, "0")}`;
+}
+
 function emptyTag(name: string, attrs?: Record<string, string>): string {
   const attrText = attrs
     ? " " +
@@ -171,6 +190,32 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
   const spiritualDefense =
     10 + character.attributes.awareness + character.attributes.presence;
 
+  const expertiseBlock = character.expertise
+    .map(
+      (item, i) =>
+        `<${listNodeName(i)}>` +
+        tag("name", escapeXml(item.name), { type: "string" }) +
+        tag("text", formattedText(item.text), { type: "formattedtext" }) +
+        `</${listNodeName(i)}>`,
+    )
+    .join("");
+
+  const talentBlock = character.talents
+    .map(
+      (item, i) =>
+        `<${listNodeName(i)}>` +
+        tag("activation", escapeXml(item.activation), { type: "string" }) +
+        tag("name", escapeXml(item.name), { type: "string" }) +
+        tag("prerequisites", escapeXml(item.prerequisites), {
+          type: "string",
+        }) +
+        tag("source", escapeXml(item.source), { type: "string" }) +
+        tag("specialty", escapeXml(item.specialty), { type: "string" }) +
+        tag("text", formattedText(item.text), { type: "formattedtext" }) +
+        `</${listNodeName(i)}>`,
+    )
+    .join("");
+
   return (
     `<?xml version="1.0" encoding="utf-8"?>` +
     `<root version="5.1" dataversion="20260124" release="8.1|CoreRPG:7">` +
@@ -207,7 +252,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("load", "0", { type: "number" }) +
     tag("max", n(character.liftingCapacity * 2), { type: "number" }) +
     `</encumbrance>` +
-    emptyTag("expertise") +
+    tag("expertise", expertiseBlock) +
     `<focus>` +
     tag("bonus", n(character.focus.bonus), { type: "number" }) +
     tag("current", n(character.focus.current), { type: "number" }) +
@@ -236,7 +281,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     `</${pathNodeName}></paths>` +
     tag("recdie", escapeXml(character.recoveryDie), { type: "dice" }) +
     tag("skilllist", skillListBlock) +
-    emptyTag("talent") +
+    tag("talent", talentBlock) +
     tag("tier", n(character.meta.tier), { type: "number" }) +
     tag(
       "totalskillranks",
