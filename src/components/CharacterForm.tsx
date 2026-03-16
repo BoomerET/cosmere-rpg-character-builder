@@ -362,19 +362,9 @@ export function CharacterForm({
             <div className="skills-grid">
               {skills.map((skill, index) => (
                 <div className="skill-row" key={`${skill.name}-${index}`}>
-                  <div className="field skill-cell">
-                    <input
-                      {...form.register(`skills.${index}.name`)}
-                      readOnly
-                    />
-                  </div>
+                  <div className="skill-name">{skill.name}</div>
 
-                  <div className="field skill-cell">
-                    <input
-                      {...form.register(`skills.${index}.stat`)}
-                      readOnly
-                    />
-                  </div>
+                  <div className="skill-stat">{skill.stat.toUpperCase()}</div>
 
                   <div className="field field-small skill-cell">
                     <input

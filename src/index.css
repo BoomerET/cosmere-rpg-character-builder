@@ -684,6 +684,23 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 720px) {
+
+  .skill-table-header {
+    display: none;
+  }
+
+  .skill-row {
+    grid-template-columns: 1fr 80px 80px;
+  }
+
+  .skill-stat {
+    display: none;
+  }
+
+}
+
 .stack-actions {
   display: flex;
   gap: 12px;
@@ -738,4 +755,50 @@ textarea {
 
 .skill-cell input {
   margin: 0;
+}
+
+.skills-table {
+  display: grid;
+  gap: 10px;
+}
+
+.skill-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 120px 120px;
+  gap: 12px;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.skills-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 120px 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+}
+
+.skill-name {
+  font-weight: 600;
+}
+
+.skill-stat {
+  font-family: monospace;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.skill-cell input {
+  text-align: center;
 }
