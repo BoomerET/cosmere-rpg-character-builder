@@ -1,3 +1,19 @@
+import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { DEFAULT_SKILLS, type CharacterInput } from "./character.schema";
+import { characterStorage } from "./character.storage";
+import { uuid } from "../../utils/uuid";
+
+type CharacterContextValue = {
+  characters: CharacterInput[];
+  refreshCharacters: () => void;
+  createBlankCharacter: () => CharacterInput;
+  saveCharacter: (character: CharacterInput) => void;
+  getCharacter: (id: string) => CharacterInput | undefined;
+  deleteCharacter: (id: string) => void;
+};
+
+const CharacterContext = createContext<CharacterContextValue | undefined>(undefined);
+
 function makeBlankCharacter(): CharacterInput {
   return {
     id: uuid(),
@@ -60,4 +76,52 @@ function makeBlankCharacter(): CharacterInput {
     notes: "",
     version: "1.0.0",
   };
+}
+
+export function CharacterProvider({ children }: { children: ReactNode }) {
+  const [characters, setCharacters] = useState<CharacterInput[]>(() => characterStorage.list());
+
+  function refreshCharacters() {
+    setCharacters(characterStorage.list());
+  }
+
+  function createBlankCharacter() {
+    return makeBlankCharacter();
+  }
+
+  function saveCharacter(character: CharacterInput) {
+    characterStorage.save(character);
+    refreshCharacters();
+  }
+
+  function getCharacter(id: string) {
+    return characterStorage.get(id);
+  }
+
+  function deleteCharacter(id: string) {
+    characterStorage.remove(id);
+    refreshCharacters();
+  }
+
+  const value = useMemo(
+    () => ({
+      characters,
+      refreshCharacters,
+      createBlankCharacter,
+      saveCharacter,
+      getCharacter,
+      deleteCharacter,
+    }),
+    [characters]
+  );
+
+  return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
+}
+
+export function useCharacters() {
+  const ctx = useContext(CharacterContext);
+  if (!ctx) {
+    throw new Error("useCharacters must be used inside CharacterProvider");
+  }
+  return ctx;
 }
