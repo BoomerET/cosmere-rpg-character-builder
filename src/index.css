@@ -573,6 +573,19 @@ textarea {
     width: 100%;
   }
 }
+
+@media (max-width: 900px) {
+  .skill-table-header {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .skill-table-header {
+    display: none;
+  }
+}
+
 .resource-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(280px, 1fr));
@@ -700,4 +713,29 @@ textarea {
 .weapon-card-header h3 {
   margin: 0;
   font-size: 1rem;
+}
+
+.skills-table {
+  display: grid;
+  gap: 10px;
+}
+
+.skill-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.25fr 120px 120px;
+  gap: 12px;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.skill-cell {
+  gap: 0;
+}
+
+.skill-cell input {
+  margin: 0;
 }

@@ -350,42 +350,54 @@ export function CharacterForm({
 
         <section className="sheet-section">
           <h2>Skills</h2>
-          <div className="skills-grid">
-            {skills.map((skill, index) => (
-              <div className="skill-row" key={`${skill.name}-${index}`}>
-                <div className="field">
-                  <span>Skill</span>
-                  <input {...form.register(`skills.${index}.name`)} readOnly />
-                </div>
 
-                <div className="field">
-                  <span>Stat</span>
-                  <input {...form.register(`skills.${index}.stat`)} readOnly />
-                </div>
+          <div className="skills-table">
+            <div className="skill-table-header">
+              <div>Skill</div>
+              <div>Stat</div>
+              <div>Rank</div>
+              <div>Bonus</div>
+            </div>
 
-                <div className="field field-small">
-                  <span>Rank</span>
-                  <input
-                    type="number"
-                    min="0"
-                    {...form.register(`skills.${index}.rank`, {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
+            <div className="skills-grid">
+              {skills.map((skill, index) => (
+                <div className="skill-row" key={`${skill.name}-${index}`}>
+                  <div className="field skill-cell">
+                    <input
+                      {...form.register(`skills.${index}.name`)}
+                      readOnly
+                    />
+                  </div>
 
-                <div className="field field-small">
-                  <span>Bonus</span>
-                  <input
-                    type="number"
-                    min="0"
-                    {...form.register(`skills.${index}.bonus`, {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <div className="field skill-cell">
+                    <input
+                      {...form.register(`skills.${index}.stat`)}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="field field-small skill-cell">
+                    <input
+                      type="number"
+                      min="0"
+                      {...form.register(`skills.${index}.rank`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
+
+                  <div className="field field-small skill-cell">
+                    <input
+                      type="number"
+                      min="0"
+                      {...form.register(`skills.${index}.bonus`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
