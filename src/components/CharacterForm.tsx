@@ -752,15 +752,6 @@ export function CharacterForm({
           <section className="sheet-section">
             <h2>Details</h2>
             <div className="form-grid">
-              <label className="field">
-                <span>Expertises</span>
-                <textarea rows={4} {...form.register("expertisesText")} />
-              </label>
-
-              <label className="field">
-                <span>Talents</span>
-                <textarea rows={4} {...form.register("talentsText")} />
-              </label>
 
               <label className="field">
                 <span>Conditions & Injuries</span>
