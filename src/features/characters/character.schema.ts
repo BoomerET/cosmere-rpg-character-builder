@@ -48,6 +48,20 @@ export const weaponSchema = z.object({
   type: z.number().int().min(0).max(99).default(0),
 });
 
+export const expertiseSchema = z.object({
+  name: z.string().min(1),
+  text: z.string().default(""),
+});
+
+export const talentSchema = z.object({
+  name: z.string().min(1),
+  activation: z.string().default(""),
+  prerequisites: z.string().default(""),
+  source: z.string().default(""),
+  specialty: z.string().default(""),
+  text: z.string().default(""),
+});
+
 export const characterSchema = z.object({
   id: z.string().min(1),
   meta: z.object({
@@ -89,9 +103,9 @@ export const characterSchema = z.object({
   recoveryDie: z.string().min(1).default("d4"),
   sensesRange: z.string().default(""),
   liftingCapacity: z.number().int().min(0).max(99999).default(50),
-  expertisesText: z.string().default(""),
+  expertise: z.array(expertiseSchema).default([]),
+  talents: z.array(talentSchema).default([]),
   weapons: z.array(weaponSchema).default([]),
-  talentsText: z.string().default(""),
   conditionsText: z.string().default(""),
   skills: z.array(skillSchema),
   notes: z.string().optional(),

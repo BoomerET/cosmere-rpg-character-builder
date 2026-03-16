@@ -21,7 +21,14 @@ type CharacterFormProps = {
   topContent?: ReactNode;
 };
 
-type FormTab = "overview" | "attributes" | "skills" | "weapons" | "details";
+type FormTab =
+  | "overview"
+  | "attributes"
+  | "skills"
+  | "weapons"
+  | "expertise"
+  | "talents"
+  | "details";
 
 export function CharacterForm({
   title,
@@ -50,6 +57,24 @@ export function CharacterForm({
   } = useFieldArray({
     control: form.control,
     name: "weapons",
+  });
+
+  const {
+    fields: expertiseFields,
+    append: addExpertise,
+    remove: removeExpertise,
+  } = useFieldArray({
+    control: form.control,
+    name: "expertise",
+  });
+
+  const {
+    fields: talentFields,
+    append: addTalent,
+    remove: removeTalent,
+  } = useFieldArray({
+    control: form.control,
+    name: "talents",
   });
 
   useEffect(() => {
@@ -112,6 +137,20 @@ export function CharacterForm({
             onClick={() => setActiveTab("weapons")}
           >
             Weapons
+          </button>
+          <button
+            type="button"
+            className={`tab-button${activeTab === "expertise" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("expertise")}
+          >
+            Expertise
+          </button>
+          <button
+            type="button"
+            className={`tab-button${activeTab === "talents" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("talents")}
+          >
+            Talents
           </button>
           <button
             type="button"
@@ -579,6 +618,130 @@ export function CharacterForm({
                 </div>
               ))}
             </div>
+          </section>
+        )}
+
+        {activeTab === "expertise" && (
+          <section className="sheet-section">
+            <h2>Expertise</h2>
+
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={() =>
+                addExpertise({
+                  name: "New Expertise",
+                  text: "",
+                })
+              }
+            >
+              Add Expertise
+            </button>
+
+            {expertiseFields.map((exp, i) => (
+              <div className="weapon-card" key={exp.id}>
+                <div className="weapon-card-header">
+                  <h3>Expertise {i + 1}</h3>
+
+                  <button
+                    type="button"
+                    className="button button-danger"
+                    onClick={() => removeExpertise(i)}
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="form-grid">
+                  <label className="field">
+                    <span>Name</span>
+                    <input {...form.register(`expertise.${i}.name`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Description</span>
+                    <textarea
+                      rows={6}
+                      {...form.register(`expertise.${i}.text`)}
+                    />
+                  </label>
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {activeTab === "talents" && (
+          <section className="sheet-section">
+            <h2>Talents</h2>
+
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={() =>
+                addTalent({
+                  name: "New Talent",
+                  activation: "",
+                  prerequisites: "",
+                  source: "",
+                  specialty: "",
+                  text: "",
+                })
+              }
+            >
+              Add Talent
+            </button>
+
+            {talentFields.map((talent, i) => (
+              <div className="weapon-card" key={talent.id}>
+                <div className="weapon-card-header">
+                  <h3>Talent {i + 1}</h3>
+
+                  <button
+                    type="button"
+                    className="button button-danger"
+                    onClick={() => removeTalent(i)}
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="form-grid">
+                  <label className="field">
+                    <span>Name</span>
+                    <input {...form.register(`talents.${i}.name`)} />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Activation</span>
+                    <input {...form.register(`talents.${i}.activation`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Prerequisites</span>
+                    <input {...form.register(`talents.${i}.prerequisites`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Source</span>
+                    <input {...form.register(`talents.${i}.source`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Specialty</span>
+                    <input {...form.register(`talents.${i}.specialty`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Description</span>
+                    <textarea
+                      rows={6}
+                      {...form.register(`talents.${i}.text`)}
+                    />
+                  </label>
+                </div>
+              </div>
+            ))}
           </section>
         )}
 
