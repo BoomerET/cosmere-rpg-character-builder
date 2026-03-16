@@ -17,7 +17,6 @@ const CharacterContext = createContext<CharacterContextValue | undefined>(undefi
 function makeBlankCharacter(): CharacterInput {
   return {
     id: uuid(),
-
     meta: {
       name: "",
       playerName: "",
@@ -26,7 +25,6 @@ function makeBlankCharacter(): CharacterInput {
       level: 1,
       tier: 1,
     },
-
     attributes: {
       awareness: 0,
       intellect: 0,
@@ -35,37 +33,29 @@ function makeBlankCharacter(): CharacterInput {
       strength: 0,
       willpower: 0,
     },
-
     health: {
       current: 10,
       total: 10,
       bonus: 0,
       wounds: 0,
     },
-
     focus: {
       current: 0,
       total: 2,
       bonus: 0,
     },
-
     investiture: {
       current: 0,
       total: 0,
     },
-
     deflect: 0,
     movement: 20,
     movementBonus: 0,
-
     recoveryDie: "d4",
     sensesRange: "",
     liftingCapacity: undefined,
-
     expertise: [],
-
     talents: [],
-
     weapons: [
       {
         name: "Unarmed Attack",
@@ -81,21 +71,15 @@ function makeBlankCharacter(): CharacterInput {
         type: 0,
       },
     ],
-
     conditionsText: "",
-
-    skills: DEFAULT_SKILLS.map((s) => ({ ...s })),
-
+    skills: DEFAULT_SKILLS.map((skill) => ({ ...skill })),
     notes: "",
-
     version: "1.0.0",
   };
 }
 
 export function CharacterProvider({ children }: { children: ReactNode }) {
-  const [characters, setCharacters] = useState<CharacterInput[]>(() =>
-    characterStorage.list(),
-  );
+  const [characters, setCharacters] = useState<CharacterInput[]>(() => characterStorage.list());
 
   function refreshCharacters() {
     setCharacters(characterStorage.list());
@@ -107,25 +91,16 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
   function saveCharacter(character: CharacterInput) {
     characterStorage.save(character);
-
-    setCharacters((prev) => {
-      const existing = prev.find((c) => c.id === character.id);
-
-      if (existing) {
-        return prev.map((c) => (c.id === character.id ? character : c));
-      }
-
-      return [...prev, character];
-    });
+    refreshCharacters();
   }
 
   function getCharacter(id: string) {
-    return characters.find((c) => c.id === id);
+    return characterStorage.get(id);
   }
 
   function deleteCharacter(id: string) {
     characterStorage.remove(id);
-    setCharacters((prev) => prev.filter((c) => c.id !== id));
+    refreshCharacters();
   }
 
   const value = useMemo(
@@ -137,29 +112,16 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       getCharacter,
       deleteCharacter,
     }),
-    [characters],
+    [characters]
   );
 
-  return (
-    <CharacterContext.Provider value={value}>
-      {children}
-    </CharacterContext.Provider>
-  );
-}
-
-  return (
-    <CharacterContext.Provider value={value}>
-      {children}
-    </CharacterContext.Provider>
-  );
+  return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
 }
 
 export function useCharacters() {
   const ctx = useContext(CharacterContext);
-
   if (!ctx) {
     throw new Error("useCharacters must be used inside CharacterProvider");
   }
-
   return ctx;
 }
