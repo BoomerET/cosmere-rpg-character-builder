@@ -53,6 +53,8 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
           </span>
         </div>
 
+      </div>
+
       <div className="summary-stats">
         <div className="summary-stat">
           <span className="summary-stat-label">Strength</span>
