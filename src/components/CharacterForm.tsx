@@ -164,6 +164,7 @@ export function CharacterForm({
         {activeTab === "overview" && (
           <section className="sheet-section">
             <h2>Core Details</h2>
+
             <div className="form-grid">
               <label className="field">
                 <span>Name</span>
@@ -184,24 +185,31 @@ export function CharacterForm({
                 <span>Path</span>
                 <input {...form.register("meta.path")} />
               </label>
+            </div>
 
-              <label className="field field-small">
-                <span>Level</span>
-                <input
-                  type="number"
-                  min="1"
-                  {...form.register("meta.level", { valueAsNumber: true })}
-                />
-              </label>
+            <div style={{ marginTop: "16px" }}>
+              <div className="mini-card">
+                <h3>Advancement</h3>
+                <div className="mini-grid two-up">
+                  <label className="field field-small">
+                    <span>Level</span>
+                    <input
+                      type="number"
+                      min="1"
+                      {...form.register("meta.level", { valueAsNumber: true })}
+                    />
+                  </label>
 
-              <label className="field field-small">
-                <span>Tier</span>
-                <input
-                  type="number"
-                  min="1"
-                  {...form.register("meta.tier", { valueAsNumber: true })}
-                />
-              </label>
+                  <label className="field field-small">
+                    <span>Tier</span>
+                    <input
+                      type="number"
+                      min="1"
+                      {...form.register("meta.tier", { valueAsNumber: true })}
+                    />
+                  </label>
+                </div>
+              </div>
             </div>
           </section>
         )}
