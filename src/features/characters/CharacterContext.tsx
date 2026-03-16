@@ -107,16 +107,25 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
 
   function saveCharacter(character: CharacterInput) {
     characterStorage.save(character);
-    refreshCharacters();
+
+    setCharacters((prev) => {
+      const existing = prev.find((c) => c.id === character.id);
+
+      if (existing) {
+        return prev.map((c) => (c.id === character.id ? character : c));
+      }
+
+      return [...prev, character];
+    });
   }
 
   function getCharacter(id: string) {
-    return characterStorage.get(id);
+    return characters.find((c) => c.id === id);
   }
 
   function deleteCharacter(id: string) {
     characterStorage.remove(id);
-    refreshCharacters();
+    setCharacters((prev) => prev.filter((c) => c.id !== id));
   }
 
   const value = useMemo(
@@ -130,6 +139,13 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     }),
     [characters],
   );
+
+  return (
+    <CharacterContext.Provider value={value}>
+      {children}
+    </CharacterContext.Provider>
+  );
+}
 
   return (
     <CharacterContext.Provider value={value}>
