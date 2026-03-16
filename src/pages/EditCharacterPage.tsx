@@ -24,7 +24,10 @@ export function EditCharacterPage() {
     return (
       <AppLayout>
         <main className="page-shell">
-          <FlashMessage kind="error" message="That character could not be loaded." />
+          <FlashMessage
+            kind="error"
+            message="That character could not be loaded."
+          />
           <section className="sheet-card">
             <h1>Character not found</h1>
             <div className="action-row">
@@ -65,4 +68,3 @@ export function EditCharacterPage() {
     </AppLayout>
   );
 }
-

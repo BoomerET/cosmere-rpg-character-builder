@@ -1,5 +1,11 @@
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #e8ecf1;
@@ -112,7 +118,10 @@ textarea {
   text-decoration: none;
   background: transparent;
   cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .app-nav-link:hover {
@@ -152,7 +161,11 @@ textarea {
 }
 
 .sheet-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 24px;
@@ -163,7 +176,7 @@ textarea {
 .sheet-section + .sheet-section {
   margin-top: 28px;
   padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .sheet-section h2 {
@@ -198,7 +211,10 @@ textarea {
   border-radius: 12px;
   padding: 12px 14px;
   outline: none;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.08s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.08s ease;
 }
 
 .field input:focus,
@@ -234,7 +250,10 @@ textarea {
   border: 1px solid rgba(119, 195, 255, 0.16);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
   cursor: text;
-  transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    transform 0.12s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .attribute-tile:hover {
@@ -293,9 +312,9 @@ textarea {
   grid-template-columns: 2fr 1.25fr 120px 120px;
   gap: 12px;
   padding: 14px;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 14px;
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .action-row {
@@ -326,7 +345,7 @@ textarea {
 }
 
 .button-secondary:hover {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .button-danger {
@@ -356,13 +375,13 @@ textarea {
 .character-table td {
   padding: 14px 16px;
   text-align: left;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .character-table th {
   color: var(--muted);
   font-weight: 600;
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .inline-actions {
@@ -409,7 +428,11 @@ textarea {
 
 .summary-card {
   margin-bottom: 22px;
-  background: linear-gradient(180deg, rgba(119, 195, 255, 0.08), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(
+    180deg,
+    rgba(119, 195, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
   border: 1px solid rgba(119, 195, 255, 0.16);
   border-radius: 18px;
   padding: 20px;
@@ -648,4 +671,3 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
-

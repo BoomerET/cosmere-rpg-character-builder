@@ -9,4 +9,3 @@ export function AppLayout({ children }: { children: ReactNode }) {
     </>
   );
 }
-

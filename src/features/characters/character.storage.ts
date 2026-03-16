@@ -41,4 +41,3 @@ export const characterStorage = {
     writeAll(readAll().filter((c) => c.id !== id));
   },
 };
-

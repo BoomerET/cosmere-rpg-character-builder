@@ -6,14 +6,18 @@ function textAt(parent: Element | null, selector: string): string {
   return node?.textContent?.trim() ?? "";
 }
 
-function numberAt(parent: Element | null, selector: string, fallback = 0): number {
+function numberAt(
+  parent: Element | null,
+  selector: string,
+  fallback = 0,
+): number {
   const raw = textAt(parent, selector);
   const n = Number(raw);
   return Number.isFinite(n) ? n : fallback;
 }
 
 function isValidStat(
-  value: string
+  value: string,
 ): value is CharacterInput["skills"][number]["stat"] {
   return [
     "awareness",
@@ -39,7 +43,9 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     throw new Error("Could not find character node in XML");
   }
 
-  const importedSkills = Array.from(character.querySelectorAll("skilllist > *")).map((node) => {
+  const importedSkills = Array.from(
+    character.querySelectorAll("skilllist > *"),
+  ).map((node) => {
     const statText = textAt(node, "stat");
     return {
       name: textAt(node, "name"),
@@ -85,7 +91,8 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     health: {
       current: Math.max(
         0,
-        numberAt(character, "hp > total", 10) - numberAt(character, "hp > wounds", 0)
+        numberAt(character, "hp > total", 10) -
+          numberAt(character, "hp > wounds", 0),
       ),
       total: numberAt(character, "hp > total", 10),
       bonus: numberAt(character, "hp > bonus", 0),
@@ -118,4 +125,3 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     version: "1.0.0",
   };
 }
-

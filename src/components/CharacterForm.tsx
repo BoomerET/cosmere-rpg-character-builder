@@ -123,16 +123,22 @@ export function CharacterForm({
           <h2>Attributes</h2>
           <div className="attributes-grid">
             <label className="attribute-tile">
-              <span className="attribute-label" title="Strength">STR</span>
+              <span className="attribute-label" title="Strength">
+                STR
+              </span>
               <input
                 className="attribute-input"
                 type="number"
-                {...form.register("attributes.strength", { valueAsNumber: true })}
+                {...form.register("attributes.strength", {
+                  valueAsNumber: true,
+                })}
               />
             </label>
 
             <label className="attribute-tile">
-              <span className="attribute-label" title="Speed">SPD</span>
+              <span className="attribute-label" title="Speed">
+                SPD
+              </span>
               <input
                 className="attribute-input"
                 type="number"
@@ -141,38 +147,54 @@ export function CharacterForm({
             </label>
 
             <label className="attribute-tile">
-              <span className="attribute-label" title="Intellect">INT</span>
+              <span className="attribute-label" title="Intellect">
+                INT
+              </span>
               <input
                 className="attribute-input"
                 type="number"
-                {...form.register("attributes.intellect", { valueAsNumber: true })}
+                {...form.register("attributes.intellect", {
+                  valueAsNumber: true,
+                })}
               />
             </label>
 
             <label className="attribute-tile">
-              <span className="attribute-label" title="Willpower">WIL</span>
+              <span className="attribute-label" title="Willpower">
+                WIL
+              </span>
               <input
                 className="attribute-input"
                 type="number"
-                {...form.register("attributes.willpower", { valueAsNumber: true })}
+                {...form.register("attributes.willpower", {
+                  valueAsNumber: true,
+                })}
               />
             </label>
 
             <label className="attribute-tile">
-              <span className="attribute-label" title="Awareness">AWR</span>
+              <span className="attribute-label" title="Awareness">
+                AWR
+              </span>
               <input
                 className="attribute-input"
                 type="number"
-                {...form.register("attributes.awareness", { valueAsNumber: true })}
+                {...form.register("attributes.awareness", {
+                  valueAsNumber: true,
+                })}
               />
             </label>
 
             <label className="attribute-tile">
-              <span className="attribute-label" title="Presence">PRE</span>
+              <span className="attribute-label" title="Presence">
+                PRE
+              </span>
               <input
                 className="attribute-input"
                 type="number"
-                {...form.register("attributes.presence", { valueAsNumber: true })}
+                {...form.register("attributes.presence", {
+                  valueAsNumber: true,
+                })}
               />
             </label>
           </div>
@@ -219,7 +241,9 @@ export function CharacterForm({
                   <span>Current</span>
                   <input
                     type="number"
-                    {...form.register("health.current", { valueAsNumber: true })}
+                    {...form.register("health.current", {
+                      valueAsNumber: true,
+                    })}
                   />
                 </label>
               </div>
@@ -252,14 +276,18 @@ export function CharacterForm({
                   <span>Max</span>
                   <input
                     type="number"
-                    {...form.register("investiture.total", { valueAsNumber: true })}
+                    {...form.register("investiture.total", {
+                      valueAsNumber: true,
+                    })}
                   />
                 </label>
                 <label className="field">
                   <span>Current</span>
                   <input
                     type="number"
-                    {...form.register("investiture.current", { valueAsNumber: true })}
+                    {...form.register("investiture.current", {
+                      valueAsNumber: true,
+                    })}
                   />
                 </label>
               </div>
@@ -412,4 +440,3 @@ export function CharacterForm({
     </main>
   );
 }
-

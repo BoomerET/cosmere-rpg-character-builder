@@ -101,4 +101,3 @@ export const DEFAULT_SKILLS: CharacterInput["skills"] = [
   { name: "Survival", stat: "awareness", rank: 0, bonus: 0 },
   { name: "Medicine", stat: "intellect", rank: 0, bonus: 0 },
 ];
-

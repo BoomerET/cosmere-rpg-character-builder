@@ -15,4 +15,3 @@ export function FlashMessage({ kind, message }: FlashMessageProps) {
     </section>
   );
 }
-

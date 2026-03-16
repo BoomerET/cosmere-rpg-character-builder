@@ -56,7 +56,7 @@ export function ExportPage() {
     downloadTextFile(
       `${character.meta.name || "character"}.xml`,
       xml,
-      "application/xml"
+      "application/xml",
     );
     setLocalSuccess(`Downloaded XML for "${character.meta.name}".`);
   }
@@ -97,4 +97,3 @@ export function ExportPage() {
     </AppLayout>
   );
 }
-

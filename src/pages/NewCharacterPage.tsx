@@ -19,7 +19,7 @@ export function NewCharacterPage() {
 
   const defaultValues = useMemo<CharacterInput>(
     () => createBlankCharacter(),
-    [createBlankCharacter]
+    [createBlankCharacter],
   );
 
   function onSubmit(values: CharacterInput) {
@@ -44,4 +44,3 @@ export function NewCharacterPage() {
     </AppLayout>
   );
 }
-

@@ -17,7 +17,7 @@ export function HomePage() {
 
   function handleDeleteCharacter(id: string, name: string) {
     const confirmed = window.confirm(
-      `Delete "${name || "this character"}"? This cannot be undone.`
+      `Delete "${name || "this character"}"? This cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -35,7 +35,9 @@ export function HomePage() {
       <main className="page-shell">
         <section className="page-header">
           <h1>Cosmere RPG Character Builder</h1>
-          <p>Create, manage, import, and export characters for Fantasy Grounds.</p>
+          <p>
+            Create, manage, import, and export characters for Fantasy Grounds.
+          </p>
         </section>
 
         <FlashMessage kind="success" message={state?.successMessage || ""} />
@@ -50,7 +52,8 @@ export function HomePage() {
         {characters.length === 0 ? (
           <section className="sheet-card">
             <p className="muted">
-              No characters yet. Create a new one or import an existing Fantasy Grounds XML file.
+              No characters yet. Create a new one or import an existing Fantasy
+              Grounds XML file.
             </p>
           </section>
         ) : (
@@ -91,7 +94,9 @@ export function HomePage() {
 
                           <button
                             className="button button-danger"
-                            onClick={() => handleDeleteCharacter(c.id, characterName)}
+                            onClick={() =>
+                              handleDeleteCharacter(c.id, characterName)
+                            }
                           >
                             Delete
                           </button>
@@ -108,4 +113,3 @@ export function HomePage() {
     </AppLayout>
   );
 }
-

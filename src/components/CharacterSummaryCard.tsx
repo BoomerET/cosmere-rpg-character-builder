@@ -33,23 +33,17 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
         <div className="summary-item">
           <span className="summary-label">Path</span>
-          <span className="summary-value">
-            {character.meta.path || "—"}
-          </span>
+          <span className="summary-value">{character.meta.path || "—"}</span>
         </div>
 
         <div className="summary-item">
           <span className="summary-label">Level</span>
-          <span className="summary-value">
-            {character.meta.level ?? "—"}
-          </span>
+          <span className="summary-value">{character.meta.level ?? "—"}</span>
         </div>
 
         <div className="summary-item">
           <span className="summary-label">Tier</span>
-          <span className="summary-value">
-            {character.meta.tier ?? "—"}
-          </span>
+          <span className="summary-value">{character.meta.tier ?? "—"}</span>
         </div>
 
         <div className="summary-item">
@@ -61,9 +55,7 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
         <div className="summary-item">
           <span className="summary-label">Concept</span>
-          <span className="summary-value">
-            {character.meta.concept || "—"}
-          </span>
+          <span className="summary-value">{character.meta.concept || "—"}</span>
         </div>
       </div>
 
@@ -113,4 +105,3 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
     </section>
   );
 }
-
