@@ -21,14 +21,7 @@ type CharacterFormProps = {
   topContent?: ReactNode;
 };
 
-type FormTab =
-  | "overview"
-  | "attributes"
-  | "skills"
-  | "weapons"
-  | "expertise"
-  | "talents"
-  | "details";
+type FormTab = "overview" | "attributes" | "skills" | "weapons" | "details";
 
 export function CharacterForm({
   title,
@@ -44,37 +37,16 @@ export function CharacterForm({
   topContent,
 }: CharacterFormProps) {
   const [activeTab, setActiveTab] = useState<FormTab>("overview");
+  const [submitError, setSubmitError] = useState("");
 
   const form = useForm<CharacterInput>({
     resolver: zodResolver(characterSchema),
     defaultValues,
   });
 
-  const {
-    fields: weaponFields,
-    append,
-    remove,
-  } = useFieldArray({
+  const { fields: weaponFields, append, remove } = useFieldArray({
     control: form.control,
     name: "weapons",
-  });
-
-  const {
-    fields: expertiseFields,
-    append: addExpertise,
-    remove: removeExpertise,
-  } = useFieldArray({
-    control: form.control,
-    name: "expertise",
-  });
-
-  const {
-    fields: talentFields,
-    append: addTalent,
-    remove: removeTalent,
-  } = useFieldArray({
-    control: form.control,
-    name: "talents",
   });
 
   useEffect(() => {
@@ -94,6 +66,17 @@ export function CharacterForm({
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
 
+  function onInvalid(errors: unknown) {
+    console.error("Form validation failed:", errors);
+    setSubmitError("Please fix the validation errors before saving.");
+  }
+
+  function numericRegister(path: Parameters<typeof form.register>[0]) {
+    return form.register(path, {
+      setValueAs: (value) => (value === "" ? undefined : Number(value)),
+    });
+  }
+
   return (
     <main className="page-shell">
       {topContent}
@@ -106,9 +89,38 @@ export function CharacterForm({
       </section>
 
       <FlashMessage kind="success" message={successMessage} />
-      <FlashMessage kind="error" message={errorMessage} />
+      <FlashMessage kind="error" message={errorMessage || submitError} />
 
-      <form className="sheet-card" onSubmit={form.handleSubmit(onSubmit)}>
+      {Object.keys(form.formState.errors).length > 0 ? (
+        <section className="notice notice-error" style={{ marginBottom: "18px" }}>
+          <p style={{ marginBottom: "8px" }}>There are validation errors in the form.</p>
+          <ul style={{ margin: 0, paddingLeft: "20px" }}>
+            {form.formState.errors.meta?.name?.message ? (
+              <li>{String(form.formState.errors.meta.name.message)}</li>
+            ) : null}
+            {form.formState.errors.meta?.level?.message ? (
+              <li>Level is invalid.</li>
+            ) : null}
+            {form.formState.errors.meta?.tier?.message ? (
+              <li>Tier is invalid.</li>
+            ) : null}
+            {form.formState.errors.liftingCapacity?.message ? (
+              <li>Lifting Capacity is invalid.</li>
+            ) : null}
+          </ul>
+        </section>
+      ) : null}
+
+      <form
+        className="sheet-card"
+        onSubmit={form.handleSubmit(
+          (values) => {
+            setSubmitError("");
+            onSubmit(values);
+          },
+          onInvalid
+        )}
+      >
         <div className="tab-bar">
           <button
             type="button"
@@ -137,20 +149,6 @@ export function CharacterForm({
             onClick={() => setActiveTab("weapons")}
           >
             Weapons
-          </button>
-          <button
-            type="button"
-            className={`tab-button${activeTab === "expertise" ? " tab-button-active" : ""}`}
-            onClick={() => setActiveTab("expertise")}
-          >
-            Expertise
-          </button>
-          <button
-            type="button"
-            className={`tab-button${activeTab === "talents" ? " tab-button-active" : ""}`}
-            onClick={() => setActiveTab("talents")}
-          >
-            Talents
           </button>
           <button
             type="button"
@@ -193,20 +191,12 @@ export function CharacterForm({
                 <div className="mini-grid two-up">
                   <label className="field field-small">
                     <span>Level</span>
-                    <input
-                      type="number"
-                      min="1"
-                      {...form.register("meta.level", { valueAsNumber: true })}
-                    />
+                    <input type="number" min="1" {...numericRegister("meta.level")} />
                   </label>
 
                   <label className="field field-small">
                     <span>Tier</span>
-                    <input
-                      type="number"
-                      min="1"
-                      {...form.register("meta.tier", { valueAsNumber: true })}
-                    />
+                    <input type="number" min="1" {...numericRegister("meta.tier")} />
                   </label>
                 </div>
               </div>
@@ -220,81 +210,33 @@ export function CharacterForm({
               <h2>Attributes</h2>
               <div className="attributes-grid">
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Strength">
-                    STR
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.strength", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Strength">STR</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.strength")} />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Speed">
-                    SPD
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.speed", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Speed">SPD</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.speed")} />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Intellect">
-                    INT
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.intellect", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Intellect">INT</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.intellect")} />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Willpower">
-                    WIL
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.willpower", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Willpower">WIL</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.willpower")} />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Awareness">
-                    AWR
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.awareness", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Awareness">AWR</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.awareness")} />
                 </label>
 
                 <label className="attribute-tile">
-                  <span className="attribute-label" title="Presence">
-                    PRE
-                  </span>
-                  <input
-                    className="attribute-input"
-                    type="number"
-                    {...form.register("attributes.presence", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <span className="attribute-label" title="Presence">PRE</span>
+                  <input className="attribute-input" type="number" {...numericRegister("attributes.presence")} />
                 </label>
               </div>
             </section>
@@ -308,25 +250,19 @@ export function CharacterForm({
                   <div className="mini-grid three-up">
                     <div className="defense-display">
                       <span className="defense-label">Physical</span>
-                      <strong className="defense-value">
-                        {physicalDefense}
-                      </strong>
+                      <strong className="defense-value">{physicalDefense}</strong>
                       <span className="defense-formula">10 + STR + SPD</span>
                     </div>
 
                     <div className="defense-display">
                       <span className="defense-label">Cognitive</span>
-                      <strong className="defense-value">
-                        {cognitiveDefense}
-                      </strong>
+                      <strong className="defense-value">{cognitiveDefense}</strong>
                       <span className="defense-formula">10 + INT + WIL</span>
                     </div>
 
                     <div className="defense-display">
                       <span className="defense-label">Spiritual</span>
-                      <strong className="defense-value">
-                        {spiritualDefense}
-                      </strong>
+                      <strong className="defense-value">{spiritualDefense}</strong>
                       <span className="defense-formula">10 + AWR + PRE</span>
                     </div>
                   </div>
@@ -337,21 +273,11 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input
-                        type="number"
-                        {...form.register("health.total", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("health.total")} />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input
-                        type="number"
-                        {...form.register("health.current", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("health.current")} />
                     </label>
                   </div>
                 </div>
@@ -361,21 +287,11 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input
-                        type="number"
-                        {...form.register("focus.total", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("focus.total")} />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input
-                        type="number"
-                        {...form.register("focus.current", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("focus.current")} />
                     </label>
                   </div>
                 </div>
@@ -385,21 +301,11 @@ export function CharacterForm({
                   <div className="mini-grid two-up">
                     <label className="field">
                       <span>Max</span>
-                      <input
-                        type="number"
-                        {...form.register("investiture.total", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("investiture.total")} />
                     </label>
                     <label className="field">
                       <span>Current</span>
-                      <input
-                        type="number"
-                        {...form.register("investiture.current", {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister("investiture.current")} />
                     </label>
                   </div>
                 </div>
@@ -408,26 +314,17 @@ export function CharacterForm({
               <div className="form-grid" style={{ marginTop: "16px" }}>
                 <label className="field field-small">
                   <span>Deflect</span>
-                  <input
-                    type="number"
-                    {...form.register("deflect", { valueAsNumber: true })}
-                  />
+                  <input type="number" {...numericRegister("deflect")} />
                 </label>
 
                 <label className="field field-small">
                   <span>Movement</span>
-                  <input
-                    type="number"
-                    {...form.register("movement", { valueAsNumber: true })}
-                  />
+                  <input type="number" {...numericRegister("movement")} />
                 </label>
 
                 <label className="field field-small">
                   <span>Movement Bonus</span>
-                  <input
-                    type="number"
-                    {...form.register("movementBonus", { valueAsNumber: true })}
-                  />
+                  <input type="number" {...numericRegister("movementBonus")} />
                 </label>
 
                 <label className="field field-small">
@@ -442,12 +339,7 @@ export function CharacterForm({
 
                 <label className="field field-small">
                   <span>Lifting Capacity</span>
-                  <input
-                    type="number"
-                    {...form.register("liftingCapacity", {
-                      valueAsNumber: true,
-                    })}
-                  />
+                  <input type="number" {...numericRegister("liftingCapacity")} />
                 </label>
               </div>
             </section>
@@ -470,27 +362,14 @@ export function CharacterForm({
                 {skills.map((skill, index) => (
                   <div className="skill-row" key={`${skill.name}-${index}`}>
                     <div className="skill-name">{skill.name}</div>
-
                     <div className="skill-stat">{skill.stat.toUpperCase()}</div>
 
                     <div className="field field-small skill-cell">
-                      <input
-                        type="number"
-                        min="0"
-                        {...form.register(`skills.${index}.rank`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" min="0" {...numericRegister(`skills.${index}.rank` as never)} />
                     </div>
 
                     <div className="field field-small skill-cell">
-                      <input
-                        type="number"
-                        min="0"
-                        {...form.register(`skills.${index}.bonus`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" min="0" {...numericRegister(`skills.${index}.bonus` as never)} />
                     </div>
                   </div>
                 ))}
@@ -554,16 +433,12 @@ export function CharacterForm({
 
                     <label className="field field-small">
                       <span>Damage Dice</span>
-                      <input
-                        {...form.register(`weapons.${index}.damageDice`)}
-                      />
+                      <input {...form.register(`weapons.${index}.damageDice`)} />
                     </label>
 
                     <label className="field">
                       <span>Damage Type</span>
-                      <input
-                        {...form.register(`weapons.${index}.damageType`)}
-                      />
+                      <input {...form.register(`weapons.${index}.damageType`)} />
                     </label>
 
                     <label className="field">
@@ -573,49 +448,27 @@ export function CharacterForm({
 
                     <label className="field">
                       <span>Expert Traits</span>
-                      <input
-                        {...form.register(`weapons.${index}.expertTraits`)}
-                      />
+                      <input {...form.register(`weapons.${index}.expertTraits`)} />
                     </label>
 
                     <label className="field field-small">
                       <span>Handling</span>
-                      <input
-                        type="number"
-                        {...form.register(`weapons.${index}.handling`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister(`weapons.${index}.handling` as never)} />
                     </label>
 
                     <label className="field field-small">
                       <span>Carried</span>
-                      <input
-                        type="number"
-                        {...form.register(`weapons.${index}.carried`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister(`weapons.${index}.carried` as never)} />
                     </label>
 
                     <label className="field field-small">
                       <span>Ammo</span>
-                      <input
-                        type="number"
-                        {...form.register(`weapons.${index}.ammo`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister(`weapons.${index}.ammo` as never)} />
                     </label>
 
                     <label className="field field-small">
                       <span>Max Ammo</span>
-                      <input
-                        type="number"
-                        {...form.register(`weapons.${index}.maxAmmo`, {
-                          valueAsNumber: true,
-                        })}
-                      />
+                      <input type="number" {...numericRegister(`weapons.${index}.maxAmmo` as never)} />
                     </label>
                   </div>
                 </div>
@@ -624,134 +477,19 @@ export function CharacterForm({
           </section>
         )}
 
-        {activeTab === "expertise" && (
-          <section className="sheet-section">
-            <h2>Expertise</h2>
-
-            <button
-              type="button"
-              className="button button-secondary"
-              onClick={() =>
-                addExpertise({
-                  name: "New Expertise",
-                  text: "",
-                })
-              }
-            >
-              Add Expertise
-            </button>
-
-            {expertiseFields.map((exp, i) => (
-              <div className="weapon-card" key={exp.id}>
-                <div className="weapon-card-header">
-                  <h3>Expertise {i + 1}</h3>
-
-                  <button
-                    type="button"
-                    className="button button-danger"
-                    onClick={() => removeExpertise(i)}
-                  >
-                    Remove
-                  </button>
-                </div>
-
-                <div className="form-grid">
-                  <label className="field">
-                    <span>Name</span>
-                    <input {...form.register(`expertise.${i}.name`)} />
-                  </label>
-
-                  <label className="field">
-                    <span>Description</span>
-                    <textarea
-                      rows={6}
-                      {...form.register(`expertise.${i}.text`)}
-                    />
-                  </label>
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
-
-        {activeTab === "talents" && (
-          <section className="sheet-section">
-            <h2>Talents</h2>
-
-            <button
-              type="button"
-              className="button button-secondary"
-              onClick={() =>
-                addTalent({
-                  name: "New Talent",
-                  activation: "",
-                  prerequisites: "",
-                  source: "",
-                  specialty: "",
-                  text: "",
-                })
-              }
-            >
-              Add Talent
-            </button>
-
-            {talentFields.map((talent, i) => (
-              <div className="weapon-card" key={talent.id}>
-                <div className="weapon-card-header">
-                  <h3>Talent {i + 1}</h3>
-
-                  <button
-                    type="button"
-                    className="button button-danger"
-                    onClick={() => removeTalent(i)}
-                  >
-                    Remove
-                  </button>
-                </div>
-
-                <div className="form-grid">
-                  <label className="field">
-                    <span>Name</span>
-                    <input {...form.register(`talents.${i}.name`)} />
-                  </label>
-
-                  <label className="field field-small">
-                    <span>Activation</span>
-                    <input {...form.register(`talents.${i}.activation`)} />
-                  </label>
-
-                  <label className="field">
-                    <span>Prerequisites</span>
-                    <input {...form.register(`talents.${i}.prerequisites`)} />
-                  </label>
-
-                  <label className="field">
-                    <span>Source</span>
-                    <input {...form.register(`talents.${i}.source`)} />
-                  </label>
-
-                  <label className="field">
-                    <span>Specialty</span>
-                    <input {...form.register(`talents.${i}.specialty`)} />
-                  </label>
-
-                  <label className="field">
-                    <span>Description</span>
-                    <textarea
-                      rows={6}
-                      {...form.register(`talents.${i}.text`)}
-                    />
-                  </label>
-                </div>
-              </div>
-            ))}
-          </section>
-        )}
-
         {activeTab === "details" && (
           <section className="sheet-section">
             <h2>Details</h2>
             <div className="form-grid">
+              <label className="field">
+                <span>Expertises</span>
+                <textarea rows={4} {...form.register("expertisesText")} />
+              </label>
+
+              <label className="field">
+                <span>Talents</span>
+                <textarea rows={4} {...form.register("talentsText")} />
+              </label>
 
               <label className="field">
                 <span>Conditions & Injuries</span>
@@ -767,20 +505,12 @@ export function CharacterForm({
         )}
 
         <div className="action-row">
-          <button
-            type="button"
-            className="button button-secondary"
-            onClick={onCancel}
-          >
+          <button type="button" className="button button-secondary" onClick={onCancel}>
             Cancel
           </button>
 
           {onSecondaryAction && secondaryActionLabel ? (
-            <button
-              type="button"
-              className="button button-secondary"
-              onClick={onSecondaryAction}
-            >
+            <button type="button" className="button button-secondary" onClick={onSecondaryAction}>
               {secondaryActionLabel}
             </button>
           ) : null}
