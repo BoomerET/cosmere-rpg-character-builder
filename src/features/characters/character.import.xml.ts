@@ -55,6 +55,22 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     };
   });
 
+  const importedWeapons = Array.from(
+    character.querySelectorAll("weaponlist > *"),
+  ).map((node) => ({
+    name: textAt(node, "name") || "Unnamed Weapon",
+    skill: textAt(node, "weaponskill") || "Athletics",
+    damageDice: textAt(node, "damagelist > * > dice") || "d1",
+    damageType: textAt(node, "damagelist > * > type") || "impact",
+    traits: textAt(node, "traits"),
+    expertTraits: textAt(node, "experttraits"),
+    handling: numberAt(node, "handling", 0),
+    carried: numberAt(node, "carried", 2),
+    ammo: numberAt(node, "ammo", 0),
+    maxAmmo: numberAt(node, "maxammo", 0),
+    type: numberAt(node, "type", 0),
+  }));
+
   return {
     id: uuid(),
     meta: {
@@ -114,7 +130,24 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     sensesRange: "",
     liftingCapacity: numberAt(character, "encumbrance > carry", 50),
     expertisesText: "",
-    weaponsText: "",
+    weapons:
+      importedWeapons.length > 0
+        ? importedWeapons
+        : [
+            {
+              name: "Unarmed Attack",
+              skill: "Athletics",
+              damageDice: "d1",
+              damageType: "impact",
+              traits: "Unique",
+              expertTraits: "Momentum, Offhand",
+              handling: 0,
+              carried: 2,
+              ammo: 0,
+              maxAmmo: 0,
+              type: 0,
+            },
+          ],
     talentsText: "",
     conditionsText: "",
     skills:

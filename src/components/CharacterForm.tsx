@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   characterSchema,
@@ -37,6 +37,15 @@ export function CharacterForm({
   const form = useForm<CharacterInput>({
     resolver: zodResolver(characterSchema),
     defaultValues,
+  });
+
+  const {
+    fields: weaponFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: "weapons",
   });
 
   useEffect(() => {
@@ -381,16 +390,130 @@ export function CharacterForm({
         </section>
 
         <section className="sheet-section">
+          <h2>Weapons</h2>
+
+          <div className="stack-actions" style={{ marginBottom: "16px" }}>
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={() =>
+                append({
+                  name: "New Weapon",
+                  skill: "Athletics",
+                  damageDice: "d1",
+                  damageType: "impact",
+                  traits: "",
+                  expertTraits: "",
+                  handling: 0,
+                  carried: 2,
+                  ammo: 0,
+                  maxAmmo: 0,
+                  type: 0,
+                })
+              }
+            >
+              Add Weapon
+            </button>
+          </div>
+
+          <div className="weapons-grid">
+            {weaponFields.map((weapon, index) => (
+              <div className="weapon-card" key={weapon.id}>
+                <div className="weapon-card-header">
+                  <h3>Weapon {index + 1}</h3>
+                  <button
+                    type="button"
+                    className="button button-danger"
+                    onClick={() => remove(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <div className="form-grid">
+                  <label className="field">
+                    <span>Name</span>
+                    <input {...form.register(`weapons.${index}.name`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Skill</span>
+                    <input {...form.register(`weapons.${index}.skill`)} />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Damage Dice</span>
+                    <input {...form.register(`weapons.${index}.damageDice`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Damage Type</span>
+                    <input {...form.register(`weapons.${index}.damageType`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Traits</span>
+                    <input {...form.register(`weapons.${index}.traits`)} />
+                  </label>
+
+                  <label className="field">
+                    <span>Expert Traits</span>
+                    <input
+                      {...form.register(`weapons.${index}.expertTraits`)}
+                    />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Handling</span>
+                    <input
+                      type="number"
+                      {...form.register(`weapons.${index}.handling`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Carried</span>
+                    <input
+                      type="number"
+                      {...form.register(`weapons.${index}.carried`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Ammo</span>
+                    <input
+                      type="number"
+                      {...form.register(`weapons.${index}.ammo`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </label>
+
+                  <label className="field field-small">
+                    <span>Max Ammo</span>
+                    <input
+                      type="number"
+                      {...form.register(`weapons.${index}.maxAmmo`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </label>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="sheet-section">
           <h2>Sheet Details</h2>
           <div className="form-grid">
             <label className="field">
               <span>Expertises</span>
               <textarea rows={4} {...form.register("expertisesText")} />
-            </label>
-
-            <label className="field">
-              <span>Weapons</span>
-              <textarea rows={4} {...form.register("weaponsText")} />
             </label>
 
             <label className="field">
@@ -402,15 +525,12 @@ export function CharacterForm({
               <span>Conditions & Injuries</span>
               <textarea rows={4} {...form.register("conditionsText")} />
             </label>
-          </div>
-        </section>
 
-        <section className="sheet-section">
-          <h2>Notes</h2>
-          <label className="field">
-            <span>Character Notes</span>
-            <textarea rows={6} {...form.register("notes")} />
-          </label>
+            <label className="field">
+              <span>Notes</span>
+              <textarea rows={4} {...form.register("notes")} />
+            </label>
+          </div>
         </section>
 
         <div className="action-row">

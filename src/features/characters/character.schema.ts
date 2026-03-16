@@ -29,6 +29,25 @@ export const resourceSchema = z.object({
   bonus: z.number().int().min(0).max(99).default(0),
 });
 
+export const weaponDamageSchema = z.object({
+  dice: z.string().min(1).default("d1"),
+  type: z.string().min(1).default("impact"),
+});
+
+export const weaponSchema = z.object({
+  name: z.string().min(1).default("New Weapon"),
+  skill: z.string().min(1).default("Athletics"),
+  damageDice: z.string().min(1).default("d1"),
+  damageType: z.string().min(1).default("impact"),
+  traits: z.string().default(""),
+  expertTraits: z.string().default(""),
+  handling: z.number().int().min(0).max(99).default(0),
+  carried: z.number().int().min(0).max(2).default(2),
+  ammo: z.number().int().min(0).max(999).default(0),
+  maxAmmo: z.number().int().min(0).max(999).default(0),
+  type: z.number().int().min(0).max(99).default(0),
+});
+
 export const characterSchema = z.object({
   id: z.string().min(1),
   meta: z.object({
@@ -71,7 +90,7 @@ export const characterSchema = z.object({
   sensesRange: z.string().default(""),
   liftingCapacity: z.number().int().min(0).max(99999).default(50),
   expertisesText: z.string().default(""),
-  weaponsText: z.string().default(""),
+  weapons: z.array(weaponSchema).default([]),
   talentsText: z.string().default(""),
   conditionsText: z.string().default(""),
   skills: z.array(skillSchema),

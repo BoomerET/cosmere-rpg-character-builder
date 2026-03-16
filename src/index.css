@@ -671,3 +671,33 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+.stack-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.weapons-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.weapon-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.weapon-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.weapon-card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}

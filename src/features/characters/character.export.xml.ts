@@ -94,6 +94,39 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     )
     .join("");
 
+  const weaponListBlock = character.weapons
+    .map((weapon, i) => {
+      const nodeName =
+        i === 0 && weapon.name === "Unarmed Attack"
+          ? "unarmedattack"
+          : idNode(i + 1);
+
+      return (
+        `<${nodeName}>` +
+        tag("ammo", n(weapon.ammo), { type: "number" }) +
+        tag("carried", n(weapon.carried), { type: "number" }) +
+        `<damagelist>` +
+        `<id-00001>` +
+        tag("dice", escapeXml(weapon.damageDice), { type: "dice" }) +
+        tag("type", escapeXml(weapon.damageType), { type: "string" }) +
+        tag("weaponskill", escapeXml(weapon.skill), { type: "string" }) +
+        `</id-00001>` +
+        `</damagelist>` +
+        tag("experttraits", escapeXml(weapon.expertTraits), {
+          type: "string",
+        }) +
+        tag("handling", n(weapon.handling), { type: "number" }) +
+        tag("maxammo", n(weapon.maxAmmo), { type: "number" }) +
+        tag("name", escapeXml(weapon.name), { type: "string" }) +
+        `<shortcut type="windowreference">${tag("class", "")}${tag("recordname", "")}</shortcut>` +
+        tag("traits", escapeXml(weapon.traits), { type: "string" }) +
+        tag("type", n(weapon.type), { type: "number" }) +
+        tag("weaponskill", escapeXml(weapon.skill), { type: "string" }) +
+        `</${nodeName}>`
+      );
+    })
+    .join("");
+
   const topLevelStats = [
     tag("awareness", n(character.attributes.awareness), { type: "number" }),
     tag("intellect", n(character.attributes.intellect), { type: "number" }),
@@ -212,23 +245,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     ) +
     tag("totaltalents", "0", { type: "number" }) +
     `<weaponlist>` +
-    `<unarmedattack>` +
-    tag("ammo", "0", { type: "number" }) +
-    tag("carried", "2", { type: "number" }) +
-    `<damagelist><id-00001>` +
-    tag("dice", "d1", { type: "dice" }) +
-    tag("type", "impact", { type: "string" }) +
-    tag("weaponskill", "Athletics", { type: "string" }) +
-    `</id-00001></damagelist>` +
-    tag("experttraits", "Momentum, Offhand", { type: "string" }) +
-    tag("handling", "0", { type: "number" }) +
-    tag("maxammo", "0", { type: "number" }) +
-    tag("name", "Unarmed Attack", { type: "string" }) +
-    `<shortcut type="windowreference">${tag("class", "")}${tag("recordname", "")}</shortcut>` +
-    tag("traits", "Unique", { type: "string" }) +
-    tag("type", "0", { type: "number" }) +
-    tag("weaponskill", "Athletics", { type: "string" }) +
-    `</unarmedattack>` +
+    weaponListBlock +
     `</weaponlist>` +
     `</character>` +
     `</root>`
