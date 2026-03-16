@@ -5,6 +5,13 @@ type CharacterSummaryCardProps = {
 };
 
 export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
+  const physicalDefense =
+    10 + character.attributes.strength + character.attributes.speed;
+  const cognitiveDefense =
+    10 + character.attributes.intellect + character.attributes.willpower;
+  const spiritualDefense =
+    10 + character.attributes.awareness + character.attributes.presence;
+
   return (
     <section className="summary-card">
       <div className="summary-card-header">
@@ -62,28 +69,45 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
       <div className="summary-stats">
         <div className="summary-stat">
-          <span className="summary-stat-label">Awareness</span>
-          <strong>{character.attributes.awareness}</strong>
-        </div>
-        <div className="summary-stat">
-          <span className="summary-stat-label">Intellect</span>
-          <strong>{character.attributes.intellect}</strong>
-        </div>
-        <div className="summary-stat">
-          <span className="summary-stat-label">Presence</span>
-          <strong>{character.attributes.presence}</strong>
+          <span className="summary-stat-label">Strength</span>
+          <strong>{character.attributes.strength}</strong>
         </div>
         <div className="summary-stat">
           <span className="summary-stat-label">Speed</span>
           <strong>{character.attributes.speed}</strong>
         </div>
         <div className="summary-stat">
-          <span className="summary-stat-label">Strength</span>
-          <strong>{character.attributes.strength}</strong>
+          <span className="summary-stat-label">Intellect</span>
+          <strong>{character.attributes.intellect}</strong>
         </div>
         <div className="summary-stat">
           <span className="summary-stat-label">Willpower</span>
           <strong>{character.attributes.willpower}</strong>
+        </div>
+        <div className="summary-stat">
+          <span className="summary-stat-label">Awareness</span>
+          <strong>{character.attributes.awareness}</strong>
+        </div>
+        <div className="summary-stat">
+          <span className="summary-stat-label">Presence</span>
+          <strong>{character.attributes.presence}</strong>
+        </div>
+      </div>
+
+      <div className="summary-defense-row">
+        <div className="summary-defense">
+          <span className="summary-stat-label">Physical Defense</span>
+          <strong>{physicalDefense}</strong>
+        </div>
+
+        <div className="summary-defense">
+          <span className="summary-stat-label">Cognitive Defense</span>
+          <strong>{cognitiveDefense}</strong>
+        </div>
+
+        <div className="summary-defense">
+          <span className="summary-stat-label">Spiritual Defense</span>
+          <strong>{spiritualDefense}</strong>
         </div>
       </div>
     </section>

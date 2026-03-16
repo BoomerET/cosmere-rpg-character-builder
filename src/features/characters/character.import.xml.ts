@@ -39,9 +39,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     throw new Error("Could not find character node in XML");
   }
 
-  const importedSkills = Array.from(
-    character.querySelectorAll("skilllist > *")
-  ).map((node) => {
+  const importedSkills = Array.from(character.querySelectorAll("skilllist > *")).map((node) => {
     const statText = textAt(node, "stat");
     return {
       name: textAt(node, "name"),
@@ -70,10 +68,49 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       strength: numberAt(character, "attributes > strength > score", 0),
       willpower: numberAt(character, "attributes > willpower > score", 0),
     },
-    skills:
-      importedSkills.length > 0
-        ? importedSkills
-        : DEFAULT_SKILLS.map((skill) => ({ ...skill })),
+    defenses: {
+      physical: {
+        bonus: numberAt(character, "defenses > physicaldefense > bonus", 0),
+        score: numberAt(character, "defenses > physicaldefense > score", 10),
+      },
+      cognitive: {
+        bonus: numberAt(character, "defenses > cognitivedefense > bonus", 0),
+        score: numberAt(character, "defenses > cognitivedefense > score", 10),
+      },
+      spiritual: {
+        bonus: numberAt(character, "defenses > spiritualdefense > bonus", 0),
+        score: numberAt(character, "defenses > spiritualdefense > score", 10),
+      },
+    },
+    health: {
+      current: Math.max(
+        0,
+        numberAt(character, "hp > total", 10) - numberAt(character, "hp > wounds", 0)
+      ),
+      total: numberAt(character, "hp > total", 10),
+      bonus: numberAt(character, "hp > bonus", 0),
+      wounds: numberAt(character, "hp > wounds", 0),
+    },
+    focus: {
+      current: numberAt(character, "focus > current", 0),
+      total: numberAt(character, "focus > total", 2),
+      bonus: numberAt(character, "focus > bonus", 0),
+    },
+    investiture: {
+      current: numberAt(character, "investiture > current", 0),
+      total: numberAt(character, "investiture > total", 0),
+    },
+    deflect: numberAt(character, "deflect", 0),
+    movement: numberAt(character, "movement", 20),
+    movementBonus: numberAt(character, "movementbonus", 0),
+    recoveryDie: textAt(character, "recdie") || "d4",
+    sensesRange: "",
+    liftingCapacity: textAt(character, "encumbrance > carry"),
+    expertisesText: "",
+    weaponsText: "",
+    talentsText: "",
+    conditionsText: "",
+    skills: importedSkills.length > 0 ? importedSkills : DEFAULT_SKILLS.map((s) => ({ ...s })),
     notes: "",
     version: "1.0.0",
   };

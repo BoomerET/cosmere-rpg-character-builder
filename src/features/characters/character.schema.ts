@@ -18,6 +18,17 @@ export const skillSchema = z.object({
   bonus: z.number().int().min(0).max(20).default(0),
 });
 
+export const defenseScoreSchema = z.object({
+  bonus: z.number().int().min(0).max(20).default(0),
+  score: z.number().int().min(0).max(99).default(10),
+});
+
+export const resourceSchema = z.object({
+  current: z.number().int().min(0).max(999).default(0),
+  total: z.number().int().min(0).max(999).default(0),
+  bonus: z.number().int().min(0).max(99).default(0),
+});
+
 export const characterSchema = z.object({
   id: z.string().min(1),
   meta: z.object({
@@ -37,6 +48,32 @@ export const characterSchema = z.object({
     strength: z.number().int().min(0).max(20),
     willpower: z.number().int().min(0).max(20),
   }),
+  defenses: z.object({
+    physical: defenseScoreSchema,
+    cognitive: defenseScoreSchema,
+    spiritual: defenseScoreSchema,
+  }),
+  health: z.object({
+    current: z.number().int().min(0).max(999).default(0),
+    total: z.number().int().min(0).max(999).default(10),
+    bonus: z.number().int().min(0).max(99).default(0),
+    wounds: z.number().int().min(0).max(999).default(0),
+  }),
+  focus: resourceSchema,
+  investiture: z.object({
+    current: z.number().int().min(0).max(999).default(0),
+    total: z.number().int().min(0).max(999).default(0),
+  }),
+  deflect: z.number().int().min(0).max(99).default(0),
+  movement: z.number().int().min(0).max(999).default(20),
+  movementBonus: z.number().int().min(0).max(99).default(0),
+  recoveryDie: z.string().min(1).default("d4"),
+  sensesRange: z.string().default(""),
+  liftingCapacity: z.string().default(""),
+  expertisesText: z.string().default(""),
+  weaponsText: z.string().default(""),
+  talentsText: z.string().default(""),
+  conditionsText: z.string().default(""),
   skills: z.array(skillSchema),
   notes: z.string().optional(),
   version: z.literal("1.0.0"),
