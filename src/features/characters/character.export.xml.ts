@@ -254,13 +254,10 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("load", "0", { type: "number" }) +
     tag("max", n(carry * 2), { type: "number" }) +
     `</encumbrance>` +
-    {/*
-      }
     tag("carry", String(carry), { type: "number" }) +
     tag("load", "0", { type: "number" }) +
     tag("max", String(carry * 2), { type: "number" }) +
     `</encumbrance>` +
-    */}
     tag("expertise", expertiseBlock) +
     `<focus>` +
     tag("bonus", n(character.focus.bonus), { type: "number" }) +
