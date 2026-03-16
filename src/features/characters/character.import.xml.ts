@@ -107,20 +107,6 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       strength: numberAt(character, "attributes > strength > score", 0),
       willpower: numberAt(character, "attributes > willpower > score", 0),
     },
-    defenses: {
-      physical: {
-        bonus: numberAt(character, "defenses > physicaldefense > bonus", 0),
-        score: numberAt(character, "defenses > physicaldefense > score", 10),
-      },
-      cognitive: {
-        bonus: numberAt(character, "defenses > cognitivedefense > bonus", 0),
-        score: numberAt(character, "defenses > cognitivedefense > score", 10),
-      },
-      spiritual: {
-        bonus: numberAt(character, "defenses > spiritualdefense > bonus", 0),
-        score: numberAt(character, "defenses > spiritualdefense > score", 10),
-      },
-    },
     health: {
       current: Math.max(
         0,
@@ -145,7 +131,9 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     movementBonus: numberAt(character, "movementbonus", 0),
     recoveryDie: textAt(character, "recdie") || "d4",
     sensesRange: "",
-    liftingCapacity: numberAt(character, "encumbrance > carry", 50),
+    liftingCapacity: textAt(character, "encumbrance > carry")
+      ? numberAt(character, "encumbrance > carry", 50)
+      : undefined,
     expertise: importedExpertise,
     weapons:
       importedWeapons.length > 0

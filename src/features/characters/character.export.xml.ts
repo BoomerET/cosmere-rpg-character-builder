@@ -250,6 +250,10 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("deflect", n(character.deflect), { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
+    tag("carry", n(carry), { type: "number" }) +
+    tag("load", "0", { type: "number" }) +
+    tag("max", n(carry * 2), { type: "number" }) +
+    `</encumbrance>` +
     tag("carry", String(carry), { type: "number" }) +
     tag("load", "0", { type: "number" }) +
     tag("max", String(carry * 2), { type: "number" }) +
