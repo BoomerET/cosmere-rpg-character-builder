@@ -415,7 +415,7 @@ export function CharacterForm({
                   <span>Lifting Capacity</span>
                   <input
                     type="number"
-                    placeHolder="50"
+                    placeHolder="optional"
                     {...numericRegister("liftingCapacity")}
                   />
                 </label>
