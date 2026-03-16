@@ -53,12 +53,6 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
           </span>
         </div>
 
-        <div className="summary-item">
-          <!-- <span className="summary-label">Concept</span> -->
-          <span className="summary-value">{character.meta.concept || "—"}</span>
-        </div>
-      </div>
-
       <div className="summary-stats">
         <div className="summary-stat">
           <span className="summary-stat-label">Strength</span>

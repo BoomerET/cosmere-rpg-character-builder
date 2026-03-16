@@ -67,7 +67,6 @@ export const characterSchema = z.object({
   meta: z.object({
     name: z.string().min(1, "Character name is required"),
     playerName: z.string().optional(),
-    concept: z.string().optional(),
     ancestry: z.string().min(1).default("Human (Roshar)"),
     path: z.string().min(1).default("Windrunner"),
     level: z.number().int().min(1).default(1),

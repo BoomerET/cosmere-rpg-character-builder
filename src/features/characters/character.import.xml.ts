@@ -94,7 +94,6 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     meta: {
       name: textAt(character, "name"),
       playerName: "",
-      concept: "",
       ancestry: textAt(character, "ancestry > name") || "Human (Roshar)",
       path: textAt(character, "path") || "Windrunner",
       level: numberAt(character, "level", 1),

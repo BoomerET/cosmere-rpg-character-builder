@@ -63,7 +63,6 @@ export function HomePage() {
                 <tr>
                   <th>Name</th>
                   <th>Player</th>
-                  <th>Concept</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -75,7 +74,6 @@ export function HomePage() {
                     <tr key={c.id}>
                       <td>{characterName}</td>
                       <td>{c.meta.playerName || "—"}</td>
-                      <td>{c.meta.concept || "—"}</td>
                       <td>
                         <div className="inline-actions">
                           <button

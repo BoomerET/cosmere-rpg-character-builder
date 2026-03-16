@@ -28,7 +28,6 @@ function makeBlankCharacter(): CharacterInput {
     meta: {
       name: "",
       playerName: "",
-      concept: "",
       ancestry: "Human (Roshar)",
       path: "Windrunner",
       level: 1,

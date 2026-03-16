@@ -176,11 +176,6 @@ export function CharacterForm({
               </label>
 
               <label className="field">
-                <span>Concept</span>
-                <input {...form.register("meta.concept")} />
-              </label>
-
-              <label className="field">
                 <span>Ancestry</span>
                 <input {...form.register("meta.ancestry")} />
               </label>
