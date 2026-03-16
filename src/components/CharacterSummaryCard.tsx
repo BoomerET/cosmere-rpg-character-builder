@@ -54,7 +54,7 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
         </div>
 
         <div className="summary-item">
-          <span className="summary-label">Concept</span>
+          <!-- <span className="summary-label">Concept</span> -->
           <span className="summary-value">{character.meta.concept || "—"}</span>
         </div>
       </div>
