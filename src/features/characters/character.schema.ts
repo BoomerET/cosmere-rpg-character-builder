@@ -117,7 +117,8 @@ export const characterSchema = z.object({
   version: z.literal("1.0.0"),
 });
 
-export type CharacterInput = z.infer<typeof characterSchema>;
+export type CharacterFormValues = z.input<typeof characterSchema>;
+export type CharacterInput = z.output<typeof characterSchema>;
 
 export const DEFAULT_SKILLS: CharacterInput["skills"] = [
   { name: "Agility", stat: "speed", rank: 0, bonus: 0 },
@@ -139,6 +140,3 @@ export const DEFAULT_SKILLS: CharacterInput["skills"] = [
   { name: "Survival", stat: "awareness", rank: 0, bonus: 0 },
   { name: "Thievery", stat: "speed", rank: 0, bonus: 0 },
 ];
-
-export type CharacterFormValues = z.input<typeof characterSchema>;
-export type CharacterInput = z.output<typeof characterSchema>;
