@@ -134,11 +134,11 @@ tag(
     tag("deflect", n(character.deflect), { type: "number" }) +
     emptyTag("effectlist") +
 
-    `<encumbrance>` +
-    tag("carry", escapeXml(character.liftingCapacity || "50"), { type: "number" }) +
-    tag("load", "0", { type: "number" }) +
-    tag("max", escapeXml(character.liftingCapacity || "100"), { type: "number" }) +
-    `</encumbrance>` +
+`<encumbrance>` +
+tag("carry", n(character.liftingCapacity), { type: "number" }) +
+tag("load", "0", { type: "number" }) +
+tag("max", n(character.liftingCapacity * 2), { type: "number" }) +
+`</encumbrance>` +
 
     emptyTag("expertise") +
 

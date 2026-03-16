@@ -301,9 +301,12 @@ export function CharacterForm({
               <input {...form.register("sensesRange")} />
             </label>
 
-            <label className="field">
+            <label className="field field-small">
               <span>Lifting Capacity</span>
-              <input {...form.register("liftingCapacity")} />
+              <input
+                type="number"
+                {...form.register("liftingCapacity", { valueAsNumber: true })}
+              />
             </label>
           </div>
         </section>

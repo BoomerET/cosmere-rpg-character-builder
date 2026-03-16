@@ -105,12 +105,15 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     movementBonus: numberAt(character, "movementbonus", 0),
     recoveryDie: textAt(character, "recdie") || "d4",
     sensesRange: "",
-    liftingCapacity: textAt(character, "encumbrance > carry"),
+    liftingCapacity: numberAt(character, "encumbrance > carry", 50),
     expertisesText: "",
     weaponsText: "",
     talentsText: "",
     conditionsText: "",
-    skills: importedSkills.length > 0 ? importedSkills : DEFAULT_SKILLS.map((s) => ({ ...s })),
+    skills:
+      importedSkills.length > 0
+        ? importedSkills
+        : DEFAULT_SKILLS.map((s) => ({ ...s })),
     notes: "",
     version: "1.0.0",
   };

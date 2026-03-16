@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { AppLayout } from "../components/AppLayout";
+import { CharacterSummaryCard } from "../components/CharacterSummaryCard";
 import { FlashMessage } from "../components/FlashMessage";
 import { useCharacters } from "../features/characters/CharacterContext";
 import { toFantasyGroundsXml } from "../features/characters/character.export.xml";
-import { CharacterSummaryCard } from "../components/CharacterSummaryCard";
 
 type PageState = {
   successMessage?: string;
@@ -60,21 +60,40 @@ export function ExportPage() {
     );
     setLocalSuccess(`Downloaded XML for "${character.meta.name}".`);
   }
+
   return (
     <AppLayout>
-      <CharacterForm
-        title="Edit Character"
-        subtitle="Update your Cosmere RPG character and export it to Fantasy Grounds XML."
-        defaultValues={character}
-        submitLabel="Save Changes"
-        onSubmit={onSubmit}
-        onCancel={() => navigate("/")}
-        onSecondaryAction={() => navigate(`/export/${character.id}`)}
-        secondaryActionLabel="View Export"
-        successMessage={state?.successMessage}
-        errorMessage={state?.errorMessage}
-        topContent={<CharacterSummaryCard character={character} />}
-      />
+      <main className="page-shell">
+        <section className="page-header">
+          <h1>Export {character.meta.name}</h1>
+          <p>Download Fantasy Grounds XML for import.</p>
+        </section>
+
+        <FlashMessage
+          kind="success"
+          message={localSuccess || state?.successMessage || ""}
+        />
+        <FlashMessage kind="error" message={state?.errorMessage || ""} />
+
+        <CharacterSummaryCard character={character} />
+
+        <section className="sheet-card">
+          <div className="inline-actions" style={{ marginBottom: "18px" }}>
+            <button className="button" onClick={handleDownload}>
+              Download XML
+            </button>
+
+            <button
+              className="button button-secondary"
+              onClick={() => navigate(`/character/${character.id}`)}
+            >
+              Edit Character
+            </button>
+          </div>
+
+          <pre className="code-block">{xml}</pre>
+        </section>
+      </main>
     </AppLayout>
   );
 }
