@@ -17,6 +17,7 @@ const CharacterContext = createContext<CharacterContextValue | undefined>(undefi
 function makeBlankCharacter(): CharacterInput {
   return {
     id: uuid(),
+
     meta: {
       name: "",
       playerName: "",
@@ -25,6 +26,7 @@ function makeBlankCharacter(): CharacterInput {
       level: 1,
       tier: 1,
     },
+
     attributes: {
       awareness: 0,
       intellect: 0,
@@ -33,29 +35,37 @@ function makeBlankCharacter(): CharacterInput {
       strength: 0,
       willpower: 0,
     },
+
     health: {
       current: 10,
       total: 10,
       bonus: 0,
       wounds: 0,
     },
+
     focus: {
       current: 0,
       total: 2,
       bonus: 0,
     },
+
     investiture: {
       current: 0,
       total: 0,
     },
+
     deflect: 0,
     movement: 20,
     movementBonus: 0,
+
     recoveryDie: "d4",
     sensesRange: "",
     liftingCapacity: undefined,
+
     expertise: [],
+
     talents: [],
+
     weapons: [
       {
         name: "Unarmed Attack",
@@ -71,15 +81,21 @@ function makeBlankCharacter(): CharacterInput {
         type: 0,
       },
     ],
+
     conditionsText: "",
-    skills: DEFAULT_SKILLS.map((skill) => ({ ...skill })),
+
+    skills: DEFAULT_SKILLS.map((s) => ({ ...s })),
+
     notes: "",
+
     version: "1.0.0",
   };
 }
 
 export function CharacterProvider({ children }: { children: ReactNode }) {
-  const [characters, setCharacters] = useState<CharacterInput[]>(() => characterStorage.list());
+  const [characters, setCharacters] = useState<CharacterInput[]>(() =>
+    characterStorage.list(),
+  );
 
   function refreshCharacters() {
     setCharacters(characterStorage.list());
@@ -112,16 +128,22 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       getCharacter,
       deleteCharacter,
     }),
-    [characters]
+    [characters],
   );
 
-  return <CharacterContext.Provider value={value}>{children}</CharacterContext.Provider>;
+  return (
+    <CharacterContext.Provider value={value}>
+      {children}
+    </CharacterContext.Provider>
+  );
 }
 
 export function useCharacters() {
   const ctx = useContext(CharacterContext);
+
   if (!ctx) {
     throw new Error("useCharacters must be used inside CharacterProvider");
   }
+
   return ctx;
 }

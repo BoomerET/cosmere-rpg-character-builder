@@ -21,7 +21,7 @@ type CharacterFormProps = {
   topContent?: ReactNode;
 };
 
-type FormTab = "overview" | "attributes" | "skills" | "weapons" | "details";
+type FormTab = "overview" | "attributes" | "skills" | "weapons" | "expertise" | "talents" | "details";
 
 export function CharacterForm({
   title,
