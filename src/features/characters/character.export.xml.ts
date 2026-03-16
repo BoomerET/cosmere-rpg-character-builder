@@ -216,6 +216,8 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     )
     .join("");
 
+  const carry = character.liftingCapacity ?? 50;
+
   return (
     `<?xml version="1.0" encoding="utf-8"?>` +
     `<root version="5.1" dataversion="20260124" release="8.1|CoreRPG:7">` +
@@ -248,9 +250,9 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("deflect", n(character.deflect), { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
-    tag("carry", n(character.liftingCapacity), { type: "number" }) +
+    tag("carry", String(carry), { type: "number" }) +
     tag("load", "0", { type: "number" }) +
-    tag("max", n(character.liftingCapacity * 2), { type: "number" }) +
+    tag("max", String(carry * 2), { type: "number" }) +
     `</encumbrance>` +
     tag("expertise", expertiseBlock) +
     `<focus>` +

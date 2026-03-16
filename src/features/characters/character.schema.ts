@@ -101,7 +101,7 @@ export const characterSchema = z.object({
   movementBonus: z.number().int().min(0).max(99).default(0),
   recoveryDie: z.string().min(1).default("d4"),
   sensesRange: z.string().default(""),
-  liftingCapacity: z.number().int().min(0).max(99999).default(50),
+  liftingCapacity: z.number().int().min(0).max(99999).optional(),
   expertise: z.array(expertiseSchema).default([]),
   talents: z.array(talentSchema).default([]),
   weapons: z.array(weaponSchema).default([]),
