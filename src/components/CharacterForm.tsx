@@ -31,6 +31,8 @@ type FormTab =
   | "talents"
   | "details";
 
+type SkillSortMode = "alpha" | "total";
+
 function getTierFromLevel(level: number): number {
   if (level >= 21) return 5;
   if (level >= 16) return 4;
@@ -64,6 +66,7 @@ export function CharacterForm({
 }: CharacterFormProps) {
   const [activeTab, setActiveTab] = useState<FormTab>("overview");
   const [submitError, setSubmitError] = useState("");
+  const [skillSortMode, setSkillSortMode] = useState<SkillSortMode>("alpha");
 
   const form = useForm<CharacterFormValues>({
     resolver: zodResolver(characterSchema),
@@ -127,6 +130,23 @@ export function CharacterForm({
     awareness: "AWR",
     presence: "PRE",
   };
+
+  const displayedSkills = [...skills]
+    .map((skill, index) => ({
+      skill,
+      index,
+      total:
+        getAttributeValue(skill.stat) + (skill.rank ?? 0) + (skill.bonus ?? 0),
+    }))
+    .sort((a, b) => {
+      if (skillSortMode === "total") {
+        return b.total - a.total || a.skill.name.localeCompare(b.skill.name);
+      }
+
+      return a.skill.name.localeCompare(b.skill.name, undefined, {
+        sensitivity: "base",
+      });
+    });
 
   function getAttributeValue(
     stat: CharacterFormValues["skills"][number]["stat"],
@@ -604,7 +624,23 @@ export function CharacterForm({
         {activeTab === "skills" && (
           <section className="sheet-section">
             <h2>Skills</h2>
+            <div className="stack-actions" style={{ marginBottom: "16px" }}>
+              <button
+                type="button"
+                className={`button ${skillSortMode === "alpha" ? "" : "button-secondary"}`}
+                onClick={() => setSkillSortMode("alpha")}
+              >
+                Sort A–Z
+              </button>
 
+              <button
+                type="button"
+                className={`button ${skillSortMode === "total" ? "" : "button-secondary"}`}
+                onClick={() => setSkillSortMode("total")}
+              >
+                Sort by Total
+              </button>
+            </div>
             <div className="skills-table">
               <div className="skill-table-header">
                 <div>Skill</div>
@@ -615,8 +651,8 @@ export function CharacterForm({
               </div>
 
               <div className="skills-grid">
-                {[...skills]
-                  .map((skill, index) => ({ skill, index })) // preserve original index
+                {[...displayedSkills]
+                  .map(({ skill, index, total }) => ({ skill, index })) // preserve original index
                   .sort((a, b) => a.skill.name.localeCompare(b.skill.name))
                   .map(({ skill, index }) => (
                     <div className="skill-row" key={`${skill.name}-${index}`}>
@@ -641,11 +677,7 @@ export function CharacterForm({
                         />
                       </div>
 
-                      <div className="skill-total">
-                        {getAttributeValue(skill.stat) +
-                          (skill.rank ?? 0) +
-                          (skill.bonus ?? 0)}
-                      </div>
+                      <div className="skill-total">{total}</div>
                     </div>
                   ))}
               </div>
