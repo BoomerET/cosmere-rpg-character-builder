@@ -6,6 +6,21 @@ function textAt(parent: Element | null, selector: string): string {
   return node?.textContent?.trim() ?? "";
 }
 
+function directChildText(parent: Element | null, tagName: string): string {
+  const node = parent?.querySelector(`:scope > ${tagName}`);
+  return node?.textContent?.trim() ?? "";
+}
+
+function numberAt(
+  parent: Element | null,
+  selector: string,
+  fallback = 0,
+): number {
+  const raw = textAt(parent, selector);
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 function numberAt(
   parent: Element | null,
   selector: string,
@@ -92,12 +107,12 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   return {
     id: uuid(),
     meta: {
-      name: textAt(character, ":scope > name"),
+      name: directChildText(character, "name"),
       playerName: "",
       ancestry: textAt(character, "ancestry > name") || "Human (Roshar)",
-      path: textAt(character, "path") || "Windrunner",
-      level: numberAt(character, "level", 1),
-      tier: numberAt(character, "tier", 1),
+      path: directChildText(character, "path") || "Windrunner",
+      level: numberAt(character, ":scope > level", 1),
+      tier: numberAt(character, ":scope > tier", 1),
     },
     attributes: {
       awareness: numberAt(character, "attributes > awareness > score", 0),
