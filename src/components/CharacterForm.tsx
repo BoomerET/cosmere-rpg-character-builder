@@ -39,25 +39,6 @@ function getTierFromLevel(level: number): number {
   return 1;
 }
 
-function getStatAbbreviation(stat: string): string {
-  switch (stat) {
-    case "strength":
-      return "STR";
-    case "speed":
-      return "SPD";
-    case "intellect":
-      return "INT";
-    case "willpower":
-      return "WIL";
-    case "awareness":
-      return "AWR";
-    case "presence":
-      return "PRE";
-    default:
-      return stat.toUpperCase();
-  }
-}
-
 function getHealthMax(strength: number): number {
   return 10 + strength;
 }
@@ -168,6 +149,25 @@ export function CharacterForm({
     return form.register(path, {
       setValueAs: (value) => (value === "" ? undefined : Number(value)),
     });
+  }
+
+  function getStatAbbreviation(stat: string): string {
+    switch (stat) {
+      case "strength":
+        return "STR";
+      case "speed":
+        return "SPD";
+      case "intellect":
+        return "INT";
+      case "willpower":
+        return "WIL";
+      case "awareness":
+        return "AWR";
+      case "presence":
+        return "PRE";
+      default:
+        return stat.toUpperCase();
+    }
   }
 
   return (
