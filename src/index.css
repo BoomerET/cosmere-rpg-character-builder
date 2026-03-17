@@ -732,12 +732,41 @@ textarea {
   font-size: 1rem;
 }
 
+.skill-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.25fr 120px 120px;
+  gap: 12px;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .skill-cell {
   gap: 0;
 }
 
 .skill-cell input {
   margin: 0;
+}
+
+.skills-table {
+  display: grid;
+  gap: 10px;
+}
+
+.skill-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 120px 120px;
+  gap: 12px;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .skills-grid {
