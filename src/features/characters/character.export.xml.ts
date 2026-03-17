@@ -1,4 +1,5 @@
 import type { CharacterInput } from "./character.schema";
+import { getTierFromLevel } from "./character.utils";
 
 const COIN_NAMES = [
   "EBR",
@@ -117,6 +118,8 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
   const movementTotal = movementBase + character.movementBonus;
 
   const wounds = Math.max(0, healthTotal - character.health.current);
+
+  const tier = getTierFromLevel(character.meta.level);
 
   const attrsBlock = [
     ["awareness", character.attributes.awareness],
@@ -303,7 +306,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("recdie", escapeXml(character.recoveryDie), { type: "dice" }) +
     tag("skilllist", skillListBlock) +
     tag("talent", talentBlock) +
-    tag("tier", n(character.meta.tier), { type: "number" }) +
+    tag("tier", n(tier), { type: "number" }) +
     tag(
       "totalskillranks",
       n(character.skills.reduce((sum, skill) => sum + skill.rank, 0)),

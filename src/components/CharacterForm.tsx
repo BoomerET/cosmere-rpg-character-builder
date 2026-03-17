@@ -6,6 +6,7 @@ import {
   type CharacterInput,
 } from "../features/characters/character.schema";
 import { FlashMessage } from "./FlashMessage";
+import { getTierFromLevel } from "../features/characters/character.utils";
 
 type CharacterFormProps = {
   title: string;
@@ -98,6 +99,9 @@ export function CharacterForm({
   const healthMax = 10 + strength;
 
   const movementRate = speed >= 3 ? 30 : speed >= 1 ? 25 : 20;
+
+  const level = form.watch("meta.level");
+  const tier = getTierFromLevel(level);
 
   function onInvalid(errors: unknown) {
     console.error("Form validation failed:", errors);
@@ -242,14 +246,31 @@ export function CharacterForm({
                     />
                   </label>
 
-                  <label className="field field-small">
-                    <span>Tier</span>
-                    <input
-                      type="number"
-                      min="1"
-                      {...numericRegister("meta.tier")}
-                    />
-                  </label>
+                  <div className="mini-card">
+                    <h3>Advancement</h3>
+                    <div className="mini-grid two-up">
+                      <label className="field field-small">
+                        <span>Level</span>
+                        <input
+                          type="number"
+                          min="1"
+                          {...numericRegister("meta.level")}
+                        />
+                      </label>
+
+                      <div className="defense-display">
+                        <span className="defense-label">Tier</span>
+                        <strong className="defense-value">{tier}</strong>
+                        <span className="defense-formula">
+                          {tier === 1 && "Levels 1–5"}
+                          {tier === 2 && "Levels 6–10"}
+                          {tier === 3 && "Levels 11–15"}
+                          {tier === 4 && "Levels 16–20"}
+                          {tier === 5 && "Levels 21+"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

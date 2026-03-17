@@ -1,4 +1,7 @@
 import type { CharacterInput } from "../features/characters/character.schema";
+import { getTierFromLevel } from "../features/characters/character.utils";
+
+const tier = getTierFromLevel(character.meta.level);
 
 type CharacterSummaryCardProps = {
   character: CharacterInput;
@@ -52,7 +55,7 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
         <div className="summary-item">
           <span className="summary-label">Tier</span>
-          <span className="summary-value">{character.meta.tier ?? "—"}</span>
+          <span className="summary-value">{tier}</span>
         </div>
 
         <div className="summary-item">
