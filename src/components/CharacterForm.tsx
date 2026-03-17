@@ -119,6 +119,27 @@ export function CharacterForm({
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
 
+  function getAttributeValue(
+    stat: CharacterFormValues["skills"][number]["stat"],
+  ) {
+    switch (stat) {
+      case "awareness":
+        return awareness;
+      case "intellect":
+        return intellect;
+      case "presence":
+        return presence;
+      case "speed":
+        return speed;
+      case "strength":
+        return strength;
+      case "willpower":
+        return willpower;
+      default:
+        return 0;
+    }
+  }
+
   function onInvalid(errors: unknown) {
     console.error("Form validation failed:", errors);
     setSubmitError("Please fix the validation errors before saving.");
@@ -558,6 +579,7 @@ export function CharacterForm({
                 <div>Stat</div>
                 <div>Rank</div>
                 <div>Bonus</div>
+                <div>Total</div>
               </div>
 
               <div className="skills-grid">
@@ -580,6 +602,12 @@ export function CharacterForm({
                         min="0"
                         {...numericRegister(`skills.${index}.bonus` as const)}
                       />
+                    </div>
+
+                    <div className="skill-total">
+                      {getAttributeValue(skill.stat) +
+                        (skill.rank ?? 0) +
+                        (skill.bonus ?? 0)}
                     </div>
                   </div>
                 ))}

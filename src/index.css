@@ -831,3 +831,10 @@ textarea {
   border-color: rgba(119, 195, 255, 0.22);
   color: #dff2ff;
 }
+
+.skill-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
