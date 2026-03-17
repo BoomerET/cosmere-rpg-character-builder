@@ -302,6 +302,21 @@ textarea {
   box-shadow: 0 0 0 3px rgba(119, 195, 255, 0.18);
 }
 
+.skills-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 2fr 1.25fr 120px 120px;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
 .action-row {
   display: flex;
   justify-content: flex-end;
@@ -676,6 +691,10 @@ textarea {
     display: none;
   }
 
+  .skill-row {
+    grid-template-columns: 1fr 80px 80px;
+  }
+
   .skill-stat {
     display: none;
   }
@@ -719,6 +738,21 @@ textarea {
 
 .skill-cell input {
   margin: 0;
+}
+
+.skills-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 120px 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
 }
 
 .skill-name {
