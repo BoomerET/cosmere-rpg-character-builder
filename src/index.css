@@ -304,17 +304,17 @@ textarea {
 
 .skills-grid {
   display: grid;
-  gap: 14px;
+  gap: 8px;
 }
 
 .skill-row {
   display: grid;
-  grid-template-columns: 2fr 1.25fr 120px 120px;
+  grid-template-columns: minmax(160px, 2fr) minmax(90px, 1.2fr) 120px 120px 120px;
   gap: 12px;
-  padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.02);
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .action-row {
@@ -731,24 +731,9 @@ textarea {
   font-size: 1rem;
 }
 
-.skill-table-header {
-  display: grid;
-  grid-template-columns: 2fr 1.25fr 120px 120px;
-  gap: 12px;
-  padding: 0 14px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
 .skill-cell {
   gap: 0;
-}
-
-.skill-cell input {
-  margin: 0;
+  width: 100%;
 }
 
 .skills-table {
@@ -758,7 +743,7 @@ textarea {
 
 .skill-table-header {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 120px 120px 100px;
+  grid-template-columns: minmax(160px, 2fr) minmax(90px, 1.2fr) 120px 120px 120px;
   gap: 12px;
   padding: 0 14px;
   color: var(--muted);
@@ -766,6 +751,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  align-items: center;
 }
 
 .skill-name {
@@ -780,13 +766,17 @@ textarea {
 
 .skill-cell input {
   text-align: center;
+  margin: 0;
+  width: 100%
 }
 
 .skill-total {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
   padding: 0 12px;
   border-radius: 12px;
   background: rgba(119, 195, 255, 0.1);
@@ -794,6 +784,7 @@ textarea {
   color: #dff2ff;
   font-weight: 800;
   font-size: 1rem;
+  text-align: center;
 }
 
 .tab-bar {
