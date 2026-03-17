@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   characterSchema,
+  type CharacterFormValues,
   type CharacterInput,
 } from "../features/characters/character.schema";
 import { FlashMessage } from "./FlashMessage";
@@ -64,7 +65,7 @@ export function CharacterForm({
   const [activeTab, setActiveTab] = useState<FormTab>("overview");
   const [submitError, setSubmitError] = useState("");
 
-  const form = useForm<CharacterInput>({
+  const form = useForm<CharacterFormValues>({
     resolver: zodResolver(characterSchema),
     defaultValues,
   });
@@ -100,7 +101,7 @@ export function CharacterForm({
     form.reset(defaultValues);
   }, [defaultValues, form]);
 
-  const skills = form.watch("skills");
+  const skills = form.watch("skills") ?? [];
 
   const level = form.watch("meta.level") ?? 1;
   const strength = form.watch("attributes.strength") ?? 0;
@@ -123,7 +124,7 @@ export function CharacterForm({
     setSubmitError("Please fix the validation errors before saving.");
   }
 
-  function numericRegister(path: Parameters<typeof form.register>[0]) {
+  function numericRegister(path: Path<CharacterFormValues>) {
     return form.register(path, {
       setValueAs: (value) => (value === "" ? undefined : Number(value)),
     });
@@ -162,7 +163,7 @@ export function CharacterForm({
         onSubmit={form.handleSubmit((values) => {
           setSubmitError("");
 
-          const normalized: CharacterInput = {
+          const normalized: CharacterFormValues = {
             ...values,
             meta: {
               ...values.meta,
@@ -175,7 +176,8 @@ export function CharacterForm({
             movement: getMovementRate(values.attributes.speed),
           };
 
-          onSubmit(normalized);
+          const parsed: CharacterInput = characterSchema.parse(normalized);
+          onSubmit(parsed);
         }, onInvalid)}
       >
         <div className="tab-bar">
@@ -537,7 +539,7 @@ export function CharacterForm({
                       <input
                         type="number"
                         min="0"
-                        {...numericRegister(`skills.${index}.rank` as never)}
+                        {...numericRegister(`skills.${index}.rank` as const)}
                       />
                     </div>
 
@@ -545,7 +547,7 @@ export function CharacterForm({
                       <input
                         type="number"
                         min="0"
-                        {...numericRegister(`skills.${index}.bonus` as never)}
+                        {...numericRegister(`skills.${index}.bonus` as const)}
                       />
                     </div>
                   </div>
@@ -600,37 +602,49 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <input {...form.register(`weapons.${index}.name`)} />
+                      <input
+                        {...form.register(`weapons.${index}.name` as const)}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Skill</span>
-                      <input {...form.register(`weapons.${index}.skill`)} />
+                      <input
+                        {...form.register(`weapons.${index}.skill` as const)}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Damage Dice</span>
                       <input
-                        {...form.register(`weapons.${index}.damageDice`)}
+                        {...form.register(
+                          `weapons.${index}.damageDice` as const,
+                        )}
                       />
                     </label>
 
                     <label className="field">
                       <span>Damage Type</span>
                       <input
-                        {...form.register(`weapons.${index}.damageType`)}
+                        {...form.register(
+                          `weapons.${index}.damageType` as const,
+                        )}
                       />
                     </label>
 
                     <label className="field">
                       <span>Traits</span>
-                      <input {...form.register(`weapons.${index}.traits`)} />
+                      <input
+                        {...form.register(`weapons.${index}.traits` as const)}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Expert Traits</span>
                       <input
-                        {...form.register(`weapons.${index}.expertTraits`)}
+                        {...form.register(
+                          `weapons.${index}.expertTraits` as const,
+                        )}
                       />
                     </label>
 
@@ -639,7 +653,7 @@ export function CharacterForm({
                       <input
                         type="number"
                         {...numericRegister(
-                          `weapons.${index}.handling` as never,
+                          `weapons.${index}.handling` as const,
                         )}
                       />
                     </label>
@@ -649,7 +663,7 @@ export function CharacterForm({
                       <input
                         type="number"
                         {...numericRegister(
-                          `weapons.${index}.carried` as never,
+                          `weapons.${index}.carried` as const,
                         )}
                       />
                     </label>
@@ -658,7 +672,7 @@ export function CharacterForm({
                       <span>Ammo</span>
                       <input
                         type="number"
-                        {...numericRegister(`weapons.${index}.ammo` as never)}
+                        {...numericRegister(`weapons.${index}.ammo` as const)}
                       />
                     </label>
 
@@ -667,7 +681,7 @@ export function CharacterForm({
                       <input
                         type="number"
                         {...numericRegister(
-                          `weapons.${index}.maxAmmo` as never,
+                          `weapons.${index}.maxAmmo` as const,
                         )}
                       />
                     </label>
@@ -714,14 +728,16 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <input {...form.register(`expertise.${index}.name`)} />
+                      <input
+                        {...form.register(`expertise.${index}.name` as const)}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Description</span>
                       <textarea
                         rows={6}
-                        {...form.register(`expertise.${index}.text`)}
+                        {...form.register(`expertise.${index}.text` as const)}
                       />
                     </label>
                   </div>
@@ -771,38 +787,50 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <input {...form.register(`talents.${index}.name`)} />
+                      <input
+                        {...form.register(`talents.${index}.name` as const)}
+                      />
                     </label>
 
                     <label className="field field-small">
                       <span>Activation</span>
                       <input
-                        {...form.register(`talents.${index}.activation`)}
+                        {...form.register(
+                          `talents.${index}.activation` as const,
+                        )}
                       />
                     </label>
 
                     <label className="field">
                       <span>Prerequisites</span>
                       <input
-                        {...form.register(`talents.${index}.prerequisites`)}
+                        {...form.register(
+                          `talents.${index}.prerequisites` as const,
+                        )}
                       />
                     </label>
 
                     <label className="field">
                       <span>Source</span>
-                      <input {...form.register(`talents.${index}.source`)} />
+                      <input
+                        {...form.register(`talents.${index}.source` as const)}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Specialty</span>
-                      <input {...form.register(`talents.${index}.specialty`)} />
+                      <input
+                        {...form.register(
+                          `talents.${index}.specialty` as const,
+                        )}
+                      />
                     </label>
 
                     <label className="field">
                       <span>Description</span>
                       <textarea
                         rows={6}
-                        {...form.register(`talents.${index}.text`)}
+                        {...form.register(`talents.${index}.text` as const)}
                       />
                     </label>
                   </div>
