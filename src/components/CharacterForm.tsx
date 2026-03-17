@@ -606,7 +606,7 @@ export function CharacterForm({
                   <div className="skill-row" key={`${skill.name}-${index}`}>
                     <div className="skill-name">{skill.name}</div>
                     <div className="skill-stat">
-                      {getStateAbbreviation(skill.stat)}
+                      {getStatAbbreviation(skill.stat)}
                     </div>
 
                     <div className="field field-small skill-cell">
