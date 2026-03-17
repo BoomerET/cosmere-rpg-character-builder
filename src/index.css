@@ -575,8 +575,9 @@ textarea {
 }
 
 @media (max-width: 900px) {
-  .skill-table-header {
-    grid-template-columns: 1fr 1fr;
+  .skill-table-header,
+  .skill-row {
+    grid-template-columns: 2fr 1fr 90px 90px 90px;
   }
 }
 
@@ -686,19 +687,17 @@ textarea {
 }
 
 @media (max-width: 720px) {
-
   .skill-table-header {
     display: none;
   }
 
   .skill-row {
-    grid-template-columns: 1fr 80px 80px;
+    grid-template-columns: 1fr 80px 80px 80px;
   }
 
   .skill-stat {
     display: none;
   }
-
 }
 
 .stack-actions {
@@ -759,7 +758,7 @@ textarea {
 
 .skill-table-header {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 120px 120px;
+  grid-template-columns: 2fr 1.2fr 120px 120px 100px;
   gap: 12px;
   padding: 0 14px;
   color: var(--muted);
@@ -767,21 +766,6 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-.skills-grid {
-  display: grid;
-  gap: 8px;
-}
-
-.skill-row {
-  display: grid;
-  grid-template-columns: 2fr 1.2fr 120px 120px;
-  gap: 12px;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.03);
 }
 
 .skill-name {
@@ -796,6 +780,20 @@ textarea {
 
 .skill-cell input {
   text-align: center;
+}
+
+.skill-total {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: rgba(119, 195, 255, 0.1);
+  border: 1px solid rgba(119, 195, 255, 0.22);
+  color: #dff2ff;
+  font-weight: 800;
+  font-size: 1rem;
 }
 
 .tab-bar {
@@ -825,11 +823,4 @@ textarea {
   background: rgba(119, 195, 255, 0.14);
   border-color: rgba(119, 195, 255, 0.22);
   color: #dff2ff;
-}
-
-.skill-total {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
 }
