@@ -140,19 +140,21 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
   const wounds = Math.max(0, healthTotal - character.health.current);
   const tier = getTierFromLevel(character.meta.level);
 
-  const attrsBlock = [
+  const attributeEntries: Array<[string, number]> = [
     ["awareness", character.attributes.awareness],
     ["intellect", character.attributes.intellect],
     ["presence", character.attributes.presence],
     ["speed", character.attributes.speed],
     ["strength", character.attributes.strength],
     ["willpower", character.attributes.willpower],
-  ]
+  ];
+
+  const attrsBlock = attributeEntries
     .map(([name, score]) =>
       tag(
         name,
-        numberTag("bonus", 0, { type: "number" }) +
-          numberTag("score", score as number, { type: "number" }),
+        tag("bonus", "0", { type: "number" }) +
+          tag("score", n(score), { type: "number" }),
       ),
     )
     .join("");
