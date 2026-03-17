@@ -866,3 +866,8 @@ textarea {
   border-color: rgba(236, 72, 153, 0.35);
   background: rgba(236, 72, 153, 0.12);
 }
+
+.skill-stat:hover {
+  box-shadow: 0 0 0 2px rgba(119, 195, 255, 0.15);
+  transform: translateY(-1px);
+}
