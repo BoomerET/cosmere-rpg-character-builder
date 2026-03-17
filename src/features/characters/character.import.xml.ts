@@ -21,16 +21,6 @@ function numberAt(
   return Number.isFinite(n) ? n : fallback;
 }
 
-function numberAt(
-  parent: Element | null,
-  selector: string,
-  fallback = 0,
-): number {
-  const raw = textAt(parent, selector);
-  const n = Number(raw);
-  return Number.isFinite(n) ? n : fallback;
-}
-
 function isValidStat(
   value: string,
 ): value is CharacterInput["skills"][number]["stat"] {
