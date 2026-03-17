@@ -1,8 +1,6 @@
 import type { CharacterInput } from "../features/characters/character.schema";
 import { getTierFromLevel } from "../features/characters/character.utils";
 
-const tier = getTierFromLevel(character.meta.level);
-
 type CharacterSummaryCardProps = {
   character: CharacterInput;
 };
@@ -16,6 +14,8 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
     10 + character.attributes.awareness + character.attributes.presence;
 
   const healthMax = 10 + character.attributes.strength;
+
+  const tier = getTierFromLevel(character.meta.level);
 
   const movementRate =
     character.attributes.speed >= 3
