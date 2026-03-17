@@ -758,12 +758,6 @@ textarea {
   font-weight: 600;
 }
 
-.skill-stat {
-  font-family: monospace;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
 .skill-cell input {
   text-align: center;
   margin: 0;
@@ -815,3 +809,12 @@ textarea {
   border-color: rgba(119, 195, 255, 0.22);
   color: #dff2ff;
 }
+
+.skill-stat {
+  font-family: monospace;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-align: center;
+}
+
