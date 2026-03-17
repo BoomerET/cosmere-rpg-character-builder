@@ -167,13 +167,44 @@ export function CharacterForm({
             ...values,
             meta: {
               ...values.meta,
-              tier: getTierFromLevel(values.meta.level),
+              level: values.meta.level ?? 1,
+              tier: getTierFromLevel(values.meta.level ?? 1),
+            },
+            attributes: {
+              ...values.attributes,
+              awareness: values.attributes.awareness ?? 0,
+              intellect: values.attributes.intellect ?? 0,
+              presence: values.attributes.presence ?? 0,
+              speed: values.attributes.speed ?? 0,
+              strength: values.attributes.strength ?? 0,
+              willpower: values.attributes.willpower ?? 0,
             },
             health: {
               ...values.health,
-              total: getHealthMax(values.attributes.strength),
+              current: values.health.current ?? 0,
+              total: getHealthMax(values.attributes.strength ?? 0),
+              bonus: values.health.bonus ?? 0,
+              wounds: values.health.wounds ?? 0,
             },
-            movement: getMovementRate(values.attributes.speed),
+            focus: {
+              ...values.focus,
+              current: values.focus.current ?? 0,
+              total: values.focus.total ?? 0,
+              bonus: values.focus.bonus ?? 0,
+            },
+            investiture: {
+              ...values.investiture,
+              current: values.investiture.current ?? 0,
+              total: values.investiture.total ?? 0,
+            },
+            deflect: values.deflect ?? 0,
+            movement: getMovementRate(values.attributes.speed ?? 0),
+            movementBonus: values.movementBonus ?? 0,
+            recoveryDie: values.recoveryDie ?? "d4",
+            sensesRange: values.sensesRange ?? "",
+            conditionsText: values.conditionsText ?? "",
+            notes: values.notes ?? "",
+            version: values.version ?? "1.0.0",
           };
 
           const parsed: CharacterInput = characterSchema.parse(normalized);
