@@ -92,7 +92,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   return {
     id: uuid(),
     meta: {
-      name: textAt(character, "name"),
+      name: textAt(character, ":scope > name"),
       playerName: "",
       ancestry: textAt(character, "ancestry > name") || "Human (Roshar)",
       path: textAt(character, "path") || "Windrunner",
