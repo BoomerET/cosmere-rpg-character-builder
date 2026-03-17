@@ -92,6 +92,23 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
       <div className="summary-defense-row">
         <div className="summary-defense">
+          <span className="summary-stat-label">Physical Defense</span>
+          <strong>{physicalDefense}</strong>
+        </div>
+
+        <div className="summary-defense">
+          <span className="summary-stat-label">Cognitive Defense</span>
+          <strong>{cognitiveDefense}</strong>
+        </div>
+
+        <div className="summary-defense">
+          <span className="summary-stat-label">Spiritual Defense</span>
+          <strong>{spiritualDefense}</strong>
+        </div>
+      </div>
+
+      <div className="summary-defense-row">
+        <div className="summary-defense">
           <span className="summary-stat-label">Health Max</span>
           <strong>{healthMax}</strong>
         </div>
