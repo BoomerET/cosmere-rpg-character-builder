@@ -103,8 +103,20 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     10 + character.attributes.awareness + character.attributes.presence;
 
   const carry = character.liftingCapacity ?? 50;
-  const wounds = Math.max(0, character.health.total - character.health.current);
   const pathNodeName = character.meta.path.replace(/[^\w.-]/g, "_");
+
+  const healthTotal = 10 + character.attributes.strength;
+
+  const movementBase =
+    character.attributes.speed >= 3
+      ? 30
+      : character.attributes.speed >= 1
+        ? 25
+        : 20;
+
+  const movementTotal = movementBase + character.movementBonus;
+
+  const wounds = Math.max(0, healthTotal - character.health.current);
 
   const attrsBlock = [
     ["awareness", character.attributes.awareness],
@@ -265,7 +277,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     emptyTag("goals") +
     `<hp>` +
     tag("bonus", n(character.health.bonus), { type: "number" }) +
-    tag("total", n(character.health.total), { type: "number" }) +
+    tag("total", n(healthTotal), { type: "number" }) +
     tag("wounds", n(wounds), { type: "number" }) +
     `</hp>` +
     emptyTag("inventorylist") +
@@ -274,7 +286,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("total", n(character.investiture.total), { type: "number" }) +
     `</investiture>` +
     tag("level", n(character.meta.level), { type: "number" }) +
-    tag("movement", n(character.movement), { type: "number" }) +
+    tag("movement", n(movementTotal), { type: "number" }) +
     tag("movementbonus", n(character.movementBonus), { type: "number" }) +
     tag("name", escapeXml(character.meta.name), { type: "string" }) +
     tag("path", escapeXml(character.meta.path), { type: "string" }) +

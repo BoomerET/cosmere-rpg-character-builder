@@ -95,6 +95,10 @@ export function CharacterForm({
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
 
+  const healthMax = 10 + strength;
+
+  const movementRate = speed >= 3 ? 30 : speed >= 1 ? 25 : 20;
+
   function onInvalid(errors: unknown) {
     console.error("Form validation failed:", errors);
     setSubmitError("Please fix the validation errors before saving.");
@@ -362,13 +366,11 @@ export function CharacterForm({
                 <div className="mini-card">
                   <h3>Health</h3>
                   <div className="mini-grid two-up">
-                    <label className="field">
-                      <span>Max</span>
-                      <input
-                        type="number"
-                        {...numericRegister("health.total")}
-                      />
-                    </label>
+                    <div className="defense-display">
+                      <span className="defense-label">Max</span>
+                      <strong className="defense-value">{healthMax}</strong>
+                      <span className="defense-formula">10 + STR</span>
+                    </div>
 
                     <label className="field">
                       <span>Current</span>
@@ -429,10 +431,30 @@ export function CharacterForm({
                   <input type="number" {...numericRegister("deflect")} />
                 </label>
 
-                <label className="field field-small">
-                  <span>Movement</span>
-                  <input type="number" {...numericRegister("movement")} />
-                </label>
+                <div className="mini-card">
+                  <h3>Movement</h3>
+                  <div className="mini-grid two-up">
+                    <div className="defense-display">
+                      <span className="defense-label">Rate</span>
+                      <strong className="defense-value">{movementRate}</strong>
+                      <span className="defense-formula">
+                        {speed >= 3
+                          ? "SPD 3+"
+                          : speed >= 1
+                            ? "SPD 1–2"
+                            : "Base 20 ft"}
+                      </span>
+                    </div>
+
+                    <label className="field field-small">
+                      <span>Bonus</span>
+                      <input
+                        type="number"
+                        {...numericRegister("movementBonus")}
+                      />
+                    </label>
+                  </div>
+                </div>
 
                 <label className="field field-small">
                   <span>Movement Bonus</span>
