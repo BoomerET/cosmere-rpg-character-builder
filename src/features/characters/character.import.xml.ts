@@ -21,6 +21,16 @@ function numberAt(
   return Number.isFinite(n) ? n : fallback;
 }
 
+function directChildNumber(
+  parent: Element | null,
+  tagName: string,
+  fallback = 0,
+): number {
+  const raw = directChildText(parent, tagName);
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 function isValidStat(
   value: string,
 ): value is CharacterInput["skills"][number]["stat"] {
@@ -49,11 +59,12 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   }
 
   const importedSkills = Array.from(
-    character.querySelectorAll("skilllist > *"),
+    character.querySelectorAll(":scope > skilllist > *"),
   ).map((node) => {
     const statText = textAt(node, "stat");
+
     return {
-      name: textAt(node, "name"),
+      name: textAt(node, "name") || "Unnamed Skill",
       stat: isValidStat(statText) ? statText : "awareness",
       rank: numberAt(node, "rank", 0),
       bonus: numberAt(node, "bonus", 0),
@@ -61,7 +72,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   });
 
   const importedWeapons = Array.from(
-    character.querySelectorAll("weaponlist > *"),
+    character.querySelectorAll(":scope > weaponlist > *"),
   ).map((node) => ({
     name: textAt(node, "name") || "Unnamed Weapon",
     skill: textAt(node, "weaponskill") || "Athletics",
@@ -77,14 +88,14 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   }));
 
   const importedExpertise = Array.from(
-    character.querySelectorAll("expertise > *"),
+    character.querySelectorAll(":scope > expertise > *"),
   ).map((node) => ({
     name: textAt(node, "name") || "Unnamed Expertise",
     text: textAt(node, "text"),
   }));
 
   const importedTalents = Array.from(
-    character.querySelectorAll("talent > *"),
+    character.querySelectorAll(":scope > talent > *"),
   ).map((node) => ({
     name: textAt(node, "name") || "Unnamed Talent",
     activation: textAt(node, "activation"),
@@ -94,52 +105,86 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     text: textAt(node, "text"),
   }));
 
+  const carryText = textAt(character, ":scope > encumbrance > carry");
+  const liftingCapacity = carryText
+    ? numberAt(character, ":scope > encumbrance > carry", 50)
+    : undefined;
+
   return {
     id: uuid(),
+
     meta: {
       name: directChildText(character, "name"),
       playerName: "",
-      ancestry: textAt(character, "ancestry > name") || "Human (Roshar)",
+      ancestry:
+        textAt(character, ":scope > ancestry > name") || "Human (Roshar)",
       path: directChildText(character, "path") || "Windrunner",
-      level: numberAt(character, ":scope > level", 1),
-      tier: numberAt(character, ":scope > tier", 1),
+      level: directChildNumber(character, "level", 1),
+      tier: directChildNumber(character, "tier", 1),
     },
+
     attributes: {
-      awareness: numberAt(character, "attributes > awareness > score", 0),
-      intellect: numberAt(character, "attributes > intellect > score", 0),
-      presence: numberAt(character, "attributes > presence > score", 0),
-      speed: numberAt(character, "attributes > speed > score", 0),
-      strength: numberAt(character, "attributes > strength > score", 0),
-      willpower: numberAt(character, "attributes > willpower > score", 0),
+      awareness: numberAt(
+        character,
+        ":scope > attributes > awareness > score",
+        0,
+      ),
+      intellect: numberAt(
+        character,
+        ":scope > attributes > intellect > score",
+        0,
+      ),
+      presence: numberAt(
+        character,
+        ":scope > attributes > presence > score",
+        0,
+      ),
+      speed: numberAt(character, ":scope > attributes > speed > score", 0),
+      strength: numberAt(
+        character,
+        ":scope > attributes > strength > score",
+        0,
+      ),
+      willpower: numberAt(
+        character,
+        ":scope > attributes > willpower > score",
+        0,
+      ),
     },
+
     health: {
       current: Math.max(
         0,
-        numberAt(character, "hp > total", 10) -
-          numberAt(character, "hp > wounds", 0),
+        numberAt(character, ":scope > hp > total", 10) -
+          numberAt(character, ":scope > hp > wounds", 0),
       ),
-      total: numberAt(character, "hp > total", 10),
-      bonus: numberAt(character, "hp > bonus", 0),
-      wounds: numberAt(character, "hp > wounds", 0),
+      total: numberAt(character, ":scope > hp > total", 10),
+      bonus: numberAt(character, ":scope > hp > bonus", 0),
+      wounds: numberAt(character, ":scope > hp > wounds", 0),
     },
+
     focus: {
-      current: numberAt(character, "focus > current", 0),
-      total: numberAt(character, "focus > total", 2),
-      bonus: numberAt(character, "focus > bonus", 0),
+      current: numberAt(character, ":scope > focus > current", 0),
+      total: numberAt(character, ":scope > focus > total", 2),
+      bonus: numberAt(character, ":scope > focus > bonus", 0),
     },
+
     investiture: {
-      current: numberAt(character, "investiture > current", 0),
-      total: numberAt(character, "investiture > total", 0),
+      current: numberAt(character, ":scope > investiture > current", 0),
+      total: numberAt(character, ":scope > investiture > total", 0),
     },
-    deflect: numberAt(character, "deflect", 0),
-    movement: numberAt(character, "movement", 20),
-    movementBonus: numberAt(character, "movementbonus", 0),
-    recoveryDie: textAt(character, "recdie") || "d4",
+
+    deflect: directChildNumber(character, "deflect", 0),
+    movement: directChildNumber(character, "movement", 20),
+    movementBonus: directChildNumber(character, "movementbonus", 0),
+    recoveryDie: directChildText(character, "recdie") || "d4",
     sensesRange: "",
-    liftingCapacity: textAt(character, "encumbrance > carry")
-      ? numberAt(character, "encumbrance > carry", 50)
-      : undefined,
+    liftingCapacity,
+
     expertise: importedExpertise,
+
+    talents: importedTalents,
+
     weapons:
       importedWeapons.length > 0
         ? importedWeapons
@@ -158,12 +203,14 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
               type: 0,
             },
           ],
-    talents: importedTalents,
+
     conditionsText: "",
+
     skills:
       importedSkills.length > 0
         ? importedSkills
-        : DEFAULT_SKILLS.map((s) => ({ ...s })),
+        : DEFAULT_SKILLS.map((skill) => ({ ...skill })),
+
     notes: "",
     version: "1.0.0",
   };

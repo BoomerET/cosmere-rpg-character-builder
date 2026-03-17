@@ -6,7 +6,6 @@ import {
   type CharacterInput,
 } from "../features/characters/character.schema";
 import { FlashMessage } from "./FlashMessage";
-import { getTierFromLevel } from "../features/characters/character.utils";
 
 type CharacterFormProps = {
   title: string;
@@ -30,6 +29,24 @@ type FormTab =
   | "expertise"
   | "talents"
   | "details";
+
+function getTierFromLevel(level: number): number {
+  if (level >= 21) return 5;
+  if (level >= 16) return 4;
+  if (level >= 11) return 3;
+  if (level >= 6) return 2;
+  return 1;
+}
+
+function getHealthMax(strength: number): number {
+  return 10 + strength;
+}
+
+function getMovementRate(speed: number): number {
+  if (speed >= 3) return 30;
+  if (speed >= 1) return 25;
+  return 20;
+}
 
 export function CharacterForm({
   title,
@@ -85,23 +102,21 @@ export function CharacterForm({
 
   const skills = form.watch("skills");
 
-  const strength = form.watch("attributes.strength");
-  const speed = form.watch("attributes.speed");
-  const intellect = form.watch("attributes.intellect");
-  const willpower = form.watch("attributes.willpower");
-  const awareness = form.watch("attributes.awareness");
-  const presence = form.watch("attributes.presence");
+  const level = form.watch("meta.level") ?? 1;
+  const strength = form.watch("attributes.strength") ?? 0;
+  const speed = form.watch("attributes.speed") ?? 0;
+  const intellect = form.watch("attributes.intellect") ?? 0;
+  const willpower = form.watch("attributes.willpower") ?? 0;
+  const awareness = form.watch("attributes.awareness") ?? 0;
+  const presence = form.watch("attributes.presence") ?? 0;
+
+  const tier = getTierFromLevel(level);
+  const healthMax = getHealthMax(strength);
+  const movementRate = getMovementRate(speed);
 
   const physicalDefense = 10 + strength + speed;
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
-
-  const healthMax = 10 + strength;
-
-  const movementRate = speed >= 3 ? 30 : speed >= 1 ? 25 : 20;
-
-  const level = form.watch("meta.level");
-  const tier = getTierFromLevel(level);
 
   function onInvalid(errors: unknown) {
     console.error("Form validation failed:", errors);
@@ -146,7 +161,21 @@ export function CharacterForm({
         className="sheet-card"
         onSubmit={form.handleSubmit((values) => {
           setSubmitError("");
-          onSubmit(values);
+
+          const normalized: CharacterInput = {
+            ...values,
+            meta: {
+              ...values.meta,
+              tier: getTierFromLevel(values.meta.level),
+            },
+            health: {
+              ...values.health,
+              total: getHealthMax(values.attributes.strength),
+            },
+            movement: getMovementRate(values.attributes.speed),
+          };
+
+          onSubmit(normalized);
         }, onInvalid)}
       >
         <div className="tab-bar">
@@ -246,30 +275,16 @@ export function CharacterForm({
                     />
                   </label>
 
-                  <div className="mini-card">
-                    <h3>Advancement</h3>
-                    <div className="mini-grid two-up">
-                      <label className="field field-small">
-                        <span>Level</span>
-                        <input
-                          type="number"
-                          min="1"
-                          {...numericRegister("meta.level")}
-                        />
-                      </label>
-
-                      <div className="defense-display">
-                        <span className="defense-label">Tier</span>
-                        <strong className="defense-value">{tier}</strong>
-                        <span className="defense-formula">
-                          {tier === 1 && "Levels 1–5"}
-                          {tier === 2 && "Levels 6–10"}
-                          {tier === 3 && "Levels 11–15"}
-                          {tier === 4 && "Levels 16–20"}
-                          {tier === 5 && "Levels 21+"}
-                        </span>
-                      </div>
-                    </div>
+                  <div className="defense-display">
+                    <span className="defense-label">Tier</span>
+                    <strong className="defense-value">{tier}</strong>
+                    <span className="defense-formula">
+                      {tier === 1 && "Levels 1–5"}
+                      {tier === 2 && "Levels 6–10"}
+                      {tier === 3 && "Levels 11–15"}
+                      {tier === 4 && "Levels 16–20"}
+                      {tier === 5 && "Levels 21+"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -444,13 +459,6 @@ export function CharacterForm({
                     </label>
                   </div>
                 </div>
-              </div>
-
-              <div className="form-grid" style={{ marginTop: "16px" }}>
-                <label className="field field-small">
-                  <span>Deflect</span>
-                  <input type="number" {...numericRegister("deflect")} />
-                </label>
 
                 <div className="mini-card">
                   <h3>Movement</h3>
@@ -476,10 +484,12 @@ export function CharacterForm({
                     </label>
                   </div>
                 </div>
+              </div>
 
+              <div className="form-grid" style={{ marginTop: "16px" }}>
                 <label className="field field-small">
-                  <span>Movement Bonus</span>
-                  <input type="number" {...numericRegister("movementBonus")} />
+                  <span>Deflect</span>
+                  <input type="number" {...numericRegister("deflect")} />
                 </label>
 
                 <label className="field field-small">
