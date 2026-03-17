@@ -39,6 +39,25 @@ function getTierFromLevel(level: number): number {
   return 1;
 }
 
+function getStatAbbreviation(stat: string): string {
+  switch (stat) {
+    case "strength":
+      return "STR";
+    case "speed":
+      return "SPD";
+    case "intellect":
+      return "INT";
+    case "willpower":
+      return "WIL";
+    case "awareness":
+      return "AWR";
+    case "presence":
+      return "PRE";
+    default:
+      return stat.toUpperCase();
+  }
+}
+
 function getHealthMax(strength: number): number {
   return 10 + strength;
 }
@@ -586,7 +605,9 @@ export function CharacterForm({
                 {skills.map((skill, index) => (
                   <div className="skill-row" key={`${skill.name}-${index}`}>
                     <div className="skill-name">{skill.name}</div>
-                    <div className="skill-stat">{skill.stat.toUpperCase()}</div>
+                    <div className="skill-stat">
+                      {getStateAbbreviation(skill.stat)}
+                    </div>
 
                     <div className="field field-small skill-cell">
                       <input
