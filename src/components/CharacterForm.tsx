@@ -615,36 +615,39 @@ export function CharacterForm({
               </div>
 
               <div className="skills-grid">
-                {skills.map((skill, index) => (
-                  <div className="skill-row" key={`${skill.name}-${index}`}>
-                    <div className="skill-name">{skill.name}</div>
-                    <div className={`skill-stat stat-${skill.stat}`}>
-                      {getStatAbbreviation(skill.stat)}
-                    </div>
+                {[...skills]
+                  .map((skill, index) => ({ skill, index })) // preserve original index
+                  .sort((a, b) => a.skill.name.localeCompare(b.skill.name))
+                  .map(({ skill, index }) => (
+                    <div className="skill-row" key={`${skill.name}-${index}`}>
+                      <div className="skill-name">{skill.name}</div>
+                      <div className={`skill-stat stat-${skill.stat}`}>
+                        {getStatAbbreviation(skill.stat)}
+                      </div>
 
-                    <div className="field field-small skill-cell">
-                      <input
-                        type="number"
-                        min="0"
-                        {...numericRegister(`skills.${index}.rank` as const)}
-                      />
-                    </div>
+                      <div className="field field-small skill-cell">
+                        <input
+                          type="number"
+                          min="0"
+                          {...numericRegister(`skills.${index}.rank` as const)}
+                        />
+                      </div>
 
-                    <div className="field field-small skill-cell">
-                      <input
-                        type="number"
-                        min="0"
-                        {...numericRegister(`skills.${index}.bonus` as const)}
-                      />
-                    </div>
+                      <div className="field field-small skill-cell">
+                        <input
+                          type="number"
+                          min="0"
+                          {...numericRegister(`skills.${index}.bonus` as const)}
+                        />
+                      </div>
 
-                    <div className="skill-total">
-                      {getAttributeValue(skill.stat) +
-                        (skill.rank ?? 0) +
-                        (skill.bonus ?? 0)}
+                      <div className="skill-total">
+                        {getAttributeValue(skill.stat) +
+                          (skill.rank ?? 0) +
+                          (skill.bonus ?? 0)}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </section>
