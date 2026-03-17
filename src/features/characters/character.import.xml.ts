@@ -6,9 +6,18 @@ function textAt(parent: Element | null, selector: string): string {
   return node?.textContent?.trim() ?? "";
 }
 
+function directChild(parent: Element | null, tagName: string): Element | null {
+  if (!parent) return null;
+
+  return (
+    Array.from(parent.children).find(
+      (child) => child.tagName.toLowerCase() === tagName.toLowerCase(),
+    ) ?? null
+  );
+}
+
 function directChildText(parent: Element | null, tagName: string): string {
-  const node = parent?.querySelector(`:scope > ${tagName}`);
-  return node?.textContent?.trim() ?? "";
+  return directChild(parent, tagName)?.textContent?.trim() ?? "";
 }
 
 function numberAt(
@@ -44,6 +53,31 @@ function isValidStat(
   ].includes(value);
 }
 
+function isValidWeaponSkill(
+  value: string,
+): value is CharacterInput["weapons"][number]["skill"] {
+  return [
+    "Agility",
+    "Athletics",
+    "Crafting",
+    "Deception",
+    "Deduction",
+    "Discipline",
+    "Heavy Weaponry",
+    "Insight",
+    "Intimidation",
+    "Leadership",
+    "Light Weaponry",
+    "Lore",
+    "Medicine",
+    "Perception",
+    "Persuasion",
+    "Stealth",
+    "Survival",
+    "Thievery",
+  ].includes(value);
+}
+
 export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, "application/xml");
@@ -58,7 +92,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     throw new Error("Could not find character node in XML");
   }
 
-  const importedSkills = Array.from(
+  const importedSkills: CharacterInput["skills"] = Array.from(
     character.querySelectorAll(":scope > skilllist > *"),
   ).map((node) => {
     const statText = textAt(node, "stat");
@@ -71,30 +105,36 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     };
   });
 
-  const importedWeapons = Array.from(
+  const importedWeapons: CharacterInput["weapons"] = Array.from(
     character.querySelectorAll(":scope > weaponlist > *"),
-  ).map((node) => ({
-    name: textAt(node, "name") || "Unnamed Weapon",
-    skill: textAt(node, "weaponskill") || "Athletics",
-    damageDice: textAt(node, "damagelist > * > dice") || "d1",
-    damageType: textAt(node, "damagelist > * > type") || "impact",
-    traits: textAt(node, "traits"),
-    expertTraits: textAt(node, "experttraits"),
-    handling: numberAt(node, "handling", 0),
-    carried: numberAt(node, "carried", 2),
-    ammo: numberAt(node, "ammo", 0),
-    maxAmmo: numberAt(node, "maxammo", 0),
-    type: numberAt(node, "type", 0),
-  }));
+  ).map((node) => {
+    const weaponSkillText = textAt(node, "weaponskill");
 
-  const importedExpertise = Array.from(
+    return {
+      name: textAt(node, "name") || "Unnamed Weapon",
+      skill: isValidWeaponSkill(weaponSkillText)
+        ? weaponSkillText
+        : "Athletics",
+      damageDice: textAt(node, "damagelist > * > dice") || "d1",
+      damageType: textAt(node, "damagelist > * > type") || "impact",
+      traits: textAt(node, "traits"),
+      expertTraits: textAt(node, "experttraits"),
+      handling: numberAt(node, "handling", 0),
+      carried: numberAt(node, "carried", 2),
+      ammo: numberAt(node, "ammo", 0),
+      maxAmmo: numberAt(node, "maxammo", 0),
+      type: numberAt(node, "type", 0),
+    };
+  });
+
+  const importedExpertise: CharacterInput["expertise"] = Array.from(
     character.querySelectorAll(":scope > expertise > *"),
   ).map((node) => ({
     name: textAt(node, "name") || "Unnamed Expertise",
     text: textAt(node, "text"),
   }));
 
-  const importedTalents = Array.from(
+  const importedTalents: CharacterInput["talents"] = Array.from(
     character.querySelectorAll(":scope > talent > *"),
   ).map((node) => ({
     name: textAt(node, "name") || "Unnamed Talent",
@@ -114,7 +154,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     id: uuid(),
 
     meta: {
-      name: directChildText(character, "name"),
+      name: directChildText(character, "name") || "Unnamed Character",
       playerName: "",
       ancestry:
         textAt(character, ":scope > ancestry > name") || "Human (Roshar)",
@@ -182,7 +222,6 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     liftingCapacity,
 
     expertise: importedExpertise,
-
     talents: importedTalents,
 
     weapons:
