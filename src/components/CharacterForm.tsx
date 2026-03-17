@@ -119,6 +119,15 @@ export function CharacterForm({
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
 
+  const STAT_ABBREVIATIONS: Record<string, string> = {
+    strength: "STR",
+    speed: "SPD",
+    intellect: "INT",
+    willpower: "WIL",
+    awareness: "AWR",
+    presence: "PRE",
+  };
+
   function getAttributeValue(
     stat: CharacterFormValues["skills"][number]["stat"],
   ) {
@@ -151,23 +160,27 @@ export function CharacterForm({
     });
   }
 
+  //function getStatAbbreviation(stat: string): string {
+  //  switch (stat) {
+  //    case "strength":
+  //      return "STR";
+  //    case "speed":
+  //      return "SPD";
+  //    case "intellect":
+  //      return "INT";
+  //    case "willpower":
+  //      return "WIL";
+  //    case "awareness":
+  //      return "AWR";
+  //    case "presence":
+  //      return "PRE";
+  //    default:
+  //      return stat.toUpperCase();
+  //  }
+  //}
+
   function getStatAbbreviation(stat: string): string {
-    switch (stat) {
-      case "strength":
-        return "STR";
-      case "speed":
-        return "SPD";
-      case "intellect":
-        return "INT";
-      case "willpower":
-        return "WIL";
-      case "awareness":
-        return "AWR";
-      case "presence":
-        return "PRE";
-      default:
-        return stat.toUpperCase();
-    }
+    return STAT_ABBREVIATIONS[stat] ?? stat.toUpperCase();
   }
 
   return (
