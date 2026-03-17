@@ -1,14 +1,5 @@
 import type { CharacterInput } from "../features/characters/character.schema";
 
-const healthMax = 10 + character.attributes.strength;
-
-const movementRate =
-  character.attributes.speed >= 3
-    ? 30
-    : character.attributes.speed >= 1
-      ? 25
-      : 20;
-
 type CharacterSummaryCardProps = {
   character: CharacterInput;
 };
@@ -61,6 +52,7 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
             {character.meta.playerName || "—"}
           </span>
         </div>
+
       </div>
 
       <div className="summary-stats">
@@ -92,18 +84,18 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
 
       <div className="summary-defense-row">
         <div className="summary-defense">
-          <span className="summary-stat-label">Health Max</span>
-          <strong>{healthMax}</strong>
+          <span className="summary-stat-label">Physical Defense</span>
+          <strong>{physicalDefense}</strong>
         </div>
 
         <div className="summary-defense">
-          <span className="summary-stat-label">Movement</span>
-          <strong>{movementRate} ft</strong>
+          <span className="summary-stat-label">Cognitive Defense</span>
+          <strong>{cognitiveDefense}</strong>
         </div>
 
         <div className="summary-defense">
-          <span className="summary-stat-label">Current Health</span>
-          <strong>{character.health.current}</strong>
+          <span className="summary-stat-label">Spiritual Defense</span>
+          <strong>{spiritualDefense}</strong>
         </div>
       </div>
     </section>
