@@ -4,15 +4,6 @@ type CharacterSummaryCardProps = {
   character: CharacterInput;
 };
 
-const healthMax = 10 + character.attributes.strength;
-
-const movementRate =
-  character.attributes.speed >= 3
-    ? 30
-    : character.attributes.speed >= 1
-      ? 25
-      : 20;
-
 export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
   const physicalDefense =
     10 + character.attributes.strength + character.attributes.speed;
@@ -20,6 +11,15 @@ export function CharacterSummaryCard({ character }: CharacterSummaryCardProps) {
     10 + character.attributes.intellect + character.attributes.willpower;
   const spiritualDefense =
     10 + character.attributes.awareness + character.attributes.presence;
+
+  const healthMax = 10 + character.attributes.strength;
+
+  const movementRate =
+    character.attributes.speed >= 3
+      ? 30
+      : character.attributes.speed >= 1
+        ? 25
+        : 20;
 
   return (
     <section className="summary-card">
