@@ -618,7 +618,7 @@ export function CharacterForm({
                 {skills.map((skill, index) => (
                   <div className="skill-row" key={`${skill.name}-${index}`}>
                     <div className="skill-name">{skill.name}</div>
-                    <div className="skill-stat">
+                    <div className={`skill-stat stat-${skill.stat}`}>
                       {getStatAbbreviation(skill.stat)}
                     </div>
 
