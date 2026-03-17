@@ -51,6 +51,25 @@ function getMovementRate(speed: number): number {
   return 20;
 }
 
+function getStatAbbreviation(stat: string): string {
+  switch (stat) {
+    case "strength":
+      return "STR";
+    case "speed":
+      return "SPD";
+    case "intellect":
+      return "INT";
+    case "willpower":
+      return "WIL";
+    case "awareness":
+      return "AWR";
+    case "presence":
+      return "PRE";
+    default:
+      return stat.toUpperCase();
+  }
+}
+
 export function CharacterForm({
   title,
   subtitle,
@@ -122,32 +141,6 @@ export function CharacterForm({
   const cognitiveDefense = 10 + intellect + willpower;
   const spiritualDefense = 10 + awareness + presence;
 
-  const STAT_ABBREVIATIONS: Record<string, string> = {
-    strength: "STR",
-    speed: "SPD",
-    intellect: "INT",
-    willpower: "WIL",
-    awareness: "AWR",
-    presence: "PRE",
-  };
-
-  const displayedSkills = [...skills]
-    .map((skill, index) => ({
-      skill,
-      index,
-      total:
-        getAttributeValue(skill.stat) + (skill.rank ?? 0) + (skill.bonus ?? 0),
-    }))
-    .sort((a, b) => {
-      if (skillSortMode === "total") {
-        return b.total - a.total || a.skill.name.localeCompare(b.skill.name);
-      }
-
-      return a.skill.name.localeCompare(b.skill.name, undefined, {
-        sensitivity: "base",
-      });
-    });
-
   function getAttributeValue(
     stat: CharacterFormValues["skills"][number]["stat"],
   ) {
@@ -169,6 +162,23 @@ export function CharacterForm({
     }
   }
 
+  const displayedSkills = [...skills]
+    .map((skill, index) => ({
+      skill,
+      index,
+      total:
+        getAttributeValue(skill.stat) + (skill.rank ?? 0) + (skill.bonus ?? 0),
+    }))
+    .sort((a, b) => {
+      if (skillSortMode === "total") {
+        return b.total - a.total || a.skill.name.localeCompare(b.skill.name);
+      }
+
+      return a.skill.name.localeCompare(b.skill.name, undefined, {
+        sensitivity: "base",
+      });
+    });
+
   function onInvalid(errors: unknown) {
     console.error("Form validation failed:", errors);
     setSubmitError("Please fix the validation errors before saving.");
@@ -178,29 +188,6 @@ export function CharacterForm({
     return form.register(path, {
       setValueAs: (value) => (value === "" ? undefined : Number(value)),
     });
-  }
-
-  //function getStatAbbreviation(stat: string): string {
-  //  switch (stat) {
-  //    case "strength":
-  //      return "STR";
-  //    case "speed":
-  //      return "SPD";
-  //    case "intellect":
-  //      return "INT";
-  //    case "willpower":
-  //      return "WIL";
-  //    case "awareness":
-  //      return "AWR";
-  //    case "presence":
-  //      return "PRE";
-  //    default:
-  //      return stat.toUpperCase();
-  //  }
-  //}
-
-  function getStatAbbreviation(stat: string): string {
-    return STAT_ABBREVIATIONS[stat] ?? stat.toUpperCase();
   }
 
   return (
@@ -240,6 +227,10 @@ export function CharacterForm({
             ...values,
             meta: {
               ...values.meta,
+              name: values.meta.name ?? "",
+              playerName: values.meta.playerName ?? "",
+              ancestry: values.meta.ancestry ?? "Human (Roshar)",
+              path: values.meta.path ?? "Windrunner",
               level: values.meta.level ?? 1,
               tier: getTierFromLevel(values.meta.level ?? 1),
             },
@@ -275,7 +266,12 @@ export function CharacterForm({
             movementBonus: values.movementBonus ?? 0,
             recoveryDie: values.recoveryDie ?? "d4",
             sensesRange: values.sensesRange ?? "",
+            liftingCapacity: values.liftingCapacity,
+            expertise: values.expertise ?? [],
+            talents: values.talents ?? [],
+            weapons: values.weapons ?? [],
             conditionsText: values.conditionsText ?? "",
+            skills: values.skills ?? [],
             notes: values.notes ?? "",
             version: values.version ?? "1.0.0",
           };
@@ -624,6 +620,7 @@ export function CharacterForm({
         {activeTab === "skills" && (
           <section className="sheet-section">
             <h2>Skills</h2>
+
             <div className="stack-actions" style={{ marginBottom: "16px" }}>
               <button
                 type="button"
@@ -641,6 +638,7 @@ export function CharacterForm({
                 Sort by Total
               </button>
             </div>
+
             <div className="skills-table">
               <div className="skill-table-header">
                 <div>Skill</div>
@@ -651,35 +649,33 @@ export function CharacterForm({
               </div>
 
               <div className="skills-grid">
-                {[...displayedSkills]
-                  .map(({ skill, index, total }) => ({ skill, index })) // preserve original index
-                  .sort((a, b) => a.skill.name.localeCompare(b.skill.name))
-                  .map(({ skill, index }) => (
-                    <div className="skill-row" key={`${skill.name}-${index}`}>
-                      <div className="skill-name">{skill.name}</div>
-                      <div className={`skill-stat stat-${skill.stat}`}>
-                        {getStatAbbreviation(skill.stat)}
-                      </div>
+                {displayedSkills.map(({ skill, index, total }) => (
+                  <div className="skill-row" key={`${skill.name}-${index}`}>
+                    <div className="skill-name">{skill.name}</div>
 
-                      <div className="field field-small skill-cell">
-                        <input
-                          type="number"
-                          min="0"
-                          {...numericRegister(`skills.${index}.rank` as const)}
-                        />
-                      </div>
-
-                      <div className="field field-small skill-cell">
-                        <input
-                          type="number"
-                          min="0"
-                          {...numericRegister(`skills.${index}.bonus` as const)}
-                        />
-                      </div>
-
-                      <div className="skill-total">{total}</div>
+                    <div className={`skill-stat stat-${skill.stat}`}>
+                      {getStatAbbreviation(skill.stat)}
                     </div>
-                  ))}
+
+                    <div className="field field-small skill-cell">
+                      <input
+                        type="number"
+                        min="0"
+                        {...numericRegister(`skills.${index}.rank` as const)}
+                      />
+                    </div>
+
+                    <div className="field field-small skill-cell">
+                      <input
+                        type="number"
+                        min="0"
+                        {...numericRegister(`skills.${index}.bonus` as const)}
+                      />
+                    </div>
+
+                    <div className="skill-total">{total}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
