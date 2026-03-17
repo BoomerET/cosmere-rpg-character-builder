@@ -50,23 +50,22 @@ export function ExportPage() {
     );
   }
 
-  const safeCharacter = character;
-  const xml = toFantasyGroundsXml(safeCharacter);
+  const xml = toFantasyGroundsXml(character);
 
   function handleDownload() {
     downloadTextFile(
-      `${safeCharacter.meta.name || "character"}.xml`,
+      `${character.meta.name || "character"}.xml`,
       xml,
       "application/xml",
     );
-    setLocalSuccess(`Downloaded XML for "${safeCharacter.meta.name}".`);
+    setLocalSuccess(`Downloaded XML for "${character.meta.name}".`);
   }
 
   return (
     <AppLayout>
       <main className="page-shell">
         <section className="page-header">
-          <h1>Export {safeCharacter.meta.name}</h1>
+          <h1>Export {character.meta.name}</h1>
           <p>Download Fantasy Grounds XML for import.</p>
         </section>
 
@@ -76,7 +75,7 @@ export function ExportPage() {
         />
         <FlashMessage kind="error" message={state?.errorMessage || ""} />
 
-        <CharacterSummaryCard character={safeCharacter} />
+        <CharacterSummaryCard character={character} />
 
         <section className="sheet-card">
           <div className="inline-actions" style={{ marginBottom: "18px" }}>
@@ -86,7 +85,7 @@ export function ExportPage() {
 
             <button
               className="button button-secondary"
-              onClick={() => navigate(`/character/${safeCharacter.id}`)}
+              onClick={() => navigate(`/character/${character.id}`)}
             >
               Edit Character
             </button>
