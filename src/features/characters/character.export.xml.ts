@@ -77,6 +77,22 @@ function emptyTag(name: string, attrs?: Record<string, string>): string {
   return `<${name}${attrText} />`;
 }
 
+function textTag(
+  name: string,
+  value: string,
+  attrs?: Record<string, string>,
+): string {
+  return tag(name, escapeXml(value), attrs);
+}
+
+function numberTag(
+  name: string,
+  value: number,
+  attrs?: Record<string, string>,
+): string {
+  return tag(name, n(value), attrs);
+}
+
 function formattedText(value: string): string {
   const trimmed = value.trim();
 
@@ -95,6 +111,11 @@ function formattedText(value: string): string {
     .join("");
 }
 
+function safeXmlNodeName(value: string, fallback = "node"): string {
+  const cleaned = value.replace(/[^\w.-]/g, "_");
+  return /^[A-Za-z_]/.test(cleaned) ? cleaned : `${fallback}_${cleaned}`;
+}
+
 export function toFantasyGroundsXml(character: CharacterInput): string {
   const physicalDefense =
     10 + character.attributes.strength + character.attributes.speed;
@@ -104,7 +125,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     10 + character.attributes.awareness + character.attributes.presence;
 
   const carry = character.liftingCapacity ?? 50;
-  const pathNodeName = character.meta.path.replace(/[^\w.-]/g, "_");
+  const pathNodeName = safeXmlNodeName(character.meta.path, "path");
 
   const healthTotal = 10 + character.attributes.strength;
 
@@ -116,9 +137,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
         : 20;
 
   const movementTotal = movementBase + character.movementBonus;
-
   const wounds = Math.max(0, healthTotal - character.health.current);
-
   const tier = getTierFromLevel(character.meta.level);
 
   const attrsBlock = [
@@ -132,26 +151,28 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     .map(([name, score]) =>
       tag(
         name,
-        tag("bonus", "0", { type: "number" }) +
-          tag("score", n(score), { type: "number" }),
+        numberTag("bonus", 0, { type: "number" }) +
+          numberTag("score", score as number, { type: "number" }),
       ),
     )
     .join("");
 
   const topLevelStats = [
-    tag("awareness", n(character.attributes.awareness), { type: "number" }),
-    tag("intellect", n(character.attributes.intellect), { type: "number" }),
-    tag("presence", n(character.attributes.presence), { type: "number" }),
-    tag("speed", n(character.attributes.speed), { type: "number" }),
-    tag("strength", n(character.attributes.strength), { type: "number" }),
-    tag("willpower", n(character.attributes.willpower), { type: "number" }),
+    numberTag("awareness", character.attributes.awareness, { type: "number" }),
+    numberTag("intellect", character.attributes.intellect, { type: "number" }),
+    numberTag("presence", character.attributes.presence, { type: "number" }),
+    numberTag("speed", character.attributes.speed, { type: "number" }),
+    numberTag("strength", character.attributes.strength, { type: "number" }),
+    numberTag("willpower", character.attributes.willpower, {
+      type: "number",
+    }),
   ].join("");
 
   const coinsBlock = COIN_NAMES.map((coinName, i) =>
     tag(
       idNode(i),
-      tag("amount", "0", { type: "number" }) +
-        tag("name", coinName, { type: "string" }),
+      numberTag("amount", 0, { type: "number" }) +
+        textTag("name", coinName, { type: "string" }),
     ),
   ).join("");
 
@@ -159,11 +180,11 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     .map((skill, i) =>
       tag(
         idNode(i),
-        tag("bonus", n(skill.bonus), { type: "number" }) +
-          tag("name", escapeXml(skill.name), { type: "string" }) +
-          tag("rank", n(skill.rank), { type: "number" }) +
-          tag("stat", escapeXml(skill.stat), { type: "string" }) +
-          tag("total", n(skill.rank + skill.bonus), { type: "number" }),
+        numberTag("bonus", skill.bonus, { type: "number" }) +
+          textTag("name", skill.name, { type: "string" }) +
+          numberTag("rank", skill.rank, { type: "number" }) +
+          textTag("stat", skill.stat, { type: "string" }) +
+          numberTag("total", skill.rank + skill.bonus, { type: "number" }),
       ),
     )
     .join("");
@@ -172,7 +193,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     .map((item, i) =>
       tag(
         idNode(i),
-        tag("name", escapeXml(item.name), { type: "string" }) +
+        textTag("name", item.name, { type: "string" }) +
           tag("text", formattedText(item.text), { type: "formattedtext" }),
       ),
     )
@@ -182,13 +203,11 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     .map((item, i) =>
       tag(
         idNode(i),
-        tag("activation", escapeXml(item.activation), { type: "string" }) +
-          tag("name", escapeXml(item.name), { type: "string" }) +
-          tag("prerequisites", escapeXml(item.prerequisites), {
-            type: "string",
-          }) +
-          tag("source", escapeXml(item.source), { type: "string" }) +
-          tag("specialty", escapeXml(item.specialty), { type: "string" }) +
+        textTag("activation", item.activation, { type: "string" }) +
+          textTag("name", item.name, { type: "string" }) +
+          textTag("prerequisites", item.prerequisites, { type: "string" }) +
+          textTag("source", item.source, { type: "string" }) +
+          textTag("specialty", item.specialty, { type: "string" }) +
           tag("text", formattedText(item.text), { type: "formattedtext" }),
       ),
     )
@@ -201,32 +220,30 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
 
       return (
         `<${nodeName}>` +
-        tag("ammo", n(weapon.ammo), { type: "number" }) +
-        tag("carried", n(weapon.carried), { type: "number" }) +
+        numberTag("ammo", weapon.ammo, { type: "number" }) +
+        numberTag("carried", weapon.carried, { type: "number" }) +
         `<damagelist>` +
         `<id-00001>` +
-        tag("dice", escapeXml(weapon.damageDice), { type: "dice" }) +
-        tag("type", escapeXml(weapon.damageType), { type: "string" }) +
-        tag("weaponskill", escapeXml(weapon.skill), { type: "string" }) +
+        textTag("dice", weapon.damageDice, { type: "dice" }) +
+        textTag("type", weapon.damageType, { type: "string" }) +
+        textTag("weaponskill", weapon.skill, { type: "string" }) +
         `</id-00001>` +
         `</damagelist>` +
         (weapon.expertTraits
-          ? tag("experttraits", escapeXml(weapon.expertTraits), {
-              type: "string",
-            })
+          ? textTag("experttraits", weapon.expertTraits, { type: "string" })
           : "") +
-        tag("handling", n(weapon.handling), { type: "number" }) +
-        tag("maxammo", n(weapon.maxAmmo), { type: "number" }) +
-        tag("name", escapeXml(weapon.name), { type: "string" }) +
+        numberTag("handling", weapon.handling, { type: "number" }) +
+        numberTag("maxammo", weapon.maxAmmo, { type: "number" }) +
+        textTag("name", weapon.name, { type: "string" }) +
         `<shortcut type="windowreference">` +
         tag("class", "") +
         tag("recordname", "") +
         `</shortcut>` +
         (weapon.traits
-          ? tag("traits", escapeXml(weapon.traits), { type: "string" })
+          ? textTag("traits", weapon.traits, { type: "string" })
           : "") +
-        tag("type", n(weapon.type), { type: "number" }) +
-        tag("weaponskill", escapeXml(weapon.skill), { type: "string" }) +
+        numberTag("type", weapon.type, { type: "number" }) +
+        textTag("weaponskill", weapon.skill, { type: "string" }) +
         `</${nodeName}>`
       );
     })
@@ -237,7 +254,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     `<root version="5.1" dataversion="20260124" release="8.1|CoreRPG:7">` +
     `<character>` +
     `<ancestry>` +
-    tag("name", escapeXml(character.meta.ancestry), { type: "string" }) +
+    textTag("name", character.meta.ancestry, { type: "string" }) +
     `<shortcut type="windowreference">` +
     tag("class", "") +
     tag("recordname", "") +
@@ -250,52 +267,52 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     `<defenses>` +
     tag(
       "cognitivedefense",
-      tag("bonus", "0", { type: "number" }) +
-        tag("score", n(cognitiveDefense), { type: "number" }),
+      numberTag("bonus", 0, { type: "number" }) +
+        numberTag("score", cognitiveDefense, { type: "number" }),
     ) +
     tag(
       "physicaldefense",
-      tag("bonus", "0", { type: "number" }) +
-        tag("score", n(physicalDefense), { type: "number" }),
+      numberTag("bonus", 0, { type: "number" }) +
+        numberTag("score", physicalDefense, { type: "number" }),
     ) +
     tag(
       "spiritualdefense",
-      tag("bonus", "0", { type: "number" }) +
-        tag("score", n(spiritualDefense), { type: "number" }),
+      numberTag("bonus", 0, { type: "number" }) +
+        numberTag("score", spiritualDefense, { type: "number" }),
     ) +
     `</defenses>` +
-    tag("deflect", n(character.deflect), { type: "number" }) +
+    numberTag("deflect", character.deflect, { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
-    tag("carry", n(carry), { type: "number" }) +
-    tag("load", "0", { type: "number" }) +
-    tag("max", n(carry * 2), { type: "number" }) +
+    numberTag("carry", carry, { type: "number" }) +
+    numberTag("load", 0, { type: "number" }) +
+    numberTag("max", carry * 2, { type: "number" }) +
     `</encumbrance>` +
     tag("expertise", expertiseBlock) +
     `<focus>` +
-    tag("bonus", n(character.focus.bonus), { type: "number" }) +
-    tag("current", n(character.focus.current), { type: "number" }) +
-    tag("total", n(character.focus.total), { type: "number" }) +
+    numberTag("bonus", character.focus.bonus, { type: "number" }) +
+    numberTag("current", character.focus.current, { type: "number" }) +
+    numberTag("total", character.focus.total, { type: "number" }) +
     `</focus>` +
     emptyTag("goals") +
     `<hp>` +
-    tag("bonus", n(character.health.bonus), { type: "number" }) +
-    tag("total", n(healthTotal), { type: "number" }) +
-    tag("wounds", n(wounds), { type: "number" }) +
+    numberTag("bonus", character.health.bonus, { type: "number" }) +
+    numberTag("total", healthTotal, { type: "number" }) +
+    numberTag("wounds", wounds, { type: "number" }) +
     `</hp>` +
     emptyTag("inventorylist") +
     `<investiture>` +
-    tag("current", n(character.investiture.current), { type: "number" }) +
-    tag("total", n(character.investiture.total), { type: "number" }) +
+    numberTag("current", character.investiture.current, { type: "number" }) +
+    numberTag("total", character.investiture.total, { type: "number" }) +
     `</investiture>` +
-    tag("level", n(character.meta.level), { type: "number" }) +
-    tag("movement", n(movementTotal), { type: "number" }) +
-    tag("movementbonus", n(character.movementBonus), { type: "number" }) +
-    tag("name", escapeXml(character.meta.name), { type: "string" }) +
-    tag("path", escapeXml(character.meta.path), { type: "string" }) +
+    numberTag("level", character.meta.level, { type: "number" }) +
+    numberTag("movement", movementTotal, { type: "number" }) +
+    numberTag("movementbonus", character.movementBonus, { type: "number" }) +
+    textTag("name", character.meta.name, { type: "string" }) +
+    textTag("path", character.meta.path, { type: "string" }) +
     `<paths>` +
     `<${pathNodeName}>` +
-    tag("name", escapeXml(character.meta.path), { type: "string" }) +
+    textTag("name", character.meta.path, { type: "string" }) +
     `<shortcut type="windowreference">` +
     tag("class", "") +
     tag("recordname", "") +
@@ -303,16 +320,16 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     tag("text", "", { type: "formattedtext" }) +
     `</${pathNodeName}>` +
     `</paths>` +
-    tag("recdie", escapeXml(character.recoveryDie), { type: "dice" }) +
+    textTag("recdie", character.recoveryDie, { type: "dice" }) +
     tag("skilllist", skillListBlock) +
     tag("talent", talentBlock) +
-    tag("tier", n(tier), { type: "number" }) +
-    tag(
+    numberTag("tier", tier, { type: "number" }) +
+    numberTag(
       "totalskillranks",
-      n(character.skills.reduce((sum, skill) => sum + skill.rank, 0)),
+      character.skills.reduce((sum, skill) => sum + skill.rank, 0),
       { type: "number" },
     ) +
-    tag("totaltalents", n(character.talents.length), { type: "number" }) +
+    numberTag("totaltalents", character.talents.length, { type: "number" }) +
     `<weaponlist>` +
     weaponListBlock +
     `</weaponlist>` +
