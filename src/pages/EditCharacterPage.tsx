@@ -62,7 +62,6 @@ export function EditCharacterPage() {
         secondaryActionLabel="View Export"
         successMessage={state?.successMessage}
         errorMessage={state?.errorMessage}
-        {/* topContent={<CharacterSummaryCard character={character} />} */}
       />
     </AppLayout>
   );
