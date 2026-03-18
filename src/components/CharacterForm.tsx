@@ -241,7 +241,11 @@ export function CharacterForm({
             There are validation errors in the form.
           </p>
           <pre className="code-block">
-            {JSON.stringify(form.formState.errors, null, 2)}
+            {JSON.stringify(
+              form.formState.errors,
+              (key, value) => (key === "ref" ? undefined : value),
+              2,
+            )}
           </pre>
         </section>
       ) : null}
