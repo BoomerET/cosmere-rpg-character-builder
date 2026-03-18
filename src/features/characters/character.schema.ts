@@ -82,6 +82,11 @@ export const characterSchema = z.object({
     path: z.string().min(1).default("Windrunner"),
     level: z.number().int().min(1).default(1),
     tier: z.number().int().min(1).default(1),
+    gender: z.string().default(""),
+    age: z.number().int().min(0).default(0),
+    height: z.string().default(""),
+    weight: z.string().default(""),
+    size: z.string().default(""),
   }),
   attributes: z.object({
     awareness: z.number().int().min(0).max(20),

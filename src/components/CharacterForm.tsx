@@ -24,6 +24,7 @@ type CharacterFormProps = {
 
 type FormTab =
   | "overview"
+  | "profile"
   | "attributes"
   | "skills"
   | "weapons"
@@ -260,6 +261,11 @@ export function CharacterForm({
               path: values.meta.path ?? "Windrunner",
               level: values.meta.level ?? 1,
               tier: getTierFromLevel(values.meta.level ?? 1),
+              gender: values.meta.gender ?? "",
+              age: values.meta.age ?? 0,
+              height: values.meta.height ?? "",
+              weight: values.meta.weight ?? "",
+              size: values.meta.size ?? "",
             },
             attributes: {
               ...values.attributes,
@@ -317,7 +323,13 @@ export function CharacterForm({
           >
             Overview
           </button>
-
+          <button
+            type="button"
+            className={`tab-button${activeTab === "profile" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("profile")}
+          >
+            Profile
+          </button>
           <button
             type="button"
             className={`tab-button${activeTab === "attributes" ? " tab-button-active" : ""}`}
@@ -419,6 +431,39 @@ export function CharacterForm({
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+        )}
+
+        {activeTab === "profile" && (
+          <section className="sheet-section">
+            <h2>Profile</h2>
+
+            <div className="form-grid">
+              <label className="field">
+                <span>Gender</span>
+                <input {...form.register("meta.gender")} />
+              </label>
+
+              <label className="field field-small">
+                <span>Age</span>
+                <input type="number" min="0" {...numericRegister("meta.age")} />
+              </label>
+
+              <label className="field">
+                <span>Height</span>
+                <input {...form.register("meta.height")} />
+              </label>
+
+              <label className="field">
+                <span>Weight</span>
+                <input {...form.register("meta.weight")} />
+              </label>
+
+              <label className="field">
+                <span>Size</span>
+                <input {...form.register("meta.size")} />
+              </label>
             </div>
           </section>
         )}
