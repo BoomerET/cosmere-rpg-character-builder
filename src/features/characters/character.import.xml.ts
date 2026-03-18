@@ -161,6 +161,11 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       path: directChildText(character, "path") || "Windrunner",
       level: directChildNumber(character, "level", 1),
       tier: directChildNumber(character, "tier", 1),
+      gender: directChildNumber(character, "gender", 1),
+      age: directChildNumber(character, "age", 0),
+      height: directChildText(character, "height") || "",
+      weight: directChildText(character, "weight") || "",
+      size: directChildText(character, "size") || "",
     },
 
     attributes: {
