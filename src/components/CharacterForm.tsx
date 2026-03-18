@@ -70,6 +70,18 @@ function getStatAbbreviation(stat: string): string {
   }
 }
 
+function getSensesRange(awareness: number): string {
+  if (awareness >= 3) return "20 ft";
+  if (awareness >= 1) return "10 ft";
+  return "5 ft";
+}
+
+function getLiftingCapacity(strength: number): number {
+  if (strength >= 3) return 500;
+  if (strength >= 1) return 200;
+  return 100;
+}
+
 export function CharacterForm({
   title,
   subtitle,
@@ -136,6 +148,8 @@ export function CharacterForm({
   const tier = getTierFromLevel(level);
   const healthMax = getHealthMax(strength);
   const movementRate = getMovementRate(speed);
+  const sensesRange = getSensesRange(awareness);
+  const liftingCapacity = getLiftingCapacity(strength);
 
   const physicalDefense = 10 + strength + speed;
   const cognitiveDefense = 10 + intellect + willpower;
@@ -265,8 +279,10 @@ export function CharacterForm({
             movement: getMovementRate(values.attributes.speed ?? 0),
             movementBonus: values.movementBonus ?? 0,
             recoveryDie: values.recoveryDie ?? "d4",
-            sensesRange: values.sensesRange ?? "",
-            liftingCapacity: values.liftingCapacity,
+            sensesRange: getSensesRange(values.attributes.awareness ?? 0),
+            liftingCapacity: getLiftingCapacity(
+              values.attributes.strength ?? 0,
+            ),
             expertise: values.expertise ?? [],
             talents: values.talents ?? [],
             weapons: values.weapons ?? [],
@@ -599,19 +615,31 @@ export function CharacterForm({
                   <input {...form.register("recoveryDie")} />
                 </label>
 
-                <label className="field">
-                  <span>Senses Range</span>
-                  <input {...form.register("sensesRange")} />
-                </label>
+                <div className="defense-display">
+                  <span className="defense-label">Senses Range</span>
+                  <strong className="defense-value">{sensesRange}</strong>
+                  <span className="defense-formula">
+                    {awareness >= 3
+                      ? "AWR 3"
+                      : awareness >= 1
+                        ? "AWR 1–2"
+                        : "AWR 0"}
+                  </span>
+                </div>
 
-                <label className="field field-small">
-                  <span>Lifting Capacity</span>
-                  <input
-                    type="number"
-                    placeholder="optional"
-                    {...numericRegister("liftingCapacity")}
-                  />
-                </label>
+                <div className="defense-display">
+                  <span className="defense-label">Lifting Capacity</span>
+                  <strong className="defense-value">
+                    {liftingCapacity} lbs
+                  </strong>
+                  <span className="defense-formula">
+                    {strength >= 3
+                      ? "STR 3"
+                      : strength >= 1
+                        ? "STR 1–2"
+                        : "STR 0"}
+                  </span>
+                </div>
               </div>
             </section>
           </>
