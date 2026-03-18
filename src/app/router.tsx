@@ -10,5 +10,8 @@ export const router = createBrowserRouter([
   { path: "/new", Component: NewCharacterPage },
   { path: "/character/:id", Component: EditCharacterPage },
   { path: "/export/:id", Component: ExportPage },
-]);
+],
+{  basename: "/cosmere",
+},
+);
 
