@@ -24,12 +24,12 @@ type CharacterFormProps = {
 
 type FormTab =
   | "overview"
-  | "profile"
   | "attributes"
   | "skills"
   | "weapons"
   | "expertise"
   | "talents"
+  | "profile"
   | "details";
 
 type SkillSortMode = "alpha" | "total";
@@ -329,13 +329,6 @@ export function CharacterForm({
           </button>
           <button
             type="button"
-            className={`tab-button${activeTab === "profile" ? " tab-button-active" : ""}`}
-            onClick={() => setActiveTab("profile")}
-          >
-            Profile
-          </button>
-          <button
-            type="button"
             className={`tab-button${activeTab === "attributes" ? " tab-button-active" : ""}`}
             onClick={() => setActiveTab("attributes")}
           >
@@ -373,7 +366,13 @@ export function CharacterForm({
           >
             Talents
           </button>
-
+          <button
+            type="button"
+            className={`tab-button${activeTab === "profile" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("profile")}
+          >
+            Profile
+          </button>
           <button
             type="button"
             className={`tab-button${activeTab === "details" ? " tab-button-active" : ""}`}
