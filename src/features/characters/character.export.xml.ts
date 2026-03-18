@@ -314,7 +314,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
         numberTag("score", spiritualDefense, { type: "number" }),
     ) +
     `</defenses>` +
-    textTag("name", senses, { type: "string" }) +
+    textTag("senses", senses, { type: "string" }) +
     numberTag("deflect", character.deflect, { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
