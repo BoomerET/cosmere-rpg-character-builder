@@ -154,6 +154,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     10 + character.attributes.awareness + character.attributes.presence;
 
   const carry = character.liftingCapacity ?? 50;
+  const senses = character.sensesRange ?? 0;
   const pathNodeName = safeXmlNodeName(character.meta.path, "path");
 
   const healthTotal = 10 + character.attributes.strength;
@@ -292,6 +293,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     `</shortcut>` +
     tag("text", "", { type: "formattedtext" }) +
     `</ancestry>` +
+    tag("name", character.meta.name, { type: "string" }) +
     tag("attributes", attrsBlock) +
     topLevelStats +
     tag("coins", coinsBlock) +
@@ -312,6 +314,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
         numberTag("score", spiritualDefense, { type: "number" }),
     ) +
     `</defenses>` +
+    textTag("name", senses, { type: "string" }) +
     numberTag("deflect", character.deflect, { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
