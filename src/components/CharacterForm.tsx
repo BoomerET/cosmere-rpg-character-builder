@@ -302,7 +302,7 @@ export function CharacterForm({
             movement: getMovementRate(values.attributes.speed ?? 0),
             movementBonus: values.movementBonus ?? 0,
             recoveryDie: getRecoveryDie(values.attributes.willpower ?? 0),
-            sensesRange: getSensesRange(values.attributes.awareness ?? 0),
+            sensesRange: getSensesRange(values.attributes.awareness ?? ""),
             liftingCapacity: getLiftingCapacity(
               values.attributes.strength ?? 0,
             ),
