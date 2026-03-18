@@ -93,6 +93,35 @@ function numberTag(
   return tag(name, n(value), attrs);
 }
 
+function formatXml(xml: string): string {
+  const PADDING = "  "; // 2 spaces
+  const reg = /(>)(<)(\/*)/g;
+  let formatted = "";
+  let pad = 0;
+
+  xml = xml.replace(reg, "$1\n$2$3");
+
+  xml.split("\n").forEach((node) => {
+    let indent = 0;
+
+    if (node.match(/^<\/\w/)) {
+      pad -= 1;
+    }
+
+    for (let i = 0; i < pad; i++) {
+      indent += 1;
+    }
+
+    formatted += PADDING.repeat(indent) + node + "\n";
+
+    if (node.match(/^<[^!?\/][^>]*[^\/]>$/)) {
+      pad += 1;
+    }
+  });
+
+  return formatted.trim();
+}
+
 function formattedText(value: string): string {
   const trimmed = value.trim();
 
@@ -251,7 +280,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     })
     .join("");
 
-  return (
+  const rawXML =
     `<?xml version="1.0" encoding="utf-8"?>` +
     `<root version="5.1" dataversion="20260124" release="8.1|CoreRPG:7">` +
     `<character>` +
@@ -313,7 +342,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     textTag("name", character.meta.name, { type: "string" }) +
     textTag("path", character.meta.path, { type: "string" }) +
     textTag("gender", character.meta.gender, { type: "string" }) +
-    numberTag("age", character.meta.age, { type: "number" }) +
+    textTag("age", character.meta.age, { type: "string" }) +
     textTag("height", character.meta.height, { type: "string" }) +
     textTag("weight", character.meta.weight, { type: "string" }) +
     textTag("size", character.meta.size, { type: "string" }) +
@@ -341,6 +370,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     weaponListBlock +
     `</weaponlist>` +
     `</character>` +
-    `</root>`
-  );
+    `</root>`;
+
+  return formatXml(rawXML);
 }
