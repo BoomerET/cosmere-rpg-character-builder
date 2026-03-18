@@ -83,7 +83,7 @@ export const characterSchema = z.object({
     level: z.number().int().min(1).default(1),
     tier: z.number().int().min(1).default(1),
     gender: z.string().default(""),
-    age: z.number().int().min(0).default(0),
+    age: z.string().default(""),
     height: z.string().default(""),
     weight: z.string().default(""),
     size: z.string().default(""),
