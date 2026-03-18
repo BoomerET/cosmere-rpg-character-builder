@@ -151,7 +151,7 @@ export function CharacterForm({
   const level = form.watch("meta.level") ?? 1;
   const strength = form.watch("attributes.strength") ?? 0;
   const speed = form.watch("attributes.speed") ?? 0;
-  const intellect = form.watch("attributes.intgetLiftingCapacityellect") ?? 0;
+  const intellect = form.watch("attributes.intellect") ?? 0;
   const willpower = form.watch("attributes.willpower") ?? 0;
   const awareness = form.watch("attributes.awareness") ?? 0;
   const presence = form.watch("attributes.presence") ?? 0;
