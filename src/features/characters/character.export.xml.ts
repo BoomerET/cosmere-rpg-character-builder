@@ -312,6 +312,11 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     numberTag("movementbonus", character.movementBonus, { type: "number" }) +
     textTag("name", character.meta.name, { type: "string" }) +
     textTag("path", character.meta.path, { type: "string" }) +
+    textTag("gender", character.meta.gender, { type: "string" }) +
+    numberTag("age", character.meta.age, { type: "number" }) +
+    textTag("height", character.meta.height, { type: "string" }) +
+    textTag("weight", character.meta.weight, { type: "string" }) +
+    textTag("size", character.meta.size, { type: "string" }) +
     `<paths>` +
     `<${pathNodeName}>` +
     textTag("name", character.meta.path, { type: "string" }) +
