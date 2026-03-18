@@ -82,6 +82,16 @@ function getLiftingCapacity(strength: number): number {
   return 100;
 }
 
+function getFocusMax(willpower: number): number {
+  return willpower + 2;
+}
+
+function getRecoveryDie(willpower: number): string {
+  if (willpower >= 3) return "1d8";
+  if (willpower >= 1) return "1d6";
+  return "1d4";
+}
+
 export function CharacterForm({
   title,
   subtitle,
@@ -150,6 +160,9 @@ export function CharacterForm({
   const movementRate = getMovementRate(speed);
   const sensesRange = getSensesRange(awareness);
   const liftingCapacity = getLiftingCapacity(strength);
+
+  const focusMax = getFocusMax(willpower);
+  const recoveryDie = getRecoveryDie(willpower);
 
   const physicalDefense = 10 + strength + speed;
   const cognitiveDefense = 10 + intellect + willpower;
@@ -267,7 +280,7 @@ export function CharacterForm({
             focus: {
               ...values.focus,
               current: values.focus.current ?? 0,
-              total: values.focus.total ?? 0,
+              total: getFocusMax(values.attributes.willpower ?? 0),
               bonus: values.focus.bonus ?? 0,
             },
             investiture: {
@@ -278,7 +291,7 @@ export function CharacterForm({
             deflect: values.deflect ?? 0,
             movement: getMovementRate(values.attributes.speed ?? 0),
             movementBonus: values.movementBonus ?? 0,
-            recoveryDie: values.recoveryDie ?? "d4",
+            recoveryDie: getRecoveryDie(values.attributes.willpower ?? 0),
             sensesRange: getSensesRange(values.attributes.awareness ?? 0),
             liftingCapacity: getLiftingCapacity(
               values.attributes.strength ?? 0,
@@ -539,13 +552,11 @@ export function CharacterForm({
                 <div className="mini-card">
                   <h3>Focus</h3>
                   <div className="mini-grid two-up">
-                    <label className="field">
-                      <span>Max</span>
-                      <input
-                        type="number"
-                        {...numericRegister("focus.total")}
-                      />
-                    </label>
+                    <div className="defense-display">
+                      <span className="defense-label">Max</span>
+                      <strong className="defense-value">{focusMax}</strong>
+                      <span className="defense-formula">WIL + 2</span>
+                    </div>
 
                     <label className="field">
                       <span>Current</span>
@@ -610,10 +621,17 @@ export function CharacterForm({
                   <input type="number" {...numericRegister("deflect")} />
                 </label>
 
-                <label className="field field-small">
-                  <span>Recovery Die</span>
-                  <input {...form.register("recoveryDie")} />
-                </label>
+                <div className="defense-display">
+                  <span className="defense-label">Recovery Die</span>
+                  <strong className="defense-value">{recoveryDie}</strong>
+                  <span className="defense-formula">
+                    {willpower >= 3
+                      ? "WIL 3–4"
+                      : willpower >= 1
+                        ? "WIL 1–2"
+                        : "WIL 0"}
+                  </span>
+                </div>
 
                 <div className="defense-display">
                   <span className="defense-label">Senses Range</span>
