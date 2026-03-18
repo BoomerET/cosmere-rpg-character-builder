@@ -874,13 +874,16 @@ export function CharacterForm({
                     </label>
 
                     <label className="field field-small">
-                      <span>Carried</span>
-                      <input
-                        type="number"
-                        {...numericRegister(
-                          `weapons.${index}.carried` as const,
-                        )}
-                      />
+                      <span>Status</span>
+                      <select
+                        {...form.register(`weapons.${index}.carried` as const, {
+                          setValueAs: (v) => Number(v),
+                        })}
+                      >
+                        <option value={0}>Not Carried</option>
+                        <option value={1}>Equipped</option>
+                        <option value={2}>Carried</option>
+                      </select>
                     </label>
 
                     <label className="field field-small">
