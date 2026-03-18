@@ -1,7 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { CharacterForm } from "../components/CharacterForm";
-import { CharacterSummaryCard } from "../components/CharacterSummaryCard";
 import { FlashMessage } from "../components/FlashMessage";
 import { useCharacters } from "../features/characters/CharacterContext";
 import type { CharacterInput } from "../features/characters/character.schema";
@@ -63,7 +62,7 @@ export function EditCharacterPage() {
         secondaryActionLabel="View Export"
         successMessage={state?.successMessage}
         errorMessage={state?.errorMessage}
-        topContent={<CharacterSummaryCard character={character} />}
+        {/* topContent={<CharacterSummaryCard character={character} />} */}
       />
     </AppLayout>
   );

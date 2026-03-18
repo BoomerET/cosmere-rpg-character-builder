@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { AppLayout } from "../components/AppLayout";
-import { CharacterSummaryCard } from "../components/CharacterSummaryCard";
 import { FlashMessage } from "../components/FlashMessage";
 import { useCharacters } from "../features/characters/CharacterContext";
 import { toFantasyGroundsXml } from "../features/characters/character.export.xml";
@@ -75,8 +74,6 @@ export function ExportPage() {
           message={localSuccess || state?.successMessage || ""}
         />
         <FlashMessage kind="error" message={state?.errorMessage || ""} />
-
-        <CharacterSummaryCard character={safeCharacter} />
 
         <section className="sheet-card">
           <div className="inline-actions" style={{ marginBottom: "18px" }}>
