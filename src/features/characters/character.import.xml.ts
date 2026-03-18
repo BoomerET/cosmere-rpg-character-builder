@@ -162,7 +162,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       level: directChildNumber(character, "level", 1),
       tier: directChildNumber(character, "tier", 1),
       gender: directChildText(character, "gender") || "",
-      age: directChildNumber(character, "age", 0),
+      age: directChildText(character, "age") || "",
       height: directChildText(character, "height") || "",
       weight: directChildText(character, "weight") || "",
       size: directChildText(character, "size") || "",
