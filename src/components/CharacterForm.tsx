@@ -100,6 +100,26 @@ function getWeaponHandling(traits: string, expertTraits = ""): number {
     : 0;
 }
 
+const ANCESTRY_OPTIONS = ["Human (Roshar)", "Singer"] as const;
+
+const PATH_OPTIONS = [
+  "Agent",
+  "Dustbringer",
+  "Edgedancer",
+  "Elsecaller",
+  "Envoy",
+  "Hunter",
+  "Leader",
+  "Lightweaver",
+  "Scholar",
+  "Skybreaker",
+  "Stoneward",
+  "Truthwatcher",
+  "Warrior",
+  "Willshaper",
+  "Windrunner",
+] as const;
+
 export function CharacterForm({
   title,
   subtitle,
@@ -450,12 +470,24 @@ export function CharacterForm({
 
               <label className="field">
                 <span>Ancestry</span>
-                <input {...form.register("meta.ancestry")} />
+                <select {...form.register("meta.ancestry")}>
+                  {ANCESTRY_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className="field">
                 <span>Path</span>
-                <input {...form.register("meta.path")} />
+                <select {...form.register("meta.path")}>
+                  {PATH_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </label>
             </div>
 

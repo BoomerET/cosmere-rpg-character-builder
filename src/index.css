@@ -202,23 +202,9 @@ textarea {
   color: var(--muted);
 }
 
-.field input,
-.field textarea {
-  width: 100%;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 12px 14px;
-  outline: none;
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.08s ease;
-}
-
 .field input:focus,
-.field textarea:focus {
+.field textarea:focus,
+.field select:focus {
   border-color: var(--accent-2);
   box-shadow: 0 0 0 3px rgba(119, 195, 255, 0.18);
 }
