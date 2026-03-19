@@ -1,26 +1,8 @@
-import {
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { DEFAULT_SKILLS, type CharacterInput } from "./character.schema";
 import { characterStorage } from "./character.storage";
 import { uuid } from "../../utils/uuid";
-
-export type CharacterContextValue = {
-  characters: CharacterInput[];
-  refreshCharacters: () => void;
-  createBlankCharacter: () => CharacterInput;
-  saveCharacter: (character: CharacterInput) => void;
-  getCharacter: (id: string) => CharacterInput | undefined;
-  deleteCharacter: (id: string) => void;
-};
-
-export const CharacterContext = createContext<
-  CharacterContextValue | undefined
->(undefined);
+import { CharacterContext } from "./character.context";
 
 function makeBlankCharacter(): CharacterInput {
   return {

@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { useFieldArray, useForm, type Path } from "react-hook-form";
+import { useFieldArray, useForm, useWatch, type Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   characterSchema,
@@ -153,15 +153,53 @@ export function CharacterForm({
     form.reset(defaultValues);
   }, [defaultValues, form]);
 
-  const skills = form.watch("skills") ?? [];
+  const skills =
+    useWatch({
+      control: form.control,
+      name: "skills",
+    }) ?? [];
 
-  const level = form.watch("meta.level") ?? 1;
-  const strength = form.watch("attributes.strength") ?? 0;
-  const speed = form.watch("attributes.speed") ?? 0;
-  const intellect = form.watch("attributes.intellect") ?? 0;
-  const willpower = form.watch("attributes.willpower") ?? 0;
-  const awareness = form.watch("attributes.awareness") ?? 0;
-  const presence = form.watch("attributes.presence") ?? 0;
+  const level =
+    useWatch({
+      control: form.control,
+      name: "meta.level",
+    }) ?? 1;
+
+  const strength =
+    useWatch({
+      control: form.control,
+      name: "attributes.strength",
+    }) ?? 0;
+
+  const speed =
+    useWatch({
+      control: form.control,
+      name: "attributes.speed",
+    }) ?? 0;
+
+  const intellect =
+    useWatch({
+      control: form.control,
+      name: "attributes.intellect",
+    }) ?? 0;
+
+  const willpower =
+    useWatch({
+      control: form.control,
+      name: "attributes.willpower",
+    }) ?? 0;
+
+  const awareness =
+    useWatch({
+      control: form.control,
+      name: "attributes.awareness",
+    }) ?? 0;
+
+  const presence =
+    useWatch({
+      control: form.control,
+      name: "attributes.presence",
+    }) ?? 0;
 
   const tier = getTierFromLevel(level);
   const healthMax = getHealthMax(strength);
