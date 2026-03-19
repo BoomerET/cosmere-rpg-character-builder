@@ -118,6 +118,14 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     refreshCharacters();
   }
 
+const saveCharacter = useCallback((character: CharacterInput) => {
+  // existing logic
+}, []);
+
+const deleteCharacter = useCallback((id: string) => {
+  // existing logic
+}, []);
+
   const value = useMemo(
     () => ({
       characters,
@@ -127,7 +135,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       getCharacter,
       deleteCharacter,
     }),
-    [characters],
+    [characters, saveCharacter, deleteCharacter],
   );
 
   return (
