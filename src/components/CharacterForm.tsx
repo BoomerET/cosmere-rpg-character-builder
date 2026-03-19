@@ -311,7 +311,7 @@ export function CharacterForm({
               level: values.meta.level ?? 1,
               tier: getTierFromLevel(values.meta.level ?? 1),
               gender: values.meta.gender ?? "",
-              age: values.meta.age ?? "",
+              age: values.meta.age ?? 0,
               height: values.meta.height ?? "",
               weight: values.meta.weight ?? "",
               size: values.meta.size ?? "",
