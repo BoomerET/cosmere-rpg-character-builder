@@ -121,6 +121,7 @@ const PATH_OPTIONS = [
 ] as const;
 
 const WEAPON_OPTIONS = [
+  "Unarmed Attack",
   "Axe",
   "Crossbow",
   "Grandbow",
@@ -146,6 +147,285 @@ const WEAPON_OPTIONS = [
   "Staff",
   "Warhammer",
 ] as const;
+
+type WeaponTemplate = {
+  skill: CharacterInput["weapons"][number]["skill"];
+  damageDice: string;
+  damageType: string;
+  traits: string;
+  expertTraits: string;
+  carried: number;
+  ammo: number;
+  maxAmmo: number;
+  type: number;
+};
+
+const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
+  Axe: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Crossbow: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Grandbow: {
+    skill: "Heavy Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Greatsword: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  "Half-Shard": {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Hammer: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Javelin: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Knife: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Longbow: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Longspear: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Longsword: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Mace: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  "Painrial (amplifying)": {
+    skill: "Lore",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Poleaxe: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Rapier: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Shardblade: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  "Shardblade (Radiant)": {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Shield: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Shortbow: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Shortspear: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Sidesword: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Sling: {
+    skill: "Light Weaponry",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Staff: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+  Warhammer: {
+    skill: "Athletics",
+    damageDice: "d1",
+    damageType: "impact",
+    traits: "Two-Handed",
+    expertTraits: "",
+    carried: 2,
+    ammo: 0,
+    maxAmmo: 0,
+    type: 0,
+  },
+};
 
 export function CharacterForm({
   title,
@@ -307,6 +587,48 @@ export function CharacterForm({
   function numericRegister(path: Path<CharacterFormValues>) {
     return form.register(path, {
       setValueAs: (value) => (value === "" ? undefined : Number(value)),
+    });
+  }
+
+  function applyWeaponTemplate(index: number, weaponName: string) {
+    const template = WEAPON_TEMPLATES[weaponName];
+    if (!template) return;
+
+    form.setValue(`weapons.${index}.skill`, template.skill, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.damageDice`, template.damageDice, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.damageType`, template.damageType, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.traits`, template.traits, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.expertTraits`, template.expertTraits, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.carried`, template.carried, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.ammo`, template.ammo, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.maxAmmo`, template.maxAmmo, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`weapons.${index}.type`, template.type, {
+      shouldDirty: true,
+      shouldValidate: true,
     });
   }
 
@@ -896,16 +1218,8 @@ export function CharacterForm({
                 onClick={() =>
                   appendWeapon({
                     name: "Longsword",
-                    skill: "Athletics",
-                    damageDice: "d1",
-                    damageType: "impact",
-                    traits: "",
-                    expertTraits: "",
+                    ...WEAPON_TEMPLATES["Longsword"],
                     handling: 0,
-                    carried: 2,
-                    ammo: 0,
-                    maxAmmo: 0,
-                    type: 0,
                   })
                 }
               >
@@ -930,8 +1244,21 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <select {...form.register(`weapons.${index}.name`)}>
-                        <option value="">Custom...</option>
+                      <select
+                        {...form.register(`weapons.${index}.name` as const)}
+                        onChange={(e) => {
+                          const weaponName = e.target.value;
+                          form.setValue(
+                            `weapons.${index}.name` as const,
+                            weaponName,
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            },
+                          );
+                          applyWeaponTemplate(index, weaponName);
+                        }}
+                      >
                         {WEAPON_OPTIONS.map((option) => (
                           <option key={option} value={option}>
                             {option}
