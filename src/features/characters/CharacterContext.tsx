@@ -65,6 +65,7 @@ function makeBlankCharacter(): CharacterInput {
         maxAmmo: 0,
         type: 0,
         range: "Melee",
+        subtype: "",
       },
     ],
     conditionsText: "",

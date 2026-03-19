@@ -331,6 +331,10 @@ export function CharacterForm({
       shouldDirty: true,
       shouldValidate: true,
     });
+    form.setValue(`weapons.${index}.subtype`, template.subtype, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   }
 
   return (
@@ -967,7 +971,10 @@ export function CharacterForm({
                         ))}
                       </select>
                     </label>
-
+<label className="field">
+                      <span>Subtype</span>
+                      <input {...form.register(`weapons.${index}.subtype`)} />
+                    </label>
                     <label className="field">
                       <span>Skill</span>
                       <input

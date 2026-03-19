@@ -247,6 +247,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
               maxAmmo: 0,
               type: 0,
               range: "Melee",
+              subtype: "",
             },
           ],
 
