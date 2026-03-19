@@ -93,6 +93,13 @@ function getRecoveryDie(willpower: number): string {
   return "1d4";
 }
 
+function getWeaponHandling(traits: string, expertTraits = ""): number {
+  const combined = `${traits} ${expertTraits}`.toLowerCase();
+  return combined.includes("two-handed") || combined.includes("two handed")
+    ? 1
+    : 0;
+}
+
 export function CharacterForm({
   title,
   subtitle,
@@ -308,7 +315,13 @@ export function CharacterForm({
             ),
             expertise: values.expertise ?? [],
             talents: values.talents ?? [],
-            weapons: values.weapons ?? [],
+            weapons: (values.weapons ?? []).map((weapon) => ({
+              ...weapon,
+              handling: getWeaponHandling(
+                weapon.traits ?? "",
+                weapon.expertTraits ?? "",
+              ),
+            })),
             conditionsText: values.conditionsText ?? "",
             skills: values.skills ?? [],
             notes: values.notes ?? "",
@@ -862,16 +875,6 @@ export function CharacterForm({
                       <input
                         {...form.register(
                           `weapons.${index}.expertTraits` as const,
-                        )}
-                      />
-                    </label>
-
-                    <label className="field field-small">
-                      <span>Handling</span>
-                      <input
-                        type="number"
-                        {...numericRegister(
-                          `weapons.${index}.handling` as const,
                         )}
                       />
                     </label>
