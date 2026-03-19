@@ -43,13 +43,14 @@ export const skillNameSchema = z.enum([
   "Stealth",
   "Survival",
   "Thievery",
+  "Special",
 ]);
 
 export const weaponSchema = z.object({
   name: z.string().min(1).default("New Weapon"),
-  skill: skillNameSchema.default("Athletics"),
-  damageDice: z.string().min(1).default("d1"),
-  damageType: z.string().min(1).default("impact"),
+  skill: skillNameSchema.default("Heavy Weaponry"),
+  damageDice: z.string().min(1).default("1d1"),
+  damageType: z.string().min(1).default("keen"),
   traits: z.string().default(""),
   expertTraits: z.string().default(""),
   handling: z.number().int().min(0).max(99).default(0),

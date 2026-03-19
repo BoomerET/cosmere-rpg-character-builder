@@ -251,7 +251,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     subtype: "",
   },
   "Shardblade (Radiant)": {
-    skill: "",
+    skill: "Special",
     damageDice: "2d*",
     damageType: "spirit",
     traits: "Deadly, Unique",
