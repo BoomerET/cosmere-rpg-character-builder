@@ -1,6 +1,6 @@
 import {
   createContext,
-  useContext,
+  useCallback,
   useMemo,
   useState,
   type ReactNode,
@@ -9,7 +9,7 @@ import { DEFAULT_SKILLS, type CharacterInput } from "./character.schema";
 import { characterStorage } from "./character.storage";
 import { uuid } from "../../utils/uuid";
 
-type CharacterContextValue = {
+export type CharacterContextValue = {
   characters: CharacterInput[];
   refreshCharacters: () => void;
   createBlankCharacter: () => CharacterInput;
@@ -18,9 +18,9 @@ type CharacterContextValue = {
   deleteCharacter: (id: string) => void;
 };
 
-const CharacterContext = createContext<CharacterContextValue | undefined>(
-  undefined,
-);
+export const CharacterContext = createContext<
+  CharacterContextValue | undefined
+>(undefined);
 
 function makeBlankCharacter(): CharacterInput {
   return {
@@ -33,7 +33,7 @@ function makeBlankCharacter(): CharacterInput {
       level: 1,
       tier: 1,
       gender: "",
-      age: "",
+      age: 0,
       height: "",
       weight: "",
       size: "",
@@ -64,9 +64,9 @@ function makeBlankCharacter(): CharacterInput {
     deflect: 0,
     movement: 20,
     movementBonus: 0,
-    recoveryDie: "d4",
-    sensesRange: "",
-    liftingCapacity: undefined,
+    recoveryDie: "1d4",
+    sensesRange: "5 ft",
+    liftingCapacity: 100,
     expertise: [],
     talents: [],
     weapons: [
@@ -96,27 +96,27 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     characterStorage.list(),
   );
 
-  function refreshCharacters() {
+  const refreshCharacters = useCallback(() => {
     setCharacters(characterStorage.list());
-  }
+  }, []);
 
-  function createBlankCharacter() {
+  const createBlankCharacter = useCallback(() => {
     return makeBlankCharacter();
-  }
+  }, []);
 
-  function saveCharacter(character: CharacterInput) {
+  const saveCharacter = useCallback((character: CharacterInput) => {
     characterStorage.save(character);
-    refreshCharacters();
-  }
+    setCharacters(characterStorage.list());
+  }, []);
 
-  function getCharacter(id: string) {
+  const getCharacter = useCallback((id: string) => {
     return characterStorage.get(id);
-  }
+  }, []);
 
-  function deleteCharacter(id: string) {
+  const deleteCharacter = useCallback((id: string) => {
     characterStorage.remove(id);
-    refreshCharacters();
-  }
+    setCharacters(characterStorage.list());
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -127,7 +127,14 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       getCharacter,
       deleteCharacter,
     }),
-    [characters],
+    [
+      characters,
+      refreshCharacters,
+      createBlankCharacter,
+      saveCharacter,
+      getCharacter,
+      deleteCharacter,
+    ],
   );
 
   return (
@@ -135,12 +142,4 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
       {children}
     </CharacterContext.Provider>
   );
-}
-
-export function useCharacters() {
-  const ctx = useContext(CharacterContext);
-  if (!ctx) {
-    throw new Error("useCharacters must be used inside CharacterProvider");
-  }
-  return ctx;
 }

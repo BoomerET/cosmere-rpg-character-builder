@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { CharacterForm } from "../components/CharacterForm";
 import { FlashMessage } from "../components/FlashMessage";
-import { useCharacters } from "../features/characters/CharacterContext";
+import { useCharacters } from "../features/characters/useCharacters";
 import type { CharacterInput } from "../features/characters/character.schema";
 
 type PageState = {

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { CharacterForm } from "../components/CharacterForm";
-import { useCharacters } from "../features/characters/CharacterContext";
+import { useCharacters } from "../features/characters/useCharacters";
 import type { CharacterInput } from "../features/characters/character.schema";
 
 type PageState = {

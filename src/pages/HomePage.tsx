@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { FlashMessage } from "../components/FlashMessage";
-import { useCharacters } from "../features/characters/CharacterContext";
+import { useCharacters } from "../features/characters/useCharacters";
 
 type PageState = {
   successMessage?: string;

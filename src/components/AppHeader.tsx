@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { fromFantasyGroundsXml } from "../features/characters/character.import.xml";
-import { useCharacters } from "../features/characters/CharacterContext";
+import { useCharacters } from "../features/characters/useCharacters";
 
 export function AppHeader() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { AppLayout } from "../components/AppLayout";
 import { FlashMessage } from "../components/FlashMessage";
-import { useCharacters } from "../features/characters/CharacterContext";
+import { useCharacters } from "../features/characters/useCharacters";
 import { toFantasyGroundsXml } from "../features/characters/character.export.xml";
 
 type PageState = {
