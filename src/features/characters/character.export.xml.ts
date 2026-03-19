@@ -114,7 +114,7 @@ function formatXml(xml: string): string {
 
     formatted += PADDING.repeat(indent) + node + "\n";
 
-    if (node.match(/^<[^!?\/][^>]*[^\/]>$/)) {
+    if (/^<[^!?/][^>]*[^/]>$/.test(node)) {
       pad += 1;
     }
   });
