@@ -148,15 +148,6 @@ export function CharacterForm({
   });
 
   const {
-    fields: equipmentFields,
-    append: appendEquipment,
-    remove: removeEquipment,
-  } = useFieldArray({
-    control: form.control,
-    name: "equipment",
-  });
-
-  const {
     fields: weaponFields,
     append: appendWeapon,
     remove: removeWeapon,
