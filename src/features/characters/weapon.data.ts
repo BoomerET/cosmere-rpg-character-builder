@@ -10,6 +10,7 @@ export type WeaponTemplate = {
   ammo: number;
   maxAmmo: number;
   type: number;
+  range: string;
 };
 
 export const WEAPON_OPTIONS = [
@@ -41,48 +42,52 @@ export const WEAPON_OPTIONS = [
 
 export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
   Axe: {
-    skill: "Athletics",
-    damageDice: "d1",
-    damageType: "impact",
-    traits: "",
-    expertTraits: "",
+    skill: "Heavy Weaponry",
+    damageDice: "1d6",
+    damageType: "keen",
+    traits: "Thrown[20/60]",
+    expertTraits: "Offhand",
     carried: 2,
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Crossbow: {
-    skill: "Light Weaponry",
-    damageDice: "d1",
-    damageType: "impact",
-    traits: "",
-    expertTraits: "",
+    skill: "Heavy Weaponry",
+    damageDice: "1d8",
+    damageType: "keen",
+    traits: "Loaded[1], Two-Handed",
+    expertTraits: "Deadly",
     carried: 2,
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Ranged [100/400]",
   },
   Grandbow: {
     skill: "Heavy Weaponry",
-    damageDice: "d1",
-    damageType: "impact",
-    traits: "",
-    expertTraits: "",
+    damageDice: "2d6",
+    damageType: "keen",
+    traits: "Cumbersone [5], Two-Handed",
+    expertTraits: "Pierce",
     carried: 2,
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Ranged [150/600]",
   },
   Greatsword: {
-    skill: "Athletics",
-    damageDice: "d1",
-    damageType: "impact",
+    skill: "Heavy Weaponry",
+    damageDice: "1d10",
+    damageType: "keen",
     traits: "Two-Handed",
-    expertTraits: "",
+    expertTraits: "Deadly",
     carried: 2,
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   "Half-Shard": {
     skill: "Athletics",
@@ -94,6 +99,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Hammer: {
     skill: "Athletics",
@@ -105,6 +111,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Javelin: {
     skill: "Athletics",
@@ -116,6 +123,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Knife: {
     skill: "Light Weaponry",
@@ -127,6 +135,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Longbow: {
     skill: "Light Weaponry",
@@ -138,6 +147,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Ranged [150/600]",
   },
   Longspear: {
     skill: "Athletics",
@@ -149,6 +159,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee +5",
   },
   Longsword: {
     skill: "Athletics",
@@ -160,6 +171,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Mace: {
     skill: "Athletics",
@@ -171,6 +183,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   "Painrial (amplifying)": {
     skill: "Lore",
@@ -182,6 +195,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Poleaxe: {
     skill: "Athletics",
@@ -193,6 +207,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Rapier: {
     skill: "Light Weaponry",
@@ -204,6 +219,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Shardblade: {
     skill: "Athletics",
@@ -215,6 +231,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   "Shardblade (Radiant)": {
     skill: "Athletics",
@@ -226,6 +243,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Shield: {
     skill: "Athletics",
@@ -237,6 +255,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Shortbow: {
     skill: "Light Weaponry",
@@ -248,6 +267,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Ranged [80/320]",
   },
   Shortspear: {
     skill: "Athletics",
@@ -259,6 +279,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Sidesword: {
     skill: "Light Weaponry",
@@ -270,6 +291,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Sling: {
     skill: "Light Weaponry",
@@ -281,6 +303,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Ranged [30/120]",
   },
   Staff: {
     skill: "Athletics",
@@ -292,6 +315,7 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
   Warhammer: {
     skill: "Athletics",
@@ -303,5 +327,6 @@ export const WEAPON_TEMPLATES: Record<string, WeaponTemplate> = {
     ammo: 0,
     maxAmmo: 0,
     type: 0,
+    range: "Melee",
   },
 };

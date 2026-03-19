@@ -124,6 +124,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       ammo: numberAt(node, "ammo", 0),
       maxAmmo: numberAt(node, "maxammo", 0),
       type: numberAt(node, "type", 0),
+      range: directChildText(node, "range") || "Melee",
     };
   });
 

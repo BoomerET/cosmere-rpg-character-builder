@@ -57,6 +57,7 @@ export const weaponSchema = z.object({
   ammo: z.number().int().min(0).max(999).default(0),
   maxAmmo: z.number().int().min(0).max(999).default(0),
   type: z.number().int().min(0).max(99).default(0),
+  range: z.string().default("Melee"),
 });
 
 export const expertiseSchema = z.object({
