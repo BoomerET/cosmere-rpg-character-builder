@@ -350,7 +350,8 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     numberTag("total", healthTotal, { type: "number" }) +
     numberTag("wounds", wounds, { type: "number" }) +
     `</hp>` +
-    tag("inventorylist", inventoryListBlock)`<investiture>` +
+    tag("inventorylist", inventoryListBlock) +
+    `<investiture>` +
     numberTag("current", character.investiture.current, { type: "number" }) +
     numberTag("total", character.investiture.total, { type: "number" }) +
     `</investiture>` +
