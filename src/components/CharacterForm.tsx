@@ -120,6 +120,33 @@ const PATH_OPTIONS = [
   "Windrunner",
 ] as const;
 
+const WEAPON_OPTIONS = [
+  "Axe",
+  "Crossbow",
+  "Grandbow",
+  "Greatsword",
+  "Half-Shard",
+  "Hammer",
+  "Javelin",
+  "Knife",
+  "Longbow",
+  "Longspear",
+  "Longsword",
+  "Mace",
+  "Painrial (amplifying)",
+  "Poleaxe",
+  "Rapier",
+  "Shardblade",
+  "Shardblade (Radiant)",
+  "Shield",
+  "Shortbow",
+  "Shortspear",
+  "Sidesword",
+  "Sling",
+  "Staff",
+  "Warhammer",
+] as const;
+
 export function CharacterForm({
   title,
   subtitle,
@@ -868,7 +895,7 @@ export function CharacterForm({
                 className="button button-secondary"
                 onClick={() =>
                   appendWeapon({
-                    name: "New Weapon",
+                    name: "Longsword",
                     skill: "Athletics",
                     damageDice: "d1",
                     damageType: "impact",
@@ -903,9 +930,14 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <input
-                        {...form.register(`weapons.${index}.name` as const)}
-                      />
+                      <select {...form.register(`weapons.${index}.name`)}>
+                        <option value="">Custom...</option>
+                        {WEAPON_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     </label>
 
                     <label className="field">
