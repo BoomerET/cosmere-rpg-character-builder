@@ -31,6 +31,7 @@ type FormTab =
   | "attributes"
   | "skills"
   | "weapons"
+  | "equipment"
   | "expertise"
   | "talents"
   | "profile"
@@ -147,12 +148,30 @@ export function CharacterForm({
   });
 
   const {
+    fields: equipmentFields,
+    append: appendEquipment,
+    remove: removeEquipment,
+  } = useFieldArray({
+    control: form.control,
+    name: "equipment",
+  });
+
+  const {
     fields: weaponFields,
     append: appendWeapon,
     remove: removeWeapon,
   } = useFieldArray({
     control: form.control,
     name: "weapons",
+  });
+
+  const {
+    fields: equipmentFields,
+    append: appendEquipment,
+    remove: removeEquipment,
+  } = useFieldArray({
+    control: form.control,
+    name: "equipment",
   });
 
   const {
@@ -427,6 +446,7 @@ export function CharacterForm({
             ),
             expertise: values.expertise ?? [],
             talents: values.talents ?? [],
+            equipment: values.equipment ?? [],
             weapons: (values.weapons ?? []).map((weapon) => ({
               ...weapon,
               handling: getWeaponHandling(
@@ -475,7 +495,13 @@ export function CharacterForm({
           >
             Weapons
           </button>
-
+          <button
+            type="button"
+            className={`tab-button${activeTab === "equipment" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("equipment")}
+          >
+            Equipment
+          </button>
           <button
             type="button"
             className={`tab-button${activeTab === "expertise" ? " tab-button-active" : ""}`}
@@ -971,7 +997,7 @@ export function CharacterForm({
                         ))}
                       </select>
                     </label>
-<label className="field">
+                    <label className="field">
                       <span>Subtype</span>
                       <input {...form.register(`weapons.${index}.subtype`)} />
                     </label>
@@ -1047,6 +1073,128 @@ export function CharacterForm({
                         {...numericRegister(
                           `weapons.${index}.maxAmmo` as const,
                         )}
+                      />
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === "equipment" && (
+          <section className="sheet-section">
+            <h2>Equipment</h2>
+
+            <div className="stack-actions" style={{ marginBottom: "16px" }}>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() =>
+                  appendEquipment({
+                    name: "New Item",
+                    count: 1,
+                    carried: 2,
+                    weight: 0,
+                    charges: 0,
+                    notes: "",
+                    type: "Equipment",
+                    uses: 0,
+                  })
+                }
+              >
+                Add Equipment
+              </button>
+            </div>
+
+            <div className="weapons-grid">
+              {equipmentFields.map((item, index) => (
+                <div className="weapon-card" key={item.id}>
+                  <div className="weapon-card-header">
+                    <h3>Item {index + 1}</h3>
+                    <button
+                      type="button"
+                      className="button button-danger"
+                      onClick={() => removeEquipment(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div className="form-grid">
+                    <label className="field">
+                      <span>Name</span>
+                      <input
+                        {...form.register(`equipment.${index}.name` as const)}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Count</span>
+                      <input
+                        type="number"
+                        {...numericRegister(
+                          `equipment.${index}.count` as const,
+                        )}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Status</span>
+                      <select
+                        {...form.register(
+                          `equipment.${index}.carried` as const,
+                          {
+                            setValueAs: (v) => Number(v),
+                          },
+                        )}
+                      >
+                        <option value={0}>Not Carried</option>
+                        <option value={1}>Equipped</option>
+                        <option value={2}>Carried</option>
+                      </select>
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Weight</span>
+                      <input
+                        type="number"
+                        step="0.1"
+                        {...numericRegister(
+                          `equipment.${index}.weight` as const,
+                        )}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Charges</span>
+                      <input
+                        type="number"
+                        {...numericRegister(
+                          `equipment.${index}.charges` as const,
+                        )}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Uses</span>
+                      <input
+                        type="number"
+                        {...numericRegister(`equipment.${index}.uses` as const)}
+                      />
+                    </label>
+
+                    <label className="field">
+                      <span>Type</span>
+                      <input
+                        {...form.register(`equipment.${index}.type` as const)}
+                      />
+                    </label>
+
+                    <label className="field">
+                      <span>Notes</span>
+                      <input
+                        {...form.register(`equipment.${index}.notes` as const)}
                       />
                     </label>
                   </div>

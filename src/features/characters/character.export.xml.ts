@@ -245,6 +245,22 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     )
     .join("");
 
+  const inventoryListBlock = character.equipment
+    .map((item, i) =>
+      tag(
+        idNode(i),
+        tag("carried", n(item.carried), { type: "number" }) +
+          tag("charges", n(item.charges), { type: "number" }) +
+          tag("count", n(item.count), { type: "number" }) +
+          tag("name", escapeXml(item.name), { type: "string" }) +
+          tag("notes", escapeXml(item.notes), { type: "string" }) +
+          tag("type", escapeXml(item.type), { type: "string" }) +
+          tag("uses", n(item.uses), { type: "number" }) +
+          tag("weight", n(item.weight), { type: "number" }),
+      ),
+    )
+    .join("");
+
   const weaponListBlock = character.weapons
     .map((weapon, i) => {
       const nodeName =
@@ -334,8 +350,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     numberTag("total", healthTotal, { type: "number" }) +
     numberTag("wounds", wounds, { type: "number" }) +
     `</hp>` +
-    emptyTag("inventorylist") +
-    `<investiture>` +
+    tag("inventorylist", inventoryListBlock)`<investiture>` +
     numberTag("current", character.investiture.current, { type: "number" }) +
     numberTag("total", character.investiture.total, { type: "number" }) +
     `</investiture>` +

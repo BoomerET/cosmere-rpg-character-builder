@@ -129,6 +129,19 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     };
   });
 
+  const importedEquipment = Array.from(
+    character.querySelectorAll(":scope > inventorylist > *"),
+  ).map((node) => ({
+    name: textAt(node, "name") || "Unnamed Item",
+    count: numberAt(node, "count", 1),
+    carried: numberAt(node, "carried", 2),
+    weight: numberAt(node, "weight", 0),
+    charges: numberAt(node, "charges", 0),
+    notes: textAt(node, "notes"),
+    type: textAt(node, "type") || "Equipment",
+    uses: numberAt(node, "uses", 0),
+  }));
+
   const importedExpertise: CharacterInput["expertise"] = Array.from(
     character.querySelectorAll(":scope > expertise > *"),
   ).map((node) => ({
@@ -230,6 +243,8 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
 
     expertise: importedExpertise,
     talents: importedTalents,
+
+    equipment: importedEquipment,
 
     weapons:
       importedWeapons.length > 0
