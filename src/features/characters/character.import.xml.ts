@@ -78,6 +78,24 @@ function isValidWeaponSkill(
   ].includes(value);
 }
 
+function isWeaponInventoryItem(
+  node: Element,
+  weaponNames: Set<string>,
+): boolean {
+  const type = directChildText(node, "type").trim().toLowerCase();
+  const name = directChildText(node, "name").trim();
+
+  if (type === "weapon") {
+    return true;
+  }
+
+  if (name && weaponNames.has(name)) {
+    return true;
+  }
+
+  return false;
+}
+
 export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, "application/xml");
@@ -111,23 +129,27 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     const weaponSkillText = textAt(node, "weaponskill");
 
     return {
-      name: textAt(node, "name") || "Unnamed Weapon",
+      name: directChildText(node, "name") || "Unnamed Weapon",
       skill: isValidWeaponSkill(weaponSkillText)
         ? weaponSkillText
         : "Athletics",
       damageDice: textAt(node, "damagelist > * > dice") || "d1",
       damageType: textAt(node, "damagelist > * > type") || "impact",
-      traits: textAt(node, "traits"),
-      expertTraits: textAt(node, "experttraits"),
-      handling: numberAt(node, "handling", 0),
-      carried: numberAt(node, "carried", 2),
-      ammo: numberAt(node, "ammo", 0),
-      maxAmmo: numberAt(node, "maxammo", 0),
-      type: numberAt(node, "type", 0),
+      traits: directChildText(node, "traits"),
+      expertTraits: directChildText(node, "experttraits"),
+      handling: directChildNumber(node, "handling", 0),
+      carried: directChildNumber(node, "carried", 2),
+      ammo: directChildNumber(node, "ammo", 0),
+      maxAmmo: directChildNumber(node, "maxammo", 0),
+      type: directChildNumber(node, "type", 0),
       range: directChildText(node, "range") || "Melee",
-      subtype: textAt(node, "subtype") || "",
+      subtype: directChildText(node, "subtype"),
     };
   });
+
+  const weaponNames = new Set(
+    importedWeapons.map((weapon) => weapon.name.trim()).filter(Boolean),
+  );
 
   const importedArmor: CharacterInput["armor"] = Array.from(
     character.querySelectorAll(":scope > armorlist > *"),
@@ -140,35 +162,37 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     weight: directChildNumber(node, "weight", 0),
   }));
 
-  const importedEquipment = Array.from(
+  const importedEquipment: CharacterInput["equipment"] = Array.from(
     character.querySelectorAll(":scope > inventorylist > *"),
-  ).map((node) => ({
-    name: textAt(node, "name") || "Unnamed Item",
-    count: numberAt(node, "count", 1),
-    carried: numberAt(node, "carried", 2),
-    weight: numberAt(node, "weight", 0),
-    charges: numberAt(node, "charges", 0),
-    notes: textAt(node, "notes"),
-    type: textAt(node, "type") || "Equipment",
-    uses: numberAt(node, "uses", 0),
-    subtype: textAt(node, "subtype") || "",
-  }));
+  )
+    .filter((node) => !isWeaponInventoryItem(node, weaponNames))
+    .map((node) => ({
+      name: directChildText(node, "name") || "Unnamed Item",
+      count: directChildNumber(node, "count", 1),
+      carried: directChildNumber(node, "carried", 2),
+      weight: directChildNumber(node, "weight", 0),
+      charges: directChildNumber(node, "charges", 0),
+      notes: directChildText(node, "notes"),
+      type: directChildText(node, "type") || "Equipment",
+      uses: directChildNumber(node, "uses", 0),
+      subtype: directChildText(node, "subtype"),
+    }));
 
   const importedExpertise: CharacterInput["expertise"] = Array.from(
     character.querySelectorAll(":scope > expertise > *"),
   ).map((node) => ({
-    name: textAt(node, "name") || "Unnamed Expertise",
+    name: directChildText(node, "name") || "Unnamed Expertise",
     text: textAt(node, "text"),
   }));
 
   const importedTalents: CharacterInput["talents"] = Array.from(
     character.querySelectorAll(":scope > talent > *"),
   ).map((node) => ({
-    name: textAt(node, "name") || "Unnamed Talent",
-    activation: textAt(node, "activation"),
-    prerequisites: textAt(node, "prerequisites"),
-    source: textAt(node, "source"),
-    specialty: textAt(node, "specialty"),
+    name: directChildText(node, "name") || "Unnamed Talent",
+    activation: directChildText(node, "activation"),
+    prerequisites: directChildText(node, "prerequisites"),
+    source: directChildText(node, "source"),
+    specialty: directChildText(node, "specialty"),
     text: textAt(node, "text"),
   }));
 
@@ -188,11 +212,11 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
       path: directChildText(character, "path") || "Windrunner",
       level: directChildNumber(character, "level", 1),
       tier: directChildNumber(character, "tier", 1),
-      gender: directChildText(character, "gender") || "",
+      gender: directChildText(character, "gender"),
       age: directChildNumber(character, "age", 0),
-      height: directChildText(character, "height") || "",
-      weight: directChildText(character, "weight") || "",
-      size: directChildText(character, "size") || "",
+      height: directChildText(character, "height"),
+      weight: directChildText(character, "weight"),
+      size: directChildText(character, "size"),
     },
 
     attributes: {
@@ -250,14 +274,13 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     movement: directChildNumber(character, "movement", 20),
     movementBonus: directChildNumber(character, "movementbonus", 0),
     recoveryDie: directChildText(character, "recdie") || "d4",
-    sensesRange: "",
+    sensesRange: directChildText(character, "senses"),
     liftingCapacity,
 
     expertise: importedExpertise,
     talents: importedTalents,
 
     equipment: importedEquipment,
-
     armor: importedArmor,
 
     weapons:
