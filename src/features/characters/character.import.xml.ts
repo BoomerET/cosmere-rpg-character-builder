@@ -140,6 +140,7 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     notes: textAt(node, "notes"),
     type: textAt(node, "type") || "Equipment",
     uses: numberAt(node, "uses", 0),
+    subtype: textAt(node, "subtype") || "",
   }));
 
   const importedExpertise: CharacterInput["expertise"] = Array.from(

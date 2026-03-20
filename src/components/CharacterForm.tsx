@@ -333,6 +333,10 @@ export function CharacterForm({
       shouldDirty: true,
       shouldValidate: true,
     });
+    form.setValue(`equipment.${index}.subtype`, template.subtype ?? "", {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
   }
 
   function applyWeaponTemplate(index: number, weaponName: string) {
@@ -1123,6 +1127,7 @@ export function CharacterForm({
                   appendEquipment({
                     name: "Backpack",
                     ...EQUIPMENT_TEMPLATES["Backpack"],
+                    subtype: EQUIPMENT_TEMPLATES["Backpack"].subtype ?? "",
                   })
                 }
               >
@@ -1231,7 +1236,14 @@ export function CharacterForm({
                         {...form.register(`equipment.${index}.type` as const)}
                       />
                     </label>
-
+                    <label className="field">
+                      <span>Subtype</span>
+                      <input
+                        {...form.register(
+                          `equipment.${index}.subtype` as const,
+                        )}
+                      />
+                    </label>
                     <label className="field">
                       <span>Notes</span>
                       <input

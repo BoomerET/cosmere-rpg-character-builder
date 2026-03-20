@@ -256,7 +256,8 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
           tag("notes", escapeXml(item.notes), { type: "string" }) +
           tag("type", escapeXml(item.type), { type: "string" }) +
           tag("uses", n(item.uses), { type: "number" }) +
-          tag("weight", n(item.weight), { type: "number" }),
+          tag("weight", n(item.weight), { type: "number" }) +
+          tag("subtype", escapeXml(item.subtype), { type: "string" }),
       ),
     )
     .join("");

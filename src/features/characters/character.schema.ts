@@ -85,6 +85,7 @@ export const equipmentItemSchema = z.object({
   notes: z.string().default(""),
   type: z.string().min(1).default("Equipment"),
   uses: z.number().min(0).default(0),
+  subtype: z.string().default(""),
 });
 
 export const characterSchema = z.object({
