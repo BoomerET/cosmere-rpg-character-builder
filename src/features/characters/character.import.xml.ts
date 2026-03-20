@@ -129,6 +129,17 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     };
   });
 
+  const importedArmor: CharacterInput["armor"] = Array.from(
+    character.querySelectorAll(":scope > armorlist > *"),
+  ).map((node) => ({
+    name: directChildText(node, "name") || "Unnamed Armor",
+    type: directChildText(node, "type") || "Armor",
+    deflect: directChildNumber(node, "deflect", 0),
+    traits: directChildText(node, "traits"),
+    expertTraits: directChildText(node, "experttraits"),
+    weight: directChildNumber(node, "weight", 0),
+  }));
+
   const importedEquipment = Array.from(
     character.querySelectorAll(":scope > inventorylist > *"),
   ).map((node) => ({
@@ -246,6 +257,8 @@ export function fromFantasyGroundsXml(xmlText: string): CharacterInput {
     talents: importedTalents,
 
     equipment: importedEquipment,
+
+    armor: importedArmor,
 
     weapons:
       importedWeapons.length > 0
