@@ -63,6 +63,13 @@ export const ARMOR_TEMPLATES: Record<string, ArmorTemplate> = {
     expertTraits: "Unique: loses Dangerous Trait",
     weight: 0,
   },
+  "Uniform": {
+    type: "Armor",
+    deflect: 5,
+    traits: "Presentable",
+    expertTraits: "",
+    weight: 5,
+  },
 };
 
 export const ARMOR_OPTIONS = Object.keys(ARMOR_TEMPLATES);
