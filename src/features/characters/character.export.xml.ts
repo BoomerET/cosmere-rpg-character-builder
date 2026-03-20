@@ -94,7 +94,7 @@ function numberTag(
 }
 
 function formatXml(xml: string): string {
-  const PADDING = "  "; // 2 spaces
+  const PADDING = "  ";
   const reg = /(>)(<)(\/*)/g;
   let formatted = "";
   let pad = 0;
@@ -145,6 +145,33 @@ function safeXmlNodeName(value: string, fallback = "node"): string {
   return /^[A-Za-z_]/.test(cleaned) ? cleaned : `${fallback}_${cleaned}`;
 }
 
+type InventoryExportItem = {
+  name: string;
+  count: number;
+  carried: number;
+  weight: number;
+  charges: number;
+  notes: string;
+  type: string;
+  uses: number;
+  subtype?: string;
+};
+
+function inventoryItemToXml(item: InventoryExportItem, index: number): string {
+  return tag(
+    idNode(index),
+    numberTag("carried", item.carried, { type: "number" }) +
+      numberTag("charges", item.charges, { type: "number" }) +
+      numberTag("count", item.count, { type: "number" }) +
+      textTag("name", item.name, { type: "string" }) +
+      textTag("notes", item.notes, { type: "string" }) +
+      textTag("type", item.type, { type: "string" }) +
+      (item.subtype ? textTag("subtype", item.subtype, { type: "string" }) : "") +
+      numberTag("uses", item.uses, { type: "number" }) +
+      numberTag("weight", item.weight, { type: "number" }),
+  );
+}
+
 export function toFantasyGroundsXml(character: CharacterInput): string {
   const physicalDefense =
     10 + character.attributes.strength + character.attributes.speed;
@@ -183,8 +210,8 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     .map(([name, score]) =>
       tag(
         name,
-        tag("bonus", "0", { type: "number" }) +
-          tag("score", n(score), { type: "number" }),
+        numberTag("bonus", 0, { type: "number" }) +
+          numberTag("score", score, { type: "number" }),
       ),
     )
     .join("");
@@ -245,21 +272,41 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     )
     .join("");
 
-  const inventoryListBlock = character.equipment
-    .map((item, i) =>
-      tag(
-        idNode(i),
-        tag("carried", n(item.carried), { type: "number" }) +
-          tag("charges", n(item.charges), { type: "number" }) +
-          tag("count", n(item.count), { type: "number" }) +
-          tag("name", escapeXml(item.name), { type: "string" }) +
-          tag("notes", escapeXml(item.notes), { type: "string" }) +
-          tag("type", escapeXml(item.type), { type: "string" }) +
-          tag("uses", n(item.uses), { type: "number" }) +
-          tag("weight", n(item.weight), { type: "number" }) +
-          tag("subtype", escapeXml(item.subtype), { type: "string" }),
-      ),
-    )
+  const equipmentInventoryItems: InventoryExportItem[] = character.equipment.map(
+    (item) => ({
+      name: item.name,
+      count: item.count,
+      carried: item.carried,
+      weight: item.weight,
+      charges: item.charges,
+      notes: item.notes,
+      type: item.type,
+      uses: item.uses,
+      subtype: item.subtype ?? "",
+    }),
+  );
+
+  const weaponInventoryItems: InventoryExportItem[] = character.weapons.map(
+    (weapon) => ({
+      name: weapon.name,
+      count: 1,
+      carried: weapon.carried,
+      weight: 0,
+      charges: 0,
+      notes: "",
+      type: "Weapon",
+      uses: 0,
+      subtype: weapon.subtype ?? "",
+    }),
+  );
+
+  const inventoryItems: InventoryExportItem[] = [
+    ...equipmentInventoryItems,
+    ...weaponInventoryItems,
+  ];
+
+  const inventoryListBlock = inventoryItems
+    .map((item, i) => inventoryItemToXml(item, i))
     .join("");
 
   const weaponListBlock = character.weapons
@@ -284,6 +331,10 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
         numberTag("handling", weapon.handling, { type: "number" }) +
         numberTag("maxammo", weapon.maxAmmo, { type: "number" }) +
         textTag("name", weapon.name, { type: "string" }) +
+        textTag("range", weapon.range ?? "Melee", { type: "string" }) +
+        (weapon.subtype
+          ? textTag("subtype", weapon.subtype, { type: "string" })
+          : "") +
         `<shortcut type="windowreference">` +
         tag("class", "") +
         tag("recordname", "") +
@@ -331,7 +382,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
         numberTag("score", spiritualDefense, { type: "number" }),
     ) +
     `</defenses>` +
-    textTag("senses", senses, { type: "string" }) +
+    textTag("senses", String(senses), { type: "string" }) +
     numberTag("deflect", character.deflect, { type: "number" }) +
     emptyTag("effectlist") +
     `<encumbrance>` +
@@ -362,7 +413,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     textTag("name", character.meta.name, { type: "string" }) +
     textTag("path", character.meta.path, { type: "string" }) +
     textTag("gender", character.meta.gender, { type: "string" }) +
-    textTag("age", character.meta.age.toString(), { type: "string" }) +
+    numberTag("age", Number(character.meta.age) || 0, { type: "number" }) +
     textTag("height", character.meta.height, { type: "string" }) +
     textTag("weight", character.meta.weight, { type: "string" }) +
     textTag("size", character.meta.size, { type: "string" }) +
