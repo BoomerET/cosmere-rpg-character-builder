@@ -694,7 +694,7 @@ export function CharacterForm({
 
               <label className="field field-small">
                 <span>Age</span>
-                <input {...form.register("meta.gender")} />
+                <input {...form.register("meta.age")} />
               </label>
 
               <label className="field">
