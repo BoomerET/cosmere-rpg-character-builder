@@ -413,7 +413,7 @@ export function toFantasyGroundsXml(character: CharacterInput): string {
     textTag("name", character.meta.name, { type: "string" }) +
     textTag("path", character.meta.path, { type: "string" }) +
     textTag("gender", character.meta.gender, { type: "string" }) +
-    textTag("age", String(character.meta.age ?? ""), { type: "string" })
+    textTag("age", character.meta.age ?? "", { type: "string" }) +
     textTag("height", character.meta.height, { type: "string" }) +
     textTag("weight", character.meta.weight, { type: "string" }) +
     textTag("size", character.meta.size, { type: "string" }) +

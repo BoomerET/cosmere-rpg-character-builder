@@ -15,7 +15,7 @@ function makeBlankCharacter(): CharacterInput {
       level: 1,
       tier: 1,
       gender: "",
-      age: 0,
+      age: "",
       height: "",
       weight: "",
       size: "",

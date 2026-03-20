@@ -477,7 +477,7 @@ export function CharacterForm({
               level: values.meta.level ?? 1,
               tier: getTierFromLevel(values.meta.level ?? 1),
               gender: values.meta.gender ?? "",
-              age: values.meta.age ?? 0,
+              age: values.meta.age ?? "",
               height: values.meta.height ?? "",
               weight: values.meta.weight ?? "",
               size: values.meta.size ?? "",
@@ -694,7 +694,7 @@ export function CharacterForm({
 
               <label className="field field-small">
                 <span>Age</span>
-                <input type="number" {...numericRegister("meta.age")} />
+                <input {...form.register("meta.age")} />
               </label>
 
               <label className="field">
