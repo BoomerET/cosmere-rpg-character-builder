@@ -88,6 +88,15 @@ export const equipmentItemSchema = z.object({
   subtype: z.string().default(""),
 });
 
+export const armorItemSchema = z.object({
+  name: z.string().min(1).default(""),
+  type: z.string().min(1).default("Armor"),
+  deflect: z.number().int().min(0).default(0),
+  traits: z.string().default(""),
+  expertTraits: z.string().default(""),
+  weight: z.number().min(0).default(0),
+});
+
 export const characterSchema = z.object({
   id: z.string().min(1),
   meta: z.object({
@@ -132,6 +141,7 @@ export const characterSchema = z.object({
   talents: z.array(talentSchema).default([]),
   weapons: z.array(weaponSchema).default([]),
   equipment: z.array(equipmentItemSchema).default([]),
+  armor: z.array(armorItemSchema).default([]),
   conditionsText: z.string().default(""),
   skills: z.array(skillSchema),
   notes: z.string().default(""),

@@ -15,6 +15,10 @@ import {
   EQUIPMENT_OPTIONS,
   EQUIPMENT_TEMPLATES,
 } from "../features/characters/equipment.data";
+import {
+  ARMOR_OPTIONS,
+  ARMOR_TEMPLATES,
+} from "../features/characters/armor.data";
 
 type CharacterFormProps = {
   title: string;
@@ -35,6 +39,7 @@ type FormTab =
   | "attributes"
   | "skills"
   | "weapons"
+  | "armor"
   | "equipment"
   | "expertise"
   | "talents"
@@ -167,6 +172,15 @@ export function CharacterForm({
   } = useFieldArray({
     control: form.control,
     name: "equipment",
+  });
+
+  const {
+    fields: armorFields,
+    append: appendArmor,
+    remove: removeArmor,
+  } = useFieldArray({
+    control: form.control,
+    name: "armor",
   });
 
   const {
@@ -339,6 +353,32 @@ export function CharacterForm({
     });
   }
 
+  function applyArmorTemplate(index: number, armorName: string) {
+    const template = ARMOR_TEMPLATES[armorName];
+    if (!template) return;
+
+    form.setValue(`armor.${index}.type`, template.type, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`armor.${index}.deflect`, template.deflect, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`armor.${index}.traits`, template.traits, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`armor.${index}.expertTraits`, template.expertTraits, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`armor.${index}.weight`, template.weight, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  }
+
   function applyWeaponTemplate(index: number, weaponName: string) {
     const template = WEAPON_TEMPLATES[weaponName];
     if (!template) return;
@@ -480,6 +520,7 @@ export function CharacterForm({
             expertise: values.expertise ?? [],
             talents: values.talents ?? [],
             equipment: values.equipment ?? [],
+            armor: values.armor ?? [],
             weapons: (values.weapons ?? []).map((weapon) => ({
               ...weapon,
               handling: getWeaponHandling(
@@ -527,6 +568,13 @@ export function CharacterForm({
             onClick={() => setActiveTab("weapons")}
           >
             Weapons
+          </button>
+          <button
+            type="button"
+            className={`tab-button${activeTab === "armor" ? " tab-button-active" : ""}`}
+            onClick={() => setActiveTab("armor")}
+          >
+            Armor
           </button>
           <button
             type="button"
@@ -1106,6 +1154,107 @@ export function CharacterForm({
                         {...numericRegister(
                           `weapons.${index}.maxAmmo` as const,
                         )}
+                      />
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {activeTab === "armor" && (
+          <section className="sheet-section">
+            <h2>Armor</h2>
+
+            <div className="stack-actions" style={{ marginBottom: "16px" }}>
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() =>
+                  appendArmor({
+                    name: "Leather Armor",
+                    ...ARMOR_TEMPLATES["Leather Armor"],
+                  })
+                }
+              >
+                Add Armor
+              </button>
+            </div>
+
+            <div className="weapons-grid">
+              {armorFields.map((item, index) => (
+                <div className="weapon-card" key={item.id}>
+                  <div className="weapon-card-header">
+                    <h3>Armor {index + 1}</h3>
+                    <button
+                      type="button"
+                      className="button button-danger"
+                      onClick={() => removeArmor(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div className="form-grid">
+                    <label className="field">
+                      <span>Name</span>
+                      <select
+                        {...form.register(`armor.${index}.name` as const)}
+                        onChange={(e) => {
+                          const armorName = e.target.value;
+                          form.setValue(`armor.${index}.name`, armorName, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                          applyArmorTemplate(index, armorName);
+                        }}
+                      >
+                        {ARMOR_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label className="field">
+                      <span>Type</span>
+                      <input
+                        {...form.register(`armor.${index}.type` as const)}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Deflect</span>
+                      <input
+                        type="number"
+                        {...numericRegister(`armor.${index}.deflect` as const)}
+                      />
+                    </label>
+
+                    <label className="field">
+                      <span>Traits</span>
+                      <input
+                        {...form.register(`armor.${index}.traits` as const)}
+                      />
+                    </label>
+
+                    <label className="field">
+                      <span>Expert Traits</span>
+                      <input
+                        {...form.register(
+                          `armor.${index}.expertTraits` as const,
+                        )}
+                      />
+                    </label>
+
+                    <label className="field field-small">
+                      <span>Weight</span>
+                      <input
+                        type="number"
+                        step="0.1"
+                        {...numericRegister(`armor.${index}.weight` as const)}
                       />
                     </label>
                   </div>
