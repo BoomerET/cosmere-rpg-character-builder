@@ -68,6 +68,7 @@ function makeBlankCharacter(): CharacterInput {
         subtype: "",
       },
     ],
+    armor: [],
     equipment: [],
     conditionsText: "",
     skills: DEFAULT_SKILLS.map((skill) => ({ ...skill })),
