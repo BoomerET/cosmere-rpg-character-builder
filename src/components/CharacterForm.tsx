@@ -11,6 +11,10 @@ import {
   WEAPON_OPTIONS,
   WEAPON_TEMPLATES,
 } from "../features/characters/weapon.data";
+import {
+  EQUIPMENT_OPTIONS,
+  EQUIPMENT_TEMPLATES,
+} from "../features/characters/equipment.data";
 
 type CharacterFormProps = {
   title: string;
@@ -294,6 +298,40 @@ export function CharacterForm({
   function numericRegister(path: Path<CharacterFormValues>) {
     return form.register(path, {
       setValueAs: (value) => (value === "" ? undefined : Number(value)),
+    });
+  }
+
+  function applyEquipmentTemplate(index: number, itemName: string) {
+    const template = EQUIPMENT_TEMPLATES[itemName];
+    if (!template) return;
+
+    form.setValue(`equipment.${index}.count`, template.count, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.carried`, template.carried, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.weight`, template.weight, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.charges`, template.charges, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.notes`, template.notes, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.type`, template.type, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    form.setValue(`equipment.${index}.uses`, template.uses, {
+      shouldDirty: true,
+      shouldValidate: true,
     });
   }
 
@@ -1083,14 +1121,8 @@ export function CharacterForm({
                 className="button button-secondary"
                 onClick={() =>
                   appendEquipment({
-                    name: "New Item",
-                    count: 1,
-                    carried: 2,
-                    weight: 0,
-                    charges: 0,
-                    notes: "",
-                    type: "Equipment",
-                    uses: 0,
+                    name: "Backpack",
+                    ...EQUIPMENT_TEMPLATES["Backpack"],
                   })
                 }
               >
@@ -1115,9 +1147,27 @@ export function CharacterForm({
                   <div className="form-grid">
                     <label className="field">
                       <span>Name</span>
-                      <input
+                      <select
                         {...form.register(`equipment.${index}.name` as const)}
-                      />
+                        onChange={(e) => {
+                          const itemName = e.target.value;
+                          form.setValue(
+                            `equipment.${index}.name` as const,
+                            itemName,
+                            {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            },
+                          );
+                          applyEquipmentTemplate(index, itemName);
+                        }}
+                      >
+                        {EQUIPMENT_OPTIONS.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     </label>
 
                     <label className="field field-small">
